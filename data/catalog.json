@@ -1,5 +1,44 @@
 {
 
+    "Experimental no names": {
+"shortName": "WWO Experimental: no names",
+"location": "data/wwo-exp-nonames.bin",
+"shortDescription" : "WWO Experimental: dimensions 10",
+"public" : "false",
+"description": ""
+},
+
+    "Experimental tiny": {
+"shortName": "WWO Experimental: tiny",
+"location": "data/wwo-exp-tiny.bin",
+"shortDescription" : "WWO Experimental: dimensions 10",
+"public" : "false",
+"description": ""
+},
+
+    "Experimental no prep": {
+"shortName": "WWO Experimental: unprepped",
+"location": "data/wwo-exp-unprepped.bin",
+"shortDescription" : "WWO Experimental: dimensions 10",
+"public" : "false",
+"description": ""
+},
+
+    "Experimental win 2": {
+"shortName": "WWO Experimental: window 2",
+"location": "data/wwo-exp-dimensions10.bin",
+"shortDescription" : "WWO Experimental: dimensions 10",
+"public" : "false",
+"description": ""
+},
+
+    "Experimental dim 10": {
+"shortName": "WWO Experimental: dimensions 10",
+"location": "data/wwo-exp-window2.bin",
+"shortDescription" : "WWO Experimental: dimensions 10",
+"public" : "false",
+"description": ""
+},
 
         "TCP1": {
 		"shortName": "Text Creation Partnership 1",
