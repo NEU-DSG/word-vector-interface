@@ -1,43 +1,43 @@
 {
 
         "Experimental no names": {
-    "shortName": "WWO Experimental: no names",
+    "shortName": "Experimental: No Names",
     "location": "data/wwo-exp-nonames.bin",
-    "shortDescription" : "WWO Experimental: dimensions 10",
+    "shortDescription" : "WWO Experimental: no names",
     "public" : "false",
-    "description": ""
+    "description": "An experimental model trained on a dataset of texts from Women Writers Online in which names have been removed."
     },
 
         "Experimental tiny": {
-    "shortName": "WWO Experimental: tiny",
+    "shortName": "Experimental: Small Corpus",
     "location": "data/wwo-exp-tiny.bin",
-    "shortDescription" : "WWO Experimental: dimensions 10",
+    "shortDescription" : "WWO Experimental: small corpus",
     "public" : "false",
-    "description": ""
+    "description": "An experimental model trained on a corpus of several novels from WWO, comprising approximately 500K words."
     },
 
         "Experimental no prep": {
-    "shortName": "WWO Experimental: unprepped",
+    "shortName": "Experimental: Unprepped",
     "location": "data/wwo-exp-unprepped.bin",
-    "shortDescription" : "WWO Experimental: dimensions 10",
+    "shortDescription" : "WWO Experimental: unprepped",
     "public" : "false",
-    "description": ""
+    "description": "An experimental model trained on a dataset of texts from Women Writers Online that has been minimally processed."
     },
 
         "Experimental win 2": {
-    "shortName": "WWO Experimental: window 2",
+    "shortName": "Experimental: Window-size 2",
     "location": "data/wwo-exp-dimensions10.bin",
-    "shortDescription" : "WWO Experimental: dimensions 10",
+    "shortDescription" : "WWO Experimental: window s",
     "public" : "false",
-    "description": ""
+    "description": "An experimental model trained on the texts in Women Writers Online, using a window size of 2 in the model training process."
     },
 
-        "Experimental dim 10": {
-    "shortName": "WWO Experimental: dimensions 10",
+        "Experimental dim 100": {
+    "shortName": "Experimental: 100 Dimensions",
     "location": "data/wwo-exp-window2.bin",
-    "shortDescription" : "WWO Experimental: dimensions 10",
+    "shortDescription" : "WWO Experimental: dimensions 100",
     "public" : "false",
-    "description": ""
+    "description": "An experimental model trained on the texts in Women Writers Online, using 100 dimensions in the model training process"
     },
 
         "TCP1": {
