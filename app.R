@@ -222,11 +222,27 @@ body <- dashboardBody(
                             font-size: 21.6px !important;
                             }
 
-
-
                             #wwvt-home:hover {
                             color: #ccc !important;
                             text-decoration: none !important;
+                            }
+
+                            .box {
+                              overflow: auto;
+                            }
+
+                            .home_desc {
+                              font-size: 14px !important;
+                              border-bottom-style: solid !important;
+                              margin-bottom: 47px !important;
+                              border-radius: 2px !important;
+                              padding: 20px !important;
+                              border-bottom-width: medium !important;
+                            }
+
+
+                            .dataTables_filter {
+                                display: none !important;
                             }
 
                             .nav-over-flow{
@@ -241,6 +257,11 @@ body <- dashboardBody(
                fluidRow(
 
                  box(
+                   div(class="home_desc", p("Welcome to the Women Writers Vector Toolkit (WWVT) discovery interface! This interface will allow you to query terms in word2vec models that were trained on different collections from Women Writers Online, the Victorian Women Writers Project, and Early English Books Online.
+To get started, type a term you're interested in exploring in the \"Query term\" box below. The results that appear beneath your query are other words that are most similar to the term you queried in vector space."),
+p("To the right are a collection of clusters generated based on neighboring words in vector space—words that are similar will be clustered together. The clusters may be different every time but will always represent related terms. On the far left-hand sidebar, you can select different models to query, or reset the selection of clusters. More ways to use these vector models can be accessed under the “Compare,” “Clusters,” “Operations,” and “Visualization” tabs above."),
+p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see this page for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used.")),
+
                    tags$h1(textOutput("model_name_basic")),
                    div(class = "model_desc", p(uiOutput("model_desc_basic"))),
                    # div(class = "model_desc",
@@ -329,8 +350,19 @@ body <- dashboardBody(
       tabPanel("Clusters", value=3,
                fluidRow(
                  box(
+
+                   div(class="home_desc", p("The Clusters function allows you to observe relationships between terms in the corpus. Clusters are generated based on neighboring words in vector space—words that are similar will be clustered together. The clusters may be different every time but will always represent related terms. Each column represents a different cluster."),
+p("You have the option to change the model that is used to create the clusters. You can also hit the \"reset clusters\" button on the left to see a new set of clusters and use the slider on the bottom to see more terms in each cluster. Click the “Download” button on the left to download the set of clusters to use on your own computer."),
+p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see this page for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used.")),
+
+
+
                    tags$h1(textOutput("model_name_cluster")),
                    div(class = "model_desc", p(uiOutput("model_desc_cluster"))),
+                   br(),
+                   actionButton("clustering_reset_input_fullcluster1", "Reset clusters"),
+
+
 
                    # div(class = "model_desc", p(textOutput("model_desc_cluster"),
                    #                             "The text has been regularized",
@@ -347,8 +379,17 @@ body <- dashboardBody(
       tabPanel("Operations", value=4,
                fluidRow(
                  box(
-                   tags$h1(textOutput("model_name_operation")),
 
+
+                   div(class="home_desc",
+                   p("If you would like to perform a closer search of a term in the word vector models, this Operations page can help. You may choose an operation on the left hand side of the webpage and adjust the model you would like to search. "),
+                   p("Addition  allows you to “add” one term with another term and see the most similar results between these two terms. For example, if you query “queen” and “throne”, you see words that are titles for people AND also material things, like \"sceptre.\""),
+                   p("Subtraction allows you to remove a term and all of its associated words from a contextual search. For example, if you would like to search “bank” in the corpus, but remove terms related to the way a bank is used in context with a river, you can subtract “river” from “bank” to see the top results. "),
+                   p("Analogies are similar to the logic of “hand is to glove as foot is to shoe.” So for example, you can query “king” minus “man” plus “woman,” your top result is queene; king is to man as queen is to woman."),
+                   p("The Advanced option allows you to create a complex query using multiple operations. "),
+                   p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see this page for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used. ")),
+
+                  tags$h1(textOutput("model_name_operation")),
                    div(class = "model_desc", p(uiOutput("model_desc_operation"))),
 
 
@@ -595,6 +636,10 @@ shinyApp(
                                    choices = fileList,
                                    selected = Selected_default),
                        br(),
+                       sliderInput("max_words_home",
+                                   "Number of Words:",
+                                   min = 1,  max = 150,  value = 10),
+                       br(),
                        actionButton("clustering_reset_input", "Reset clusters")
 
       ),
@@ -646,7 +691,7 @@ shinyApp(
                                    choices = fileList,
                                    selected = Selected_default),
 
-                       selectInput("visualisation_selector", "Select visualisation",
+                       selectInput("visualisation_selector","Select visualisation",
                                    choices =  list("Word Cloud" = "wc", "2d Scatter plot" = "scatter", "closest scatter plot" = "scatter_closest"),
                                    selected = 1),
 
@@ -916,11 +961,10 @@ shinyApp(
         if (i > 20 & i <= 40 ) cluster <- append(cluster, "top 40")
         if (i > 40 & i <= 60 ) cluster <- append(cluster, "top 60")
         if (i > 60 & i <= 80 ) cluster <- append(cluster, "top 80")
-        if (i > 80 & i <= 100 ) cluster <- append(cluster, "top 80")
+        if (i > 80 & i <= 100 ) cluster <- append(cluster, "top 100")
         if (i > 100  ) cluster <- append(cluster, "top 150")
         i <- i + 1
         names <- append(names,word)
-        print(i)
       }
       df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster) ,stringsAsFactors = FALSE)
       df_new
@@ -930,7 +974,7 @@ shinyApp(
     output$scatter_plot_closest <- renderPlot({
       ggplot(dataset_closet(), aes(x=x, y=y, colour=cluster)) +
         geom_point() +
-        geom_text_repel(aes(label=ifelse(cluster == input$scatter_plot_closest_choice ,as.character(names),'')), hjust=0.5,vjust=-0.5)
+        geom_text_repel(aes(label=ifelse(cluster == tolower(input$scatter_plot_closest_choice) ,as.character(names),'')), hjust=0.5,vjust=-0.5)
     })
 
     outputOptions(output, "scatter_plot_closest", suspendWhenHidden = FALSE)
@@ -1041,7 +1085,7 @@ shinyApp(
       # list_models[[input$modelSelect[[1]]]]
       data <- list_models[[input$modelSelect[[1]]]] %>% closest_to(tolower(input$basic_word1), 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
 
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = FALSE)))
+    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
 
 
     output$basic_table_c1 <- DT::renderDataTable(DT::datatable({
@@ -1062,15 +1106,15 @@ shinyApp(
       data <- sapply(sample(1:150,4),function(n) {
         paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"</a>")
       }) %>% as_data_frame()
-    }, escape = FALSE, colnames=c(paste0("cluster_",1:4)), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
+    }, escape = FALSE, colnames=c(paste0("cluster_",1:4)), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
 
 
     observeEvent(input$clustering_reset_input, {
       output$tbl <- DT::renderDataTable(DT::datatable({
-        data <- sapply(sample(1:150,5),function(n) {
+        data <- sapply(sample(1:150,4),function(n) {
           paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"</a>")
         }) %>% as_data_frame()
-      }, escape = FALSE, colnames=c(paste0("cluster_",1:5)), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10,searching = TRUE)))
+      }, escape = FALSE, colnames=c(paste0("cluster_",1:4)),options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
     })
 
 
@@ -1091,7 +1135,18 @@ shinyApp(
           ls_download_cluster <<- c(ls_download_cluster,n)
           paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"</a>")
         }) %>% as_data_frame()
-      }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
+      }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
+    })
+
+
+    observeEvent(input$clustering_reset_input_fullcluster1, {
+      ls_download_cluster <<- c()
+      output$clusters_full <- DT::renderDataTable(DT::datatable({
+        data <- sapply(sample(1:150,10),function(n) {
+          ls_download_cluster <<- c(ls_download_cluster,n)
+          paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"</a>")
+        }) %>% as_data_frame()
+      }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
     })
 
 
