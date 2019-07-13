@@ -39,6 +39,15 @@
     "public" : "false",
     "description": "An experimental model trained on the texts in Women Writers Online, using 100 dimensions in the model training process"
     },
+    
+     "ECCO": {
+    "shortName": "Eighteenth Century Collections Online",
+    "location": "data/ecco.bin",
+    "shortDescription" : "ECCO",
+    "public" : "false",
+    "description": "A model trained on the standardized version of the Eighteenth Century Collections Online corpus published by the Visualizing Early Print project."
+    },
+
 
         "TCP1": {
 		"shortName": "Text Creation Partnership 1",
