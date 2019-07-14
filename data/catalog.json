@@ -47,6 +47,15 @@
     "public" : "false",
     "description": "A model trained on the standardized version of the Eighteenth Century Collections Online corpus published by the Visualizing Early Print project."
     },
+    
+       "EEBO": {
+    "shortName": "Early Modern 1080",
+    "location": "data/eebo1080.bin",
+    "shortDescription" : "EEBO",
+    "public" : "false",
+    "description": "A model trained on the “Early Modern 1080” corpus published by the Visualizing Early Print project; this corpus contains 40 randomly-selected texts per decade from the Early English Books Online–Text Creation Partnership collection."
+    },
+
 
 
         "TCP1": {
@@ -163,7 +172,7 @@
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a paragraph (<p>). This corpus contains 8,433,255 words in 406 texts."
   },
 
-  "EEBO": {
+  "EEBO-archive": {
 		"shortName": "Early English Books Online",
 		"location": "data/eebo.bin",
 		"shortDescription" : "EEBO Selected Corpus",
