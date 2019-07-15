@@ -1,68 +1,248 @@
 {
 
-        "Experimental no names": {
-    "shortName": "Experimental: No Names",
-    "location": "data/wwo-exp-nonames.bin",
-    "shortDescription" : "WWO Experimental: no names",
-    "public" : "false",
-    "description": "An experimental model trained on a dataset of texts from Women Writers Online in which names have been removed."
-    },
 
-        "Experimental tiny": {
-    "shortName": "Experimental: Small Corpus",
-    "location": "data/wwo-exp-tiny.bin",
-    "shortDescription" : "WWO Experimental: small corpus",
-    "public" : "false",
-    "description": "An experimental model trained on a corpus of several novels from WWO, comprising approximately 500K words."
-    },
-
-        "Experimental no prep": {
-    "shortName": "Experimental: Unprepped",
-    "location": "data/wwo-exp-unprepped.bin",
-    "shortDescription" : "WWO Experimental: unprepped",
-    "public" : "false",
-    "description": "An experimental model trained on a dataset of texts from Women Writers Online that has been minimally processed."
-    },
-
-        "Experimental win 2": {
-    "shortName": "Experimental: Window-size 2",
-    "location": "data/wwo-exp-dimensions10.bin",
-    "shortDescription" : "WWO Experimental: window s",
-    "public" : "false",
-    "description": "An experimental model trained on the texts in Women Writers Online, using a window size of 2 in the model training process."
-    },
-
-        "Experimental dim 100": {
-    "shortName": "Experimental: 100 Dimensions",
-    "location": "data/wwo-exp-window2.bin",
-    "shortDescription" : "WWO Experimental: dimensions 100",
-    "public" : "false",
-    "description": "An experimental model trained on the texts in Women Writers Online, using 100 dimensions in the model training process"
+ "Evans": {
+    "shortName": "Evans Early American Imprints (TCP)",
+    "location": "data/samples/evans_early-american-imprints-reg.bin",
+    "shortDescription" : "Evans",
+    "public" : "true",
+    "description": "A model trained on a corpus of printed books, pamphlets, and broadsides from the Evans Early American Imprint Collection, transcribed by the Text Creation Partnership and regularized by the Visualizing Early Print project. The corpus contains 101,787,912 words in 5,012 texts."
     },
     
+    
+     "DocSouth": {
+    "shortName": "DocSouth North American Slave Narratives",
+    "location": "data/samples/doc-south_north-american-slave-narratives.bin",
+    "shortDescription" : "DocSouth",
+    "public" : "true",
+    "description": "A model trained on a corpus of of books and articles that document the individual and collective stories of African Americans in the eighteenth–early twentieth century in the United States. It is part of the Documenting the American South Project from the University of North Carolina. The corpus contains 11,376,694 words in 294 texts."
+    },
+    
+     "Wright": {
+    "shortName": "Wright American Fiction",
+    "location": "data/samples/ecco.bin",
+    "shortDescription" : "Wright",
+    "public" : "true",
+    "description": "A model trained on a corpus of eighteenth and nineteenth century American fiction from the Wright American Fiction project. The corpus contains 234,607,442 words in 2,876 texts."
+    },
+
+
      "ECCO": {
     "shortName": "Eighteenth Century Collections Online",
-    "location": "data/ecco.bin",
+    "location": "data/samples/ecco.bin",
     "shortDescription" : "ECCO",
-    "public" : "false",
+    "public" : "true",
     "description": "A model trained on the standardized version of the Eighteenth Century Collections Online corpus published by the Visualizing Early Print project."
     },
     
        "EEBO": {
     "shortName": "Early Modern 1080",
-    "location": "data/eebo1080.bin",
+    "location": "data/samples/eebo1080.bin",
     "shortDescription" : "EEBO",
-    "public" : "false",
+    "public" : "true",
     "description": "A model trained on the “Early Modern 1080” corpus published by the Visualizing Early Print project; this corpus contains 40 randomly-selected texts per decade from the Early English Books Online–Text Creation Partnership collection."
     },
 
+  "WWO Corpus": {
+    "shortName": "WWO Full Corpus",
+    "location": "data/samples/wwo.bin",
+	"shortDescription" : "All texts from WWO",
+	"public" : "true",
+    "description": "A model trained on the entire Women Writers Online corpus of women's writing from 1526 to 1850. This corpus contains 10,978,553 words in 415 texts."
+  },
+  
+  
+  
+    "VWWP and WWO": {
+    "shortName": "VWWP and WWO",
+    "location": "data/samples/wwo-vwwp.bin",
+	"shortDescription" : "The Victorian Women Writers Project and Women Writers Online Combined Corpus",
+	"public" : "true",
+    "description": "A model trained on a combined corpus that includes all texts from both the Victorian Women Writers Project and Women Writers Online. This corpus contains 19,044,358 words in 614 texts."
+  },
 
 
+        "Experimental no names": {
+    "shortName": "Experimental: No Names",
+    "location": "data/experimentals/wwo-exp-nonames.bin",
+    "shortDescription" : "WWO Experimental: no names",
+    "public" : "true",
+    "description": "An experimental model trained on a dataset of texts from Women Writers Online in which names have been removed."
+    },
+
+        "Experimental tiny": {
+    "shortName": "Experimental: Small Corpus",
+    "location": "data/experimentals/wwo-exp-tiny.bin",
+    "shortDescription" : "WWO Experimental: small corpus",
+    "public" : "true",
+    "description": "An experimental model trained on a corpus of several novels from WWO, comprising approximately 500K words."
+    },
+
+        "Experimental no prep": {
+    "shortName": "Experimental: Unprepped",
+    "location": "data/experimentals/wwo-exp-unprepped.bin",
+    "shortDescription" : "WWO Experimental: unprepped",
+    "public" : "true",
+    "description": "An experimental model trained on a dataset of texts from Women Writers Online that has been minimally processed."
+    },
+
+        "Experimental win 2": {
+    "shortName": "Experimental: Window-size 2",
+    "location": "data/experimentals/wwo-exp-dimensions10.bin",
+    "shortDescription" : "WWO Experimental: window s",
+    "public" : "true",
+    "description": "An experimental model trained on the texts in Women Writers Online, using a window size of 2 in the model training process."
+    },
+
+        "Experimental dim 100": {
+    "shortName": "Experimental: 100 Dimensions",
+    "location": "data/experimentals/wwo-exp-window2.bin",
+    "shortDescription" : "WWO Experimental: dimensions 100",
+    "public" : "true",
+    "description": "An experimental model trained on the texts in Women Writers Online, using 100 dimensions in the model training process"
+    },
+    
+  "Agostini": {
+    "shortName": "Agostini: Medical Humanities",
+    "location": "data/participants/agostini_itl-medical-humanities.bin",
+    "shortDescription" : "Agostini",
+    "public" : "true",
+    "description": "A model trained on a corpus of early Italian scientific, medical, and autobiographical essays and manuscripts. The corpus contains 1,039,821 words in 12 texts."
+    },
+    
+      "Champagne": {
+    "shortName": "Champagne: Native American Literature",
+    "location": "data/participants/champagne_native-american-literature.bin",
+    "shortDescription" : "Champagne",
+    "public" : "true",
+    "description": "A model trained on a corpus of documents collected under the query \"Native American literature\" from the Internet Archive, including educational, creative, and non-fiction works. The corpus contains 9,019,229 words in 337 texts."
+    },
+    
+        "Clawson": {
+    "shortName": "Clawson: 19th/20thc American and British Fiction",
+    "location": "data/participants/clawson_19C-20C-american-british-fic.bin",
+    "shortDescription" : "Clawson",
+    "public" : "true",
+    "description": "A model trained on a corpus of prominent nineteenth and early-twentieth century novels from a variety of British and American authors. The corpus contains 76,112,439 words in 737 texts."
+    },
+    
+    "Cloutier": {
+    "shortName": "Cloutier: US-Foreign Relations",
+    "location": "data/participants/cloutier_US-foreign-relations.bin",
+    "shortDescription" : "Cloutier",
+    "public" : "true",
+    "description": "A model trained on a corpus of documents from the Foreign Relations of the United States (FRUS) collection. This corpus contains 10,100,862 words in 23 texts."
+    },
+    
+  "Joyce": {
+    "shortName": "Joyce: Wikipedia Deliberations",
+    "location": "data/participants/joyce_wikipedia-deliberations.bin",
+    "shortDescription" : "Joyce",
+    "public" : "true",
+    "description": "A model trained on a corpus of comments, transcripts, and interviews regarding Wikipedia deliberations. The corpus contains 1,540,558 words in 3,357 texts."
+    },
+    
+    "Kuliyeva": {
+    "shortName": "Kuliyeva: Shakespeare",
+    "location": "data/participants/kuliyeva_shakespeare.bin",
+    "shortDescription" : "Kuliyeva",
+    "public" : "true",
+    "description": "A model trained on a corpus of Shakespeare's dramatic works from the Folger Digital Editions collection, including histories, tragedies, romances, and comedies. The corpus contains 885,010 words in 37 texts."
+    },
+    
+      "Loewen": {
+    "shortName": "Loewen: Philosophy of Religion",
+    "location": "data/participants/loewen_philosophy-of-religion.bin",
+    "shortDescription" : "Loewen",
+    "public" : "true",
+    "description": "A model trained on a corpus of the archived journal articles and reviews from the International Journal for Philosophy of Religion. The corpus contains 39,010,832 words in 17,073 texts."
+    },
+    
+        "Mapp": {
+    "shortName": "Mapp: Biographies of Women",
+    "location": "data/participants/mapp_women-biographies.bin",
+    "shortDescription" : "Mapp",
+    "public" : "true",
+    "description": "A model trained on a corpus of women's biographies from the Alison Booth's Collective Biographies of Women (CBA) project at UVA. The corpus contains 1,697,467 words in 430 texts."
+    },
+    
+    
+        "Peljak-Łapińska1": {
+    "shortName": "Peljak-Łapińska: Anglophone fiction",
+    "location": "data/participants/peljak_lapinska_english-lit-translation.bin",
+    "shortDescription" : "Peljak-Łapińska1",
+    "public" : "true",
+    "description": "A model trained on a corpus of twenty- and twenty-first century short stories and popular Anglophone fiction. The corpus contains 3,506,248 words in 876 texts."
+    },
+    
+         "Peljak-Łapińska2": {
+    "shortName": "Peljak-Łapińska: Belarussian fiction",
+    "location": "data/participants/peljak_lapinska_belarussian-lit-translation.bin",
+    "shortDescription" : "Peljak-Łapińska2",
+    "public" : "true",
+    "description": "A model trained on a corpus of twenty- and twenty-first century short stories and popular Anglophone fiction translated into Belarussian. The corpus contains 2,751,250 words in 880 texts."
+    },
+    
+        "Rodrigues": {
+    "shortName": "Rodrigues: Biographies and Autobiographies",
+    "location": "data/participants/rodrigues_20C-bio-and-autobiography.bin",
+    "shortDescription" : "Rodrigues",
+    "public" : "true",
+    "description": "A model trained on a corpus of autobiographies and biographies from the early twentieth century, including narratives from immigrants in the US. The corpus contains 3,857,658 words in 42 texts."
+    },
+    
+        "Rust": {
+    "shortName": "Rust: Finding Aids",
+    "location": "data/participants/rust_northeastern-finding-aids.bin",
+    "shortDescription" : "Rust",
+    "public" : "true",
+    "description": "A model trained on a corpus of EAD finding aids from Northeastern University's Archives and Special Collections. The corpus contains 1,191,319 words in 331 texts."
+    },
+    
+        "Standard": {
+    "shortName": "Standard: American Women's Writing",
+    "location": "data/participants/standard_american-women-writing.bin",
+    "shortDescription" : "Standard",
+    "public" : "true",
+    "description": "A model trained on a corpus of autobiographical and fiction writing by women in the United States collected from Documenting the American South, the Wright American fiction project, and Project Gutenberg. The corpus contains 23,279,229 words in 246 texts."
+    },
+    
+         "VandeCreek": {
+    "shortName": "VandeCreek: Congressional Speeches",
+    "location": "data/participants/vandecreek_congress-speeches.bin",
+    "shortDescription" : "VandeCreek",
+    "public" : "true",
+    "description": "A model trained on a corpus of transcripts from policy debates about tarifs in Congress from 1873 to 1896. The corpus contains approximately 165,000,000 words."
+    },
+         "Wilson-Saia": {
+    "shortName": "Wilson-Saia: Austen",
+    "location": "data/participants/wilson-saia_austen.bin",
+    "shortDescription" : "Wilson-Saia",
+    "public" : "true",
+    "description": "A model trained on a corpus of Jane Austen's fictional writing and letters, incuding her juvenille writings and those published posthumously. The corpus contians 1,049,337 words in 10 texts."
+    },
+      "Johnson": {
+    "shortName": "Johnson: LGBT Finding Aids",
+    "location": "data/participants/johnson_LGBT-finding-aids.bin",
+    "shortDescription" : "Johnson",
+    "public" : "true",
+    "description": "A model trained on a corpus of finding aids for LGBT collections (using ArchiveGrid) from One Archive (LA), the GLBT Historical Society, Cornell University, and the New York Public Library. The corpus contains 1,602,200 words in 304 texts."
+    },
+    
+       "Connell": {
+    "shortName": "Connell: 17thc Histories",
+    "location": "data/participants/connell_histories.bin",
+    "shortDescription" : "Connell",
+    "public" : "true",
+    "description": "A model trained on a corpus of histories from the Early English Books Online–Text Creation Partnership. The corpus contains 10,929,084 words in 52 texts."
+    },
+    
+    
         "TCP1": {
 		"shortName": "Text Creation Partnership 1",
 		"location": "data/tcp1.bin",
 		"shortDescription" : "TCP Selected Corpus 1",
-		"public" : "true",
+		"public" : "false",
 		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,329,588 words in 205 texts."
     },
 
@@ -70,7 +250,7 @@
 		"shortName": "Text Creation Partnership 2",
 		"location": "data/tcp2.bin",
 		"shortDescription" : "TCP Selected Corpus 2",
-		"public" : "true",
+		"public" : "false",
 		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,002,431 words in 1,796 texts."
     },
 
@@ -78,7 +258,7 @@
 		"shortName": "Text Creation Partnership 3",
 		"location": "data/tcp3.bin",
 		"shortDescription" : "TCP Selected Corpus 3",
-		"public" : "true",
+		"public" : "false",
 		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 7,990,878 words in 470 texts."
     },
 
@@ -86,7 +266,7 @@
 		"shortName": "Text Creation Partnership 4",
 		"location": "data/tcp4.bin",
 		"shortDescription" : "TCP Selected Corpus 4",
-		"public" : "true",
+		"public" : "false",
 		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,343,987 words in 69 texts."
     },
 
@@ -94,16 +274,8 @@
     "shortName": "VWWP Full Corpus",
     "location": "data/vwwp_xquery_nonreg.bin",
 	"shortDescription" : "The Victorian Women Writers Project Corpus",
-	"public" : "true",
+	"public" : "false",
     "description": "Currently displayed: the entire Victorian Women Writers Project corpus of women's writing from 1830 to 1929. This corpus contains 8,065,805 words in 199 texts."
-  },
-
-    "VWWP and WWO": {
-    "shortName": "VWWP and WWO",
-    "location": "data/wwo-vwwp.bin",
-	"shortDescription" : "The Victorian Women Writers Project and Women Writers Online Combined Corpus",
-	"public" : "true",
-    "description": "Currently displayed: a combined corpus that includes all texts from both the Victorian Women Writers Project and Women Writers Online. This corpus contains 19,044,358 words in 614 texts."
   },
 
 
@@ -111,7 +283,7 @@
     "shortName": "VWWP and 19th-Century WWO",
     "location": "data/wwo-19-vwwp.bin",
 	"shortDescription" : "The Victorian Women Writers Project and 19thC Women Writers Online Combined Corpus",
-	"public" : "true",
+	"public" : "false",
     "description": "Currently displayed: a combined corpus that includes the full set of Victorian Women Writers Projects texts and the subset of the Women Writers Online corpus that was published in the 19th century. This corpus contains 11,625,245 words in 295 texts."
   },
 
@@ -120,7 +292,7 @@
     "shortName": "WWO 16th and 17th Centuries",
     "location": "data/wwo-16-17.bin",
 	"shortDescription" : "WWO texts from the 17th century",
-	"public" : "true",
+	"public" : "false",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 16th and 17th centuries. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,886,257 words in 201 texts."
   },
 
@@ -128,7 +300,7 @@
     "shortName": "WWO 18th Century",
     "location": "data/wwo-18.bin",
 	"shortDescription" : "WWO texts from the 18th century",
-	"public" : "true",
+	"public" : "false",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 18th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,408,243 words in 119 texts."
   },
 
@@ -136,23 +308,17 @@
     "shortName": "WWO 19th Century",
     "location": "data/wwo-19.bin",
 	"shortDescription" : "WWO texts from the 19th century",
-	"public" : "true",
+	"public" : "false",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 19th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,559,440 words in 96 texts."
   },
 
-  "WWO Corpus": {
-    "shortName": "WWO Full Corpus",
-    "location": "data/wwo.bin",
-	"shortDescription" : "All texts from WWO",
-	"public" : "true",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women's writing from 1526 to 1850. This corpus contains 10,978,553 words in 415 texts."
-  },
+
 
   "WWO Body Content": {
     "shortName": "WWO Body Content",
     "location": "data/wwo-body.bin",
 	"shortDescription" : "Text content extracted from the <body> element in the WWO, excludes front and back matter",
-	"public" : "true",
+	"public" : "false",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes the body of each text, without front or back matter. This corpus contains 10,669,922 words in 405 texts."
   },
 
@@ -160,7 +326,7 @@
     "shortName": "WWO Verse",
     "location": "data/wwo-lg.bin",
 	"shortDescription" : "Poetry and verse subset of the WWO",
-	"public" : "true",
+	"public" : "false",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a verse line group (<lg>). Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 4,973,946 words in 290 texts."
   },
 
@@ -168,7 +334,7 @@
     "shortName": "WWO Prose",
     "location": "data/wwo-p.bin",
 	"shortDescription" : "Prose only subset of the WWO",
-	"public" : "true",
+	"public" : "false",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a paragraph (<p>). This corpus contains 8,433,255 words in 406 texts."
   },
 
