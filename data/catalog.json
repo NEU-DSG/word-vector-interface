@@ -177,7 +177,7 @@
     
          "Peljak-Łapińska2": {
     "shortName": "Peljak-Łapińska: Belarussian fiction",
-    "location": "data/participants/peljak-lapinska_belarussian-lit-translation.bin",
+    "location": "data/participants/peljak-lapinska_belarussian-lit.bin",
     "shortDescription" : "Peljak-Łapińska2",
     "public" : "true",
     "description": "A model trained on a corpus of twenty- and twenty-first century short stories and popular Anglophone fiction translated into Belarussian. The corpus contains 2,751,250 words in 880 texts."
