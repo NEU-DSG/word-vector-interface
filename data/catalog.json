@@ -23,29 +23,29 @@
     "location": "data/samples/wright_american-fiction.bin",
     "shortDescription" : "Wright",
     "public" : "true",
-    "description": "A model trained on a corpus of eighteenth and nineteenth century American fiction from the Wright American Fiction project. The corpus contains 234,607,442 words in 2,876 texts."
+    "description": "A model trained on a corpus of eighteenth- and nineteenth-century American fiction from the Wright American Fiction project. The corpus contains 234,607,442 words in 2,876 texts."
     },
 
 
      "ECCO": {
     "shortName": "Eighteenth Century Collections Online",
-    "location": "data/ecco.bin",
+    "location": "data/samples/ecco.bin",
     "shortDescription" : "ECCO",
     "public" : "true",
-    "description": "A model trained on the standardized version of the Eighteenth Century Collections Online corpus published by the Visualizing Early Print project."
+    "description": "A model trained on the standardized version of the Eighteenth Century Collections Online corpus published by the Visualizing Early Print project. The corpus contains 74,556,712 words in 2,473 texts."
     },
     
        "EEBO": {
     "shortName": "Early Modern 1080",
-    "location": "data/eebo1080.bin",
+    "location": "data/samples/eebo1080.bin",
     "shortDescription" : "EEBO",
     "public" : "true",
-    "description": "A model trained on the “Early Modern 1080” corpus published by the Visualizing Early Print project; this corpus contains 40 randomly-selected texts per decade from the Early English Books Online–Text Creation Partnership collection."
+    "description": "A model trained on the “Early Modern 1080” corpus published by the Visualizing Early Print project; this corpus includes 40 randomly-selected texts per decade from the Early English Books Online–Text Creation Partnership collection. The corpus contains 37,614,609 words in 1,080 texts."
     },
 
   "WWO Corpus": {
     "shortName": "WWO Full Corpus",
-    "location": "data/wwo.bin",
+    "location": "data/samples/wwo.bin",
 	"shortDescription" : "All texts from WWO",
 	"public" : "true",
     "description": "A model trained on the entire Women Writers Online corpus of women's writing from 1526 to 1850. This corpus contains 10,978,553 words in 415 texts."
@@ -55,7 +55,7 @@
   
     "VWWP and WWO": {
     "shortName": "VWWP and WWO",
-    "location": "data/wwo-vwwp.bin",
+    "location": "data/samples/wwo-vwwp.bin",
 	"shortDescription" : "The Victorian Women Writers Project and Women Writers Online Combined Corpus",
 	"public" : "true",
     "description": "A model trained on a combined corpus that includes all texts from both the Victorian Women Writers Project and Women Writers Online. This corpus contains 19,044,358 words in 614 texts."
@@ -89,7 +89,7 @@
         "Experimental win 2": {
     "shortName": "Experimental: Window-size 2",
     "location": "data/experimentals/wwo-exp-window2.bin",
-    "shortDescription" : "WWO Experimental: window s",
+    "shortDescription" : "WWO Experimental: window size 2",
     "public" : "true",
     "description": "An experimental model trained on the texts in Women Writers Online, using a window size of 2 in the model training process."
     },
@@ -127,7 +127,7 @@
     },
     
     "Cloutier": {
-    "shortName": "Cloutier: US-Foreign Relations",
+    "shortName": "Cloutier: US Foreign Relations",
     "location": "data/participants/cloutier_US-foreign-relations.bin",
     "shortDescription" : "Cloutier",
     "public" : "true",
@@ -163,7 +163,7 @@
     "location": "data/participants/mapp_women-biographies.bin",
     "shortDescription" : "Mapp",
     "public" : "true",
-    "description": "A model trained on a corpus of women's biographies from the Alison Booth's Collective Biographies of Women (CBA) project at UVA. The corpus contains 1,697,467 words in 430 texts."
+    "description": "A model trained on a corpus of women's biographies from the Collective Biographies of Women project at UVA. The corpus contains 1,697,467 words in 430 texts."
     },
     
     
@@ -176,11 +176,11 @@
     },
     
          "Peljak-Łapińska2": {
-    "shortName": "Peljak-Łapińska: Belarussian fiction",
-    "location": "data/participants/peljak-lapinska_belarussian-lit.bin",
+    "shortName": "Peljak-Łapińska: Belarusian  fiction",
+    "location": "data/participants/peljak-lapinska_belarusian-lit.bin",
     "shortDescription" : "Peljak-Łapińska2",
     "public" : "true",
-    "description": "A model trained on a corpus of twenty- and twenty-first century short stories and popular Anglophone fiction translated into Belarussian. The corpus contains 2,751,250 words in 880 texts."
+    "description": "A model trained on a corpus of twenty- and twenty-first century short stories and popular Anglophone fiction translated into Belarusian. The corpus contains 2,751,250 words in 880 texts."
     },
     
         "Rodrigues": {
