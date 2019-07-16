@@ -29,7 +29,7 @@
 
      "ECCO": {
     "shortName": "Eighteenth Century Collections Online",
-    "location": "data/ecco.bin",
+    "location": "data/samples/ecco.bin",
     "shortDescription" : "ECCO",
     "public" : "true",
     "description": "A model trained on the standardized version of the Eighteenth Century Collections Online corpus published by the Visualizing Early Print project. The corpus contains 74,556,712 words in 2,473 texts."
@@ -37,7 +37,7 @@
     
        "EEBO": {
     "shortName": "Early Modern 1080",
-    "location": "data/eebo1080.bin",
+    "location": "data/samples/eebo1080.bin",
     "shortDescription" : "EEBO",
     "public" : "true",
     "description": "A model trained on the “Early Modern 1080” corpus published by the Visualizing Early Print project; this corpus includes 40 randomly-selected texts per decade from the Early English Books Online–Text Creation Partnership collection. The corpus contains 37,614,609 words in 1,080 texts."
