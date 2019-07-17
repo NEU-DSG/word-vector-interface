@@ -212,7 +212,7 @@
     "location": "data/participants/vandecreek_congress-speeches.bin",
     "shortDescription" : "VandeCreek",
     "public" : "true",
-    "description": "A model trained on a corpus of transcripts from policy debates about tarifs in Congress from 1873 to 1896. The corpus contains approximately 165,000,000 words."
+    "description": "A model trained on a corpus of transcripts from policy debates in Congress from 1873 to 1896. The corpus contains approximately 165,000,000 words."
     },
          "Wilson-Saia": {
     "shortName": "Wilson-Saia: Austen",
