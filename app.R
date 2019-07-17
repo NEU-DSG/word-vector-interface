@@ -257,8 +257,7 @@ body <- dashboardBody(
                fluidRow(
 
                  box(
-                   div(class="home_desc", p("Welcome to the Women Writers Vector Toolkit (WWVT) discovery interface! This interface will allow you to query terms in word2vec models that were trained on different collections from Women Writers Online, the Victorian Women Writers Project, and Early English Books Online.
-To get started, type a term you're interested in exploring in the \"Query term\" box below. The results that appear beneath your query are other words that are most similar to the term you queried in vector space."),
+                   div(class="home_desc", p("To get started, type a term you're interested in exploring in the \"Query term\" box below. The results that appear beneath your query are other words that are most similar to the term you queried in vector space."),
 p("To the right are a collection of clusters generated based on neighboring words in vector space—words that are similar will be clustered together. The clusters may be different every time but will always represent related terms. On the far left-hand sidebar, you can select different models to query, or reset the selection of clusters. More ways to use these vector models can be accessed under the “Compare,” “Clusters,” “Operations,” and “Visualization” tabs above."),
 p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see this page for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used.")),
 
@@ -353,7 +352,7 @@ p("If you click on any individual term, a new page will take you to the Women Wr
 
                    div(class="home_desc", p("The Clusters function allows you to observe relationships between terms in the corpus. Clusters are generated based on neighboring words in vector space—words that are similar will be clustered together. The clusters may be different every time but will always represent related terms. Each column represents a different cluster."),
 p("You have the option to change the model that is used to create the clusters. You can also hit the \"reset clusters\" button on the left to see a new set of clusters and use the slider on the bottom to see more terms in each cluster. Click the “Download” button on the left to download the set of clusters to use on your own computer."),
-p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see this page for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used.")),
+p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see <a href='https://wwp.northeastern.edu/wwo/texts/' target='_blank'>this page</a> for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used.")),
 
 
 
@@ -383,11 +382,11 @@ p("If you click on any individual term, a new page will take you to the Women Wr
 
                    div(class="home_desc",
                    p("If you would like to perform a closer search of a term in the word vector models, this Operations page can help. You may choose an operation on the left hand side of the webpage and adjust the model you would like to search. "),
-                   p("Addition  allows you to “add” one term with another term and see the most similar results between these two terms. For example, if you query “queen” and “throne”, you see words that are titles for people AND also material things, like \"sceptre.\""),
+                   p("Addition allows you to “add” one term with another term and see the most similar results between these two terms. For example, if you query “queen” and “throne”, you see words that are titles for people AND also material things, like \"sceptre.\""),
                    p("Subtraction allows you to remove a term and all of its associated words from a contextual search. For example, if you would like to search “bank” in the corpus, but remove terms related to the way a bank is used in context with a river, you can subtract “river” from “bank” to see the top results. "),
-                   p("Analogies are similar to the logic of “hand is to glove as foot is to shoe.” So for example, you can query “king” minus “man” plus “woman,” your top result is queene; king is to man as queen is to woman."),
+                   p("Analogies are similar to the logic of “hand is to glove as foot is to shoe.” So for example, you can query “woman” minus “man” plus “king”: man is to woman as king is to queen."),
                    p("The Advanced option allows you to create a complex query using multiple operations. "),
-                   p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see this page for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used. ")),
+                   p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see <a href='https://wwp.northeastern.edu/wwo/texts/' target='_blank'>this page</a> for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used. ")),
 
                   tags$h1(textOutput("model_name_operation")),
                    div(class = "model_desc", p(uiOutput("model_desc_operation"))),
@@ -784,7 +783,7 @@ shinyApp(
 
       url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
       output$model_desc_basic <- renderUI({
-        tagList(paste(list_Desc[[input$modelSelect[[1]]]], "The text has been regularized."), url)
+        tagList(paste(list_Desc[[input$modelSelect[[1]]]]), url)
       })
 
     })
@@ -796,7 +795,7 @@ shinyApp(
 
       url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
       output$model_desc_compare_1 <- renderUI({
-        tagList(paste(list_Desc[[input$modelSelectc1[[1]]]], "The text has been regularized."), url)
+        tagList(paste(list_Desc[[input$modelSelectc1[[1]]]]), url)
       })
 
 
@@ -809,7 +808,7 @@ shinyApp(
 
       url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
       output$model_desc_compare_2 <- renderUI({
-        tagList(paste(list_Desc[[input$modelSelectc2[[1]]]], "The text has been regularized."), url)
+        tagList(paste(list_Desc[[input$modelSelectc2[[1]]]]), url)
       })
 
 
@@ -822,7 +821,7 @@ shinyApp(
 
       url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
       output$model_desc_cluster <- renderUI({
-        tagList(paste(list_Desc[[input$modelSelect_clusters[[1]]]], "The text has been regularized."), url)
+        tagList(paste(list_Desc[[input$modelSelect_clusters[[1]]]]), url)
       })
 
 
@@ -836,7 +835,7 @@ shinyApp(
 
       url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
       output$model_desc_operation <- renderUI({
-        tagList(paste(list_Desc[[input$modelSelect_analogies_tabs[[1]]]], "The text has been regularized."), url)
+        tagList(paste(list_Desc[[input$modelSelect_analogies_tabs[[1]]]]), url)
       })
 
 
@@ -849,7 +848,7 @@ shinyApp(
 
       url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
       output$model_desc_visualisation <- renderUI({
-        tagList(paste(list_Desc[[input$modelSelect_Visualisation_tabs[[1]]]], "The text has been regularized."), url)
+        tagList(paste(list_Desc[[input$modelSelect_Visualisation_tabs[[1]]]]), url)
       })
 
     })
