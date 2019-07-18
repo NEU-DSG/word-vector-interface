@@ -32,12 +32,12 @@
     "description": "An experimental model trained on the texts in Women Writers Online, using a window size of 2 in the model training process."
     },
 
-        "Experimental dim 100": {
-    "shortName": "Experimental: 100 Dimensions",
-    "location": "data/wwo-exp-window2.bin",
-    "shortDescription" : "WWO Experimental: dimensions 100",
+        "Experimental dim 1000": {
+    "shortName": "Experimental: 1000 Dimensions",
+    "location": "data/experimentals/wwo-exp-dimensions1000.bin",
+    "shortDescription" : "WWO Experimental: dimensions 1000",
     "public" : "false",
-    "description": "An experimental model trained on the texts in Women Writers Online, using 100 dimensions in the model training process"
+    "description": "An experimental model trained on the texts in Women Writers Online, using 1000 dimensions in the model training process"
     },
 
         "TCP1": {
