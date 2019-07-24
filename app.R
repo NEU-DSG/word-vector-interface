@@ -257,11 +257,12 @@ body <- dashboardBody(
                fluidRow(
 
                  box(
-                   div(class="home_desc", p("To get started, type a term you're interested in exploring in the \"Query term\" box below. The results that appear beneath your query are other words that are most similar to the term you queried in vector space."),
-p("To the right are a collection of clusters generated based on neighboring words in vector space—words that are similar will be clustered together. The clusters may be different every time but will always represent related terms. On the far left-hand sidebar, you can select different models to query, or reset the selection of clusters. More ways to use these vector models can be accessed under the “Compare,” “Clusters,” “Operations,” and “Visualization” tabs above."),
-p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
-  tags$a(href="https://wwp.northeastern.edu/wwo/texts/", target="_blank", "this page"), 
-  " for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used.")),
+                   div(class="home_desc", 
+                       p("Welcome to the Women Writers Vector Toolkit (WWVT) discovery interface! This interface will allow you to query terms in word2vec models that were trained on different collections from Women Writers Online, the Victorian Women Writers Project, and Early English Books Online. To get started, type a term you're interested in exploring in the \"Query term\" box below. The results that appear beneath your query are other words that are most similar to the term you queried in vector space."),
+                       p("To the right are a collection of clusters generated based on neighboring words in vector space—words that are similar will be clustered together. The clusters may be different every time but will always represent related terms. On the far left-hand sidebar, you can select different models to query, or reset the selection of clusters. More ways to use these vector models can be accessed under the “Compare,” “Clusters,” “Operations,” and “Visualization” tabs above."),
+                       p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
+                         tags$a(href="https://wwp.northeastern.edu/wwo/texts/", target="_blank", "this page"), 
+                         " for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used.")),
 
                    tags$h1(textOutput("model_name_basic")),
                    div(class = "model_desc", p(uiOutput("model_desc_basic"))),
