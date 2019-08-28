@@ -554,7 +554,7 @@ body <- dashboardBody(
                                                     analyze. The word cloud will produce a collage
                                                     of the most similar words to your query term
                                                     using the WWO general corpus model. You can
-                                                    adjust the visualization based on the amount
+                                                    adjust the visualization based on the number
                                                     of words you would like to see appear
                                                     (top slider bar on the left of this page).
                                                     These terms are based on their percentage of
@@ -562,7 +562,7 @@ body <- dashboardBody(
                                                     percentage is also represented in the visualization
                                                     by the color of each word. See below for the color
                                                     key. The second slider down from the similarity
-                                                    bar will allow you to adjust the amount of words you
+                                                    bar will allow you to adjust the number of words you
                                                     would like in your word cloud, and the bottom-most
                                                     slider controls the size of the plot image."),
                                                   div("Similarity Color Key"),
@@ -699,7 +699,7 @@ shinyApp(
                                    selected = Selected_default),
 
                        selectInput("visualisation_selector","Select visualisation",
-                                   choices =  list("Word Cloud" = "wc", "2d Scatter plot" = "scatter", "closest scatter plot" = "scatter_closest"),
+                                   choices =  list("Word Cloud" = "wc", "2-D Scatterplot" = "scatter", "Closest Scatterplot" = "scatter_closest"),
                                    selected = 1),
 
                        conditionalPanel(condition="input.visualisation_selector=='wc'",
