@@ -530,40 +530,43 @@ body <- dashboardBody(
                     class = "visualization",
                     shinyjs::useShinyjs(),
                     tags$head(tags$style("#word_cloud{height:calc(100vh - 200px) !important;}")),
-                    box( solidHeader = TRUE, textInput("word_cloud_word", "Query term:", width = "500px"), width=12),
+                    box( solidHeader = TRUE, 
+                         textInput("word_cloud_word", "Query term:", width = "500px"), 
+                         width=12),
                     box(
                       solidHeader = FALSE,
                       box(
                         solidHeader = TRUE,
-                        plotOutput("word_cloud"),
+                        plotOutput("word_cloud", height="600px"),
                         width = 8
                       ),
                       box(
-                        solidHeader = TRUE,
-                        div(class = "model_desc", p("The visualizations tab allows you to create a
-                                                    word cloud for the query term you would like to
-                                                    analyze. The word cloud will produce a collage
-                                                    of the most similar words to your query term
-                                                    using the WWO general corpus model. You can
-                                                    adjust the visualization based on the number
-                                                    of words you would like to see appear
-                                                    (top slider bar on the left of this page).
-                                                    These terms are based on their percentage of
-                                                    similarity to the query term. The similarity
-                                                    percentage is also represented in the visualization
-                                                    by the color of each word. See below for the color
-                                                    key. The second slider down from the similarity
-                                                    bar will allow you to adjust the number of words you
-                                                    would like in your word cloud, and the bottom-most
-                                                    slider controls the size of the plot image."),
-                                                  div("Similarity Color Key"),
-                                                  div("Similarity % -- Color"),
-                                                  div("91- 100 -- gray"),
-                                                  div("81 – 90 -- brown"),
-                                                  div("71 – 80 -- orange"),
-                                                  div("51 - 70 -- green"),
-                                                  div("00 - 50 -- pink")
-                      ),
+                        #solidHeader = TRUE,
+                        div(class = "model_desc", 
+                            p("The visualizations tab allows you to create a
+                              word cloud for the query term you would like to
+                              analyze. The word cloud will produce a collage
+                              of the most similar words to your query term
+                              using the WWO general corpus model. You can
+                              adjust the visualization based on the number
+                              of words you would like to see appear
+                              (top slider bar on the left of this page).
+                              These terms are based on their percentage of
+                              similarity to the query term. The similarity
+                              percentage is also represented in the visualization
+                              by the color of each word. See below for the color
+                              key. The second slider down from the similarity
+                              bar will allow you to adjust the number of words you
+                              would like in your word cloud, and the bottom-most
+                              slider controls the size of the plot image."),
+                                    div("Similarity Color Key"),
+                                    div("Similarity % -- Color"),
+                                    div("91 – 100 -- gray"),
+                                    div("81 – 90 -- brown"),
+                                    div("71 – 80 -- orange"),
+                                    div("51 – 70 -- green"),
+                                    div("00 – 50 -- pink")
+                        ),
                         width = 4
                       ),
                       width = 12
@@ -575,7 +578,7 @@ body <- dashboardBody(
                       class = "visualization",
                       shinyjs::useShinyjs(),
                       box(
-                         plotOutput("scatter_plot",height = "600px"),
+                         plotOutput("scatter_plot", height = "600px"),
                          width = 8
                       )
                  ),
@@ -837,7 +840,6 @@ shinyApp(
         tagList(paste(list_Desc[[input$modelSelect_analogies_tabs[[1]]]], "The text has been regularized."), url)
       })
 
-
     })
 
 
@@ -854,29 +856,28 @@ shinyApp(
 
 
     output$word_cloud <- renderPlot({
-        validate(need(tolower(input$word_cloud_word) != "", "Please enter a valid Query term:"))
-        data <-  list_models[[input$modelSelect_Visualisation_tabs[[1]]]] %>% closest_to(tolower(input$word_cloud_word), 150)
+        validate(
+          need(tolower(input$word_cloud_word) != "", 
+               "Please enter a valid Query term:"))
+        data <- list_models[[input$modelSelect_Visualisation_tabs[[1]]]] %>% closest_to(tolower(input$word_cloud_word), 150)
         colnames(data) <- c("words", "sims")
         data <- mutate(data, sims = as.integer(sims * 100))
 
         set.seed(1234)
         wordcloud(words = data$words, freq = data$sims,
                   min.freq = input$freq, max.words=input$max,
-                  random.order=FALSE, random.color = FALSE,rot.per = 0.30, ordered.colors = F,
-                  colors = brewer.pal(8,"Dark2"), scale=c(input$scale,0.5))
-
+                  random.order=FALSE, random.color = FALSE, rot.per = 0.30, ordered.colors = FALSE,
+                  colors = brewer.pal(8,"Dark2"), scale= c(input$scale,0.5),
+                  use.r.layout = TRUE)
     })
-
 
     # rv <- reactiveValues()
     # rv$setupComplete <- FALSE
 
 
-
     dataset <- reactive({
 
       times <- input$clustering_reset_input_visualisation
-
 
       df2 <- sapply(sample(1:150,10),function(n) {
         paste0(names(list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster[list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster==n][1:150]))
@@ -890,14 +891,12 @@ shinyApp(
     datascatter <- reactive({
 
       df2 <- dataset()
-
       # print(df2)
 
       x <- c()
       y <- c()
       names <- c()
       cluster <- c()
-
 
       vector <- vectors[[input$modelSelect_Visualisation_tabs[[1]]]]
       for (column in colnames(df2))
@@ -909,9 +908,6 @@ shinyApp(
           cluster <- append(cluster,column)
         }
       }
-
-
-
 
       df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster), stringsAsFactors = FALSE)
       df_new
@@ -926,9 +922,9 @@ shinyApp(
 
 
     output$scatter_plot <- renderPlot({
-      ggplot(datascatter(), aes(x=x, y=y, colour=cluster), height = 600,width = 800) +
+      ggplot(datascatter(), aes(x=x, y=y, colour=cluster), height="600px", width="800px") +
         geom_point() +
-        geom_text_repel(aes(label=ifelse(cluster == input$scatter_cluster ,as.character(names),'')), hjust=0.5,vjust=-0.5)
+        geom_text_repel(aes(label = ifelse(cluster == input$scatter_cluster, as.character(names),'')), hjust=0.5,vjust=-0.5)
 
     })
 
@@ -947,7 +943,6 @@ shinyApp(
       cluster <-c()
 
       closeword <- list_models[['WWO Full Corpus']] %>% closest_to(tolower(input$scatter_plot_term), 150)
-
 
       i = 0
       for(word in closeword[[1]])
@@ -976,8 +971,6 @@ shinyApp(
     })
 
     outputOptions(output, "scatter_plot_closest", suspendWhenHidden = FALSE)
-
-
 
 
     output$addition_table <- DT::renderDataTable(DT::datatable({
