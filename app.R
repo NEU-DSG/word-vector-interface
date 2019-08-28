@@ -258,11 +258,11 @@ body <- dashboardBody(
 
                  box(
                    div(class="home_desc", 
-                       p("Welcome to the Women Writers Vector Toolkit (WWVT) discovery interface! This interface will allow you to query terms in word2vec models that were trained on different collections from Women Writers Online, the Victorian Women Writers Project, and Early English Books Online. To get started, type a term you're interested in exploring in the “Query term” box below. The results that appear beneath your query are other words that are most similar to the term you queried in vector space."),
-                       p("To the right are a collection of clusters generated based on neighboring words in vector space—words that are similar will be clustered together. The clusters may be different every time but will always represent related terms. On the far left-hand sidebar, you can select different models to query, or reset the selection of clusters. More ways to use these vector models can be accessed under the “Compare,” “Clusters,” “Operations,” and “Visualization” tabs above."),
+                       p("Welcome to the Women Writers Vector Toolkit (WWVT) discovery interface! This interface will allow you to query terms in word2vec models that were trained on texts from the Women Writers Online, Victorian Women Writers Project, and Early English Books Online–Text Creation Partnership collections. To get started, type a word in the “Query term” box below. The results that appear are the words that are closest to the term that you queried in vector space—that is, words that appear in similar contexts in the corpus used to train your model."),
+                       p("On the left-hand sidebar, you can select different models to query; you can also increase the number of words in your results set. More ways to explore these models can be accessed under the “Compare,” “Clusters,” “Operations,” and “Visualization” tabs above."),
                        p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
                          tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
-                         " for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used.")),
+                         " for information on subscribing and setting up a free trial) to search for your term in the WWO collection.")),
 
                    tags$h1(textOutput("model_name_basic")),
                    div(class = "model_desc", p(uiOutput("model_desc_basic"))),
@@ -284,14 +284,6 @@ body <- dashboardBody(
                    DT::dataTableOutput("basic_table"),
                    id = "table-main-1",
                    width = 6
-
-                 ),
-                 box(
-                   # solidHeader = TRUE,
-                   DTOutput('tbl'),
-                   id = "table-main-2",
-                   width = 6
-
 
                  )
                )
@@ -354,11 +346,11 @@ body <- dashboardBody(
                  box(
 
                    div(class="home_desc", 
-                       p("The Clusters function allows you to observe relationships between terms in the corpus. Clusters are generated based on neighboring words in vector space—words that are similar will be clustered together. The clusters may be different every time but will always represent related terms. Each column represents a different cluster."),
-                       p("You have the option to change the model that is used to create the clusters. You can also hit the “reset clusters” button on the left to see a new set of clusters and use the slider on the bottom to see more terms in each cluster. Click the “Download” button on the left to download the set of clusters to use on your own computer."),
+                       p("Clusters are generated based on neighboring words in vector space—words that are used in similar contexts will be clustered together. Each column represents a different cluster, randomly selected from 150 total clusters; the words in the list are those closest to the center of the cluster."),
+                       p("Use the dropdown on the left to select which model you want to view. Click the “Download” button to download the set of clusters you are viewing. You can also hit the “reset clusters” button to see a new set of clusters and use the slider to see more terms from each cluster. (Note that adjusting the number of terms per cluster will also reset the clusters.)"),
                        p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
                          tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
-                         " for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used.")),
+                         " for information on subscribing and setting up a free trial) to search for your term in the WWO collection.")),
 
 
 
@@ -387,14 +379,13 @@ body <- dashboardBody(
 
 
                    div(class="home_desc",
-                   p("If you would like to perform a closer search of a term in the word vector models, this Operations page can help. You may choose an operation on the left hand side of the webpage and adjust the model you would like to search. "),
-                   p("Addition allows you to “add” one term with another term and see the most similar results between these two terms. For example, if you query “queen” and “throne”, you see words that are titles for people AND also material things, like “sceptre.”"),
-                   p("Subtraction allows you to remove a term and all of its associated words from a contextual search. For example, if you would like to search “bank” in the corpus, but remove terms related to the way a bank is used in context with a river, you can subtract “river” from “bank” to see the top results. "),
-                   p("Analogies are similar to the logic of “hand is to glove as foot is to shoe.” So for example, you can query “woman” minus “man” plus “king”: man is to woman as king is to queen."),
-                   p("The Advanced option allows you to create a complex query using multiple operations. "),
+                   p("Using the sidebar on the left, you can select from several different operations and choose which model you would like to query."),
+                   p("Addition allows you to add the contexts associated with two terms to each other, while subtraction allows you to subtract the contexts associated with one word from another. To see how these work, try “orange” + “red” and “orange” - “red” and compare the results."),
+                   p("The analogies operation allows you to subtract the contexts associated with one term from another, and then add the contexts associated with a third term. For example, you might subtract “man” from “woman” to get a vector associated with the contexts of “woman” as distinct from “man”; then, adding the vector for “king” will bring in its contexts to give you words associated with the distinction between woman and man AND with royalty; in many models, this will be “queen.” Or, put more simply: woman - man + king = queen; woman is to man as queen is to king."),
+                   p("The advanced option allows you to create a query of your own using multiple operations."),
                    p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
                      tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
-                     " for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used.")),
+                     " for information on subscribing and setting up a free trial) to search for your term in the WWO collection.")),
 
                   tags$h1(textOutput("model_name_operation")),
                    div(class = "model_desc", p(uiOutput("model_desc_operation"))),
@@ -922,7 +913,7 @@ shinyApp(
 
 
 
-      df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster) ,stringsAsFactors = FALSE)
+      df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster), stringsAsFactors = FALSE)
       df_new
 
     })
