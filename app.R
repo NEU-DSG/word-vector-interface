@@ -159,10 +159,8 @@ body <- dashboardBody(
                             }
 
                             .visualization {
-                            width : 100%
-
+                            width : 100%;
                             }
-
 
                             #Download_reset_button {
                             display: flex !important;
@@ -182,12 +180,21 @@ body <- dashboardBody(
                             .dropdown-menu {
                             font-size:16px !important;
                             }
+
                             #sidebarItemExpanded {
                             margin-top:20px;
                             }
+
                             .btn-group-vertical>.btn-group:after, .btn-group-vertical>.btn-group:before, .btn-toolbar:after, .btn-toolbar:before, .clearfix:after, .clearfix:before, .container-fluid:after, .container-fluid:before, .container:after, .container:before, .dl-horizontal dd:after, .dl-horizontal dd:before, .form-horizontal .form-group:after, .form-horizontal .form-group:before, .modal-footer:after, .modal-footer:before, .modal-header:after, .modal-header:before, .nav:after, .nav:before, .navbar-collapse:after, .navbar-collapse:before, .navbar-header:after, .navbar-header:before, .navbar:after, .navbar:before, .pager:after, .pager:before, .panel-body:after, .panel-body:before, .row:after, .row:before {
                             display: table;
                             content: unset;
+                            }
+
+                            #word_cloud.shiny-output-error-validation {
+                              visibility: visible;
+                              color: inherit;
+                              font-size: 1.25em;
+                              font-style: italic;
                             }
 
                             #word_cloud > img {
@@ -739,12 +746,12 @@ shinyApp(
     ),
     body
   ),
+  
   server = function(input, output) {
     # The currently selected tab from the first box
     output$tabset1Selected <- renderText({
       input$tabset1
     })
-
 
 
     set.seed(122)
@@ -853,7 +860,7 @@ shinyApp(
     output$word_cloud <- renderPlot({
         validate(
           need(tolower(input$word_cloud_word) != "", 
-               "Please enter a valid Query term:"))
+               "To generate a word cloud, enter a query term in the text field above."))
         data <- list_models[[input$modelSelect_Visualisation_tabs[[1]]]] %>% closest_to(tolower(input$word_cloud_word), 150)
         colnames(data) <- c("words", "sims")
         data <- mutate(data, sims = as.integer(sims * 100))
