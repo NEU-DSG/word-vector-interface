@@ -290,7 +290,7 @@ body <- dashboardBody(
                     width=6
                   ),
                   box(
-                    p("To get started, type a word in the “Query term” box below. The results that appear are the words that are closest to the term that you queried in vector space—that is, words that appear in similar contexts in the corpus used to train your model."),
+                    p("To get started, type a word in the “Query term” box. The results that appear are the words that are closest to the term that you queried in vector space—that is, words that appear in similar contexts in the corpus used to train your model."),
                     p("On the left-hand sidebar, you can select different models to query; you can also increase the number of words in your results set. More ways to explore these models can be accessed under the “Compare,” “Clusters,” “Operations,” and “Visualization” tabs above."),
                     p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
                       tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
@@ -386,24 +386,18 @@ body <- dashboardBody(
                fluidRow(
                  box(
 
-
                    div(class="home_desc",
-                   p("Using the sidebar on the left, you can select from several different operations and choose which model you would like to query."),
-                   p("Addition allows you to add the contexts associated with two terms to each other, while subtraction allows you to subtract the contexts associated with one word from another. To see how these work, try “orange” + “red” and “orange” - “red” and compare the results."),
-                   p("The analogies operation allows you to subtract the contexts associated with one term from another, and then add the contexts associated with a third term. For example, you might subtract “man” from “woman” to get a vector associated with the contexts of “woman” as distinct from “man”; then, adding the vector for “king” will bring in its contexts to give you words associated with the distinction between woman and man AND with royalty; in many models, this will be “queen.” Or, put more simply: woman - man + king = queen; woman is to man as queen is to king."),
-                   p("The advanced option allows you to create a query of your own using multiple operations."),
-                   p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
-                     tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
-                     " for information on subscribing and setting up a free trial) to search for your term in the WWO collection.")),
-
+                     p("Using the sidebar on the left, you can select from several different operations and choose which model you would like to query.")
+                  ),
                   tags$h1(textOutput("model_name_operation")),
                    div(class = "model_desc", p(uiOutput("model_desc_operation"))),
                    width=12
-                 ),
+                 )
+              ),
+              fluidRow(
+                box( width = 7,
                  conditionalPanel(condition="input.operator_selector=='Addition'",
-                                  class = "compare_width",
-
-                                  box(
+                                  #class = "compare_width",
                                     box(
                                       solidHeader = TRUE,
                                       shinyjs::useShinyjs(),
@@ -411,7 +405,7 @@ body <- dashboardBody(
                                       column(4,
                                              textInput("addition_word1", "Word 1")),
                                       column(
-                                        2,br(), tags$label(class = "col-sm-4 control-label", icon("plus"))
+                                        2, br(), tags$label(class = "col-sm-4 control-label", icon("plus"))
                                       ),
                                       column(4,
                                              textInput("addition_word2", "Word 2")
@@ -422,41 +416,35 @@ body <- dashboardBody(
                                       DT::dataTableOutput("addition_table"),
                                       width = 12
                                     ),
-                                  width = 12
-                                ),
                     width = 12
                  ),
 
                  conditionalPanel(condition="input.operator_selector=='Subtraction'",
-                                  class = "compare_width",
+                                  #class = "compare_width",
                                   box(
-                                    box(
-                                        solidHeader = TRUE,
-                                        shinyjs::useShinyjs(),
-                                        id = "subtraction_panel",
-                                        column(4,
-                                               # Sidebar with a inputs
-                                               textInput("subtraction_word1", "Word 1")),
-                                        column(
-                                          2,br(), tags$label(class = "col-sm-4 control-label", icon("minus"))
-                                        ),
-                                        column(4,
-                                               textInput("subtraction_word2", "Word 2")
-                                        ),
-                                        width = 12
-                                    ),
-                                    box(
-                                      DT::dataTableOutput("subtraction_table"),
+                                      solidHeader = TRUE,
+                                      shinyjs::useShinyjs(),
+                                      id = "subtraction_panel",
+                                      column(4,
+                                             # Sidebar with a inputs
+                                             textInput("subtraction_word1", "Word 1")),
+                                      column(
+                                        2,br(), tags$label(class = "col-sm-4 control-label", icon("minus"))
+                                      ),
+                                      column(4,
+                                             textInput("subtraction_word2", "Word 2")
+                                      ),
                                       width = 12
-                                    ),
+                                  ),
+                                  box(
+                                    DT::dataTableOutput("subtraction_table"),
                                     width = 12
                                   ),
                     width = 12
                  ),
                  conditionalPanel(condition="input.operator_selector=='Advanced'",
-                                  class = "compare_width",
+                                  #class = "compare_width",
                                   box(
-                                    box(
                                        solidHeader = TRUE,
                                        shinyjs::useShinyjs(),
                                        id = "advanced_panel",
@@ -484,26 +472,25 @@ body <- dashboardBody(
                                       DT::dataTableOutput("advanced_table"),
                                       width = 12
                                     ),
-                                    width = 12
-                                  ),
                       width = 12
                  ),
 
                  conditionalPanel(condition="input.operator_selector=='Analogies'",
-                                  class = "compare_width",
+                                  #class = "compare_width",
                                   box(
+                                    solidHeader = TRUE,
                                     shinyjs::useShinyjs(),
                                     id = "analogies_panel",
                                     column(2,
                                            # Sidebar with a inputs
                                            textInput("analogies_word1", "Word 1")),
                                     column(
-                                      1,br(), tags$label(class = "col-sm-4 control-label", icon("minus"))
+                                      1, br(), tags$label(class = "col-sm-4 control-label", icon("minus"))
                                     ),
                                     column(2,
                                            textInput("analogies_word2", "Word 2")),
                                     column(
-                                      1,br(), tags$label(class = "col-sm-4 control-label", icon("plus"))
+                                      1, br(), tags$label(class = "col-sm-4 control-label", icon("plus"))
                                     ),
                                     column(2,
                                            textInput("analogies_word3", "Word 3")
@@ -511,10 +498,19 @@ body <- dashboardBody(
                                     width = 12
                                   ),
                                   box(
-
                                     DT::dataTableOutput("analogies_table"),
                                     width = 12
                                   )
+                      )
+                 ),
+                 box(
+                   p("Addition allows you to add the contexts associated with two terms to each other, while subtraction allows you to subtract the contexts associated with one word from another. To see how these work, try “orange” + “red” and “orange” - “red” and compare the results."),
+                   p("The analogies operation allows you to subtract the contexts associated with one term from another, and then add the contexts associated with a third term. For example, you might subtract “man” from “woman” to get a vector associated with the contexts of “woman” as distinct from “man”; then, adding the vector for “king” will bring in its contexts to give you words associated with the distinction between woman and man AND with royalty; in many models, this will be “queen.” Or, put more simply: woman - man + king = queen; woman is to man as queen is to king."),
+                   p("The advanced option allows you to create a query of your own using multiple operations."),
+                   p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
+                     tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
+                     " for information on subscribing and setting up a free trial) to search for your term in the WWO collection."),
+                   width = 5
                  )
 
                )
@@ -629,10 +625,9 @@ shinyApp(
         # )
       )
     ,
+
     # dashboardHeader(),
     dashboardSidebar(
-
-
 
       conditionalPanel(condition="input.tabset1==1",
                        selectInput("modelSelect", "Model",
