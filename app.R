@@ -240,6 +240,9 @@ body <- dashboardBody(
                               border-bottom-width: medium !important;
                             }
 
+                            .welcome_desc {
+                              font-size: 1.2em !important;
+                            }
 
                             .dataTables_filter {
                                 display: none !important;
@@ -254,41 +257,40 @@ body <- dashboardBody(
       # The id lets us use input$tabset1 on the server to find the current tab
       id = "tabset1", height = "250px", width = 12,
       tabPanel("Home", value=1,
-               fluidRow(
-
-                 box(
-                   div(class="home_desc", 
-                       p("Welcome to the Women Writers Vector Toolkit (WWVT) discovery interface! This interface will allow you to query terms in word2vec models that were trained on texts from the Women Writers Online, Victorian Women Writers Project, and Early English Books Online–Text Creation Partnership collections. To get started, type a word in the “Query term” box below. The results that appear are the words that are closest to the term that you queried in vector space—that is, words that appear in similar contexts in the corpus used to train your model."),
-                       p("On the left-hand sidebar, you can select different models to query; you can also increase the number of words in your results set. More ways to explore these models can be accessed under the “Compare,” “Clusters,” “Operations,” and “Visualization” tabs above."),
-                       p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
-                         tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
-                         " for information on subscribing and setting up a free trial) to search for your term in the WWO collection.")),
-
-                   tags$h1(textOutput("model_name_basic")),
-                   div(class = "model_desc", p(uiOutput("model_desc_basic"))),
-                   # div(class = "model_desc",
-                   #     p(textOutput("model_desc_basic"),
-                   #       "The text has been regularized",
-                   #       a("[read more]", href=paste("https://wwp.northeastern.edu/lab/wwvt/methodology/index.html", sep=""), target="_blank")
-                   #       )
-                   #     ),
-
-                   width=12
-                 ),
-                 box(solidHeader = TRUE, textInput("basic_word1", "Query term:", width = "500px"), width=12)
-               )
-               ,
-               fluidRow(
-                 box(
-                   # solidHeader = TRUE,
-                   DT::dataTableOutput("basic_table"),
-                   id = "table-main-1",
-                   width = 6
-
+               div(
+                 fluidRow (
+                   box(
+                     p( class="home_desc welcome_desc", 
+                       "Welcome to the Women Writers Vector Toolkit (WWVT) discovery interface! This interface will allow you to query terms in word2vec models that were trained on texts from the Women Writers Online, Victorian Women Writers Project, and Early English Books Online–Text Creation Partnership collections."),
+                     tags$h1(textOutput("model_name_basic")),
+                     div(
+                       class = "model_desc", 
+                       p(uiOutput("model_desc_basic"))
+                     ),
+                     width=12
+                   )
                  )
-               )
-
-
+               ,
+                 fluidRow(
+                   box(
+                     box(solidHeader = TRUE, textInput("basic_word1", "Query term:", width = "500px"), width=12),
+                     box(
+                       # solidHeader = TRUE,
+                       DT::dataTableOutput("basic_table"),
+                       id = "table-main-1",
+                       width=12
+                    ),
+                    width=6
+                  ),
+                  box(
+                    p("To get started, type a word in the “Query term” box below. The results that appear are the words that are closest to the term that you queried in vector space—that is, words that appear in similar contexts in the corpus used to train your model."),
+                    p("On the left-hand sidebar, you can select different models to query; you can also increase the number of words in your results set. More ways to explore these models can be accessed under the “Compare,” “Clusters,” “Operations,” and “Visualization” tabs above."),
+                    p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
+                      tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
+                      " for information on subscribing and setting up a free trial) to search for your term in the WWO collection.")),
+                  width = 6
+                  )
+                )
         ),
       tabPanel("Compare", value=2,
                id = "compareTab-Id",
@@ -389,13 +391,6 @@ body <- dashboardBody(
 
                   tags$h1(textOutput("model_name_operation")),
                    div(class = "model_desc", p(uiOutput("model_desc_operation"))),
-
-
-                   # div(class = "model_desc", p(textOutput("model_desc_operation"),
-                   #                             "The text has been regularized",
-                   #                             a("[read more]", href=paste("https://wwp.northeastern.edu/lab/wwvt/methodology/index.html", sep=""), target="_blank")
-                   #                             )
-                   #     ),
                    width=12
                  ),
                  conditionalPanel(condition="input.operator_selector=='Addition'",
@@ -711,16 +706,16 @@ shinyApp(
                        ),
                        conditionalPanel(condition="input.visualisation_selector=='scatter'",
                             selectInput("scatter_cluster", "Cluster",
-                                        choices = list("cluster 1" = "V1",
-                                                       "cluster 2" = "V2",
-                                                       "cluster 3" = "V3",
-                                                       "cluster 4" = "V4",
-                                                       "cluster 5" = "V5",
-                                                       "cluster 6" = "V6",
-                                                       "cluster 7" = "V7",
-                                                       "cluster 8" = "V8",
-                                                       "cluster 9" = "V9",
-                                                       "cluster 10" = "V10" ),
+                                        choices = list("Cluster 1" = "V1",
+                                                       "Cluster 2" = "V2",
+                                                       "Cluster 3" = "V3",
+                                                       "Cluster 4" = "V4",
+                                                       "Cluster 5" = "V5",
+                                                       "Cluster 6" = "V6",
+                                                       "Cluster 7" = "V7",
+                                                       "Cluster 8" = "V8",
+                                                       "Cluster 9" = "V9",
+                                                       "Cluster 10" = "V10" ),
                                         selected = 1),
                             sliderInput("scatter_number",
                                         "Number of Words:",
@@ -959,7 +954,7 @@ shinyApp(
         i <- i + 1
         names <- append(names,word)
       }
-      df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster) ,stringsAsFactors = FALSE)
+      df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster), stringsAsFactors = FALSE)
       df_new
 
     })
