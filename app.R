@@ -690,7 +690,10 @@ shinyApp(
                                    selected = Selected_default),
 
                        selectInput("visualisation_selector","Select visualisation",
-                                   choices =  list("Word Cloud" = "wc", "2-D Scatterplot" = "scatter", "Closest Scatterplot" = "scatter_closest"),
+                                   choices = list(
+                                     "Word Cloud" = "wc",
+                                     "Query Term Scatterplot" = "scatter_closest",
+                                     "Cluster Scatterplot" = "scatter"),
                                    selected = 1),
 
                        conditionalPanel(condition="input.visualisation_selector=='wc'",
