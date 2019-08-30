@@ -727,12 +727,12 @@ shinyApp(
                        ),
                        conditionalPanel(condition="input.visualisation_selector=='scatter_closest'",
                                         selectInput("scatter_plot_closest_choice", "Cluster",
-                                                    choices = list("top 10",
-                                                                   "top 20",
-                                                                   "top 40",
-                                                                   "top 60",
-                                                                   "top 80",
-                                                                   "top 150"),
+                                                    choices = list("Top 10",
+                                                                   "Top 20",
+                                                                   "Top 40",
+                                                                   "Top 60",
+                                                                   "Top 80",
+                                                                   "Top 150"),
                                                     selected = 1)
 
                        )
