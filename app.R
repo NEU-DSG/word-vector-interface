@@ -159,10 +159,8 @@ body <- dashboardBody(
                             }
 
                             .visualization {
-                            width : 100%
-
+                            width : 100%;
                             }
-
 
                             #Download_reset_button {
                             display: flex !important;
@@ -182,12 +180,21 @@ body <- dashboardBody(
                             .dropdown-menu {
                             font-size:16px !important;
                             }
+
                             #sidebarItemExpanded {
                             margin-top:20px;
                             }
+
                             .btn-group-vertical>.btn-group:after, .btn-group-vertical>.btn-group:before, .btn-toolbar:after, .btn-toolbar:before, .clearfix:after, .clearfix:before, .container-fluid:after, .container-fluid:before, .container:after, .container:before, .dl-horizontal dd:after, .dl-horizontal dd:before, .form-horizontal .form-group:after, .form-horizontal .form-group:before, .modal-footer:after, .modal-footer:before, .modal-header:after, .modal-header:before, .nav:after, .nav:before, .navbar-collapse:after, .navbar-collapse:before, .navbar-header:after, .navbar-header:before, .navbar:after, .navbar:before, .pager:after, .pager:before, .panel-body:after, .panel-body:before, .row:after, .row:before {
                             display: table;
                             content: unset;
+                            }
+
+                            #word_cloud.shiny-output-error-validation {
+                              visibility: visible;
+                              color: inherit;
+                              font-size: 1.25em;
+                              font-style: italic;
                             }
 
                             #word_cloud > img {
@@ -240,6 +247,9 @@ body <- dashboardBody(
                               border-bottom-width: medium !important;
                             }
 
+                            .welcome_desc {
+                              font-size: 1.2em !important;
+                            }
 
                             .dataTables_filter {
                                 display: none !important;
@@ -254,47 +264,40 @@ body <- dashboardBody(
       # The id lets us use input$tabset1 on the server to find the current tab
       id = "tabset1", height = "250px", width = 12,
       tabPanel("Home", value=1,
-               fluidRow(
-
-                 box(
-                   div(class="home_desc", p("Welcome to the Women Writers Vector Toolkit (WWVT) discovery interface! This interface will allow you to query terms in word2vec models that were trained on different collections from Women Writers Online, the Victorian Women Writers Project, and Early English Books Online.
-To get started, type a term you're interested in exploring in the \"Query term\" box below. The results that appear beneath your query are other words that are most similar to the term you queried in vector space."),
-p("To the right are a collection of clusters generated based on neighboring words in vector space—words that are similar will be clustered together. The clusters may be different every time but will always represent related terms. On the far left-hand sidebar, you can select different models to query, or reset the selection of clusters. More ways to use these vector models can be accessed under the “Compare,” “Clusters,” “Operations,” and “Visualization” tabs above."),
-p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see this page for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used.")),
-
-                   tags$h1(textOutput("model_name_basic")),
-                   div(class = "model_desc", p(uiOutput("model_desc_basic"))),
-                   # div(class = "model_desc",
-                   #     p(textOutput("model_desc_basic"),
-                   #       "The text has been regularized",
-                   #       a("[read more]", href=paste("https://wwp.northeastern.edu/lab/wwvt/methodology/index.html", sep=""), target="_blank")
-                   #       )
-                   #     ),
-
-                   width=12
-                 ),
-                 box(solidHeader = TRUE, textInput("basic_word1", "Query term:", width = "500px"), width=12)
-               )
-               ,
-               fluidRow(
-                 box(
-                   # solidHeader = TRUE,
-                   DT::dataTableOutput("basic_table"),
-                   id = "table-main-1",
-                   width = 6
-
-                 ),
-                 box(
-                   # solidHeader = TRUE,
-                   DTOutput('tbl'),
-                   id = "table-main-2",
-                   width = 6
-
-
+               div(
+                 fluidRow (
+                   box(
+                     p( class="home_desc welcome_desc", 
+                       "Welcome to the Women Writers Vector Toolkit (WWVT) discovery interface! This interface will allow you to query terms in word2vec models that were trained on texts from the Women Writers Online, Victorian Women Writers Project, and Early English Books Online–Text Creation Partnership collections."),
+                     tags$h1(textOutput("model_name_basic")),
+                     div(
+                       class = "model_desc", 
+                       p(uiOutput("model_desc_basic"))
+                     ),
+                     width=12
+                   )
                  )
-               )
-
-
+               ,
+                 fluidRow(
+                   box(
+                     box(solidHeader = TRUE, textInput("basic_word1", "Query term:", width = "500px"), width=12),
+                     box(
+                       # solidHeader = TRUE,
+                       DT::dataTableOutput("basic_table"),
+                       id = "table-main-1",
+                       width=12
+                    ),
+                    width=6
+                  ),
+                  box(
+                    p("To get started, type a word in the “Query term” box. The results that appear are the words that are closest to the term that you queried in vector space—that is, words that appear in similar contexts in the corpus used to train your model."),
+                    p("On the left-hand sidebar, you can select different models to query; you can also increase the number of words in your results set. More ways to explore these models can be accessed under the “Compare,” “Clusters,” “Operations,” and “Visualization” tabs above."),
+                    p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
+                      tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
+                      " for information on subscribing and setting up a free trial) to search for your term in the WWO collection.")),
+                  width = 6
+                  )
+                )
         ),
       tabPanel("Compare", value=2,
                id = "compareTab-Id",
@@ -351,9 +354,12 @@ p("If you click on any individual term, a new page will take you to the Women Wr
                fluidRow(
                  box(
 
-                   div(class="home_desc", p("The Clusters function allows you to observe relationships between terms in the corpus. Clusters are generated based on neighboring words in vector space—words that are similar will be clustered together. The clusters may be different every time but will always represent related terms. Each column represents a different cluster."),
-p("You have the option to change the model that is used to create the clusters. You can also hit the \"reset clusters\" button on the left to see a new set of clusters and use the slider on the bottom to see more terms in each cluster. Click the “Download” button on the left to download the set of clusters to use on your own computer."),
-p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see this page for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used.")),
+                   div(class="home_desc", 
+                       p("Clusters are generated based on neighboring words in vector space—words that are used in similar contexts will be clustered together. Each column represents a different cluster, randomly selected from 150 total clusters; the words in the list are those closest to the center of the cluster."),
+                       p("Use the dropdown on the left to select which model you want to view. Click the “Download” button to download the set of clusters you are viewing. You can also hit the “reset clusters” button to see a new set of clusters and use the slider to see more terms from each cluster. (Note that adjusting the number of terms per cluster will also reset the clusters.)"),
+                       p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
+                         tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
+                         " for information on subscribing and setting up a free trial) to search for your term in the WWO collection.")),
 
 
 
@@ -380,30 +386,18 @@ p("If you click on any individual term, a new page will take you to the Women Wr
                fluidRow(
                  box(
 
-
                    div(class="home_desc",
-                   p("If you would like to perform a closer search of a term in the word vector models, this Operations page can help. You may choose an operation on the left hand side of the webpage and adjust the model you would like to search. "),
-                   p("Addition  allows you to “add” one term with another term and see the most similar results between these two terms. For example, if you query “queen” and “throne”, you see words that are titles for people AND also material things, like \"sceptre.\""),
-                   p("Subtraction allows you to remove a term and all of its associated words from a contextual search. For example, if you would like to search “bank” in the corpus, but remove terms related to the way a bank is used in context with a river, you can subtract “river” from “bank” to see the top results. "),
-                   p("Analogies are similar to the logic of “hand is to glove as foot is to shoe.” So for example, you can query “king” minus “man” plus “woman,” your top result is queene; king is to man as queen is to woman."),
-                   p("The Advanced option allows you to create a complex query using multiple operations. "),
-                   p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see this page for information on subscribing and setting up a free trial) to show where in the WWO collection your term is used. ")),
-
+                     p("Using the sidebar on the left, you can select from several different operations and choose which model you would like to query.")
+                  ),
                   tags$h1(textOutput("model_name_operation")),
                    div(class = "model_desc", p(uiOutput("model_desc_operation"))),
-
-
-                   # div(class = "model_desc", p(textOutput("model_desc_operation"),
-                   #                             "The text has been regularized",
-                   #                             a("[read more]", href=paste("https://wwp.northeastern.edu/lab/wwvt/methodology/index.html", sep=""), target="_blank")
-                   #                             )
-                   #     ),
                    width=12
-                 ),
+                 )
+              ),
+              fluidRow(
+                box( width = 7,
                  conditionalPanel(condition="input.operator_selector=='Addition'",
-                                  class = "compare_width",
-
-                                  box(
+                                  #class = "compare_width",
                                     box(
                                       solidHeader = TRUE,
                                       shinyjs::useShinyjs(),
@@ -411,7 +405,7 @@ p("If you click on any individual term, a new page will take you to the Women Wr
                                       column(4,
                                              textInput("addition_word1", "Word 1")),
                                       column(
-                                        2,br(), tags$label(class = "col-sm-4 control-label", icon("plus"))
+                                        2, br(), tags$label(class = "col-sm-4 control-label", icon("plus"))
                                       ),
                                       column(4,
                                              textInput("addition_word2", "Word 2")
@@ -422,41 +416,35 @@ p("If you click on any individual term, a new page will take you to the Women Wr
                                       DT::dataTableOutput("addition_table"),
                                       width = 12
                                     ),
-                                  width = 12
-                                ),
                     width = 12
                  ),
 
                  conditionalPanel(condition="input.operator_selector=='Subtraction'",
-                                  class = "compare_width",
+                                  #class = "compare_width",
                                   box(
-                                    box(
-                                        solidHeader = TRUE,
-                                        shinyjs::useShinyjs(),
-                                        id = "subtraction_panel",
-                                        column(4,
-                                               # Sidebar with a inputs
-                                               textInput("subtraction_word1", "Word 1")),
-                                        column(
-                                          2,br(), tags$label(class = "col-sm-4 control-label", icon("minus"))
-                                        ),
-                                        column(4,
-                                               textInput("subtraction_word2", "Word 2")
-                                        ),
-                                        width = 12
-                                    ),
-                                    box(
-                                      DT::dataTableOutput("subtraction_table"),
+                                      solidHeader = TRUE,
+                                      shinyjs::useShinyjs(),
+                                      id = "subtraction_panel",
+                                      column(4,
+                                             # Sidebar with a inputs
+                                             textInput("subtraction_word1", "Word 1")),
+                                      column(
+                                        2,br(), tags$label(class = "col-sm-4 control-label", icon("minus"))
+                                      ),
+                                      column(4,
+                                             textInput("subtraction_word2", "Word 2")
+                                      ),
                                       width = 12
-                                    ),
+                                  ),
+                                  box(
+                                    DT::dataTableOutput("subtraction_table"),
                                     width = 12
                                   ),
                     width = 12
                  ),
                  conditionalPanel(condition="input.operator_selector=='Advanced'",
-                                  class = "compare_width",
+                                  #class = "compare_width",
                                   box(
-                                    box(
                                        solidHeader = TRUE,
                                        shinyjs::useShinyjs(),
                                        id = "advanced_panel",
@@ -484,26 +472,25 @@ p("If you click on any individual term, a new page will take you to the Women Wr
                                       DT::dataTableOutput("advanced_table"),
                                       width = 12
                                     ),
-                                    width = 12
-                                  ),
                       width = 12
                  ),
 
                  conditionalPanel(condition="input.operator_selector=='Analogies'",
-                                  class = "compare_width",
+                                  #class = "compare_width",
                                   box(
+                                    solidHeader = TRUE,
                                     shinyjs::useShinyjs(),
                                     id = "analogies_panel",
                                     column(2,
                                            # Sidebar with a inputs
                                            textInput("analogies_word1", "Word 1")),
                                     column(
-                                      1,br(), tags$label(class = "col-sm-4 control-label", icon("minus"))
+                                      1, br(), tags$label(class = "col-sm-4 control-label", icon("minus"))
                                     ),
                                     column(2,
                                            textInput("analogies_word2", "Word 2")),
                                     column(
-                                      1,br(), tags$label(class = "col-sm-4 control-label", icon("plus"))
+                                      1, br(), tags$label(class = "col-sm-4 control-label", icon("plus"))
                                     ),
                                     column(2,
                                            textInput("analogies_word3", "Word 3")
@@ -511,10 +498,19 @@ p("If you click on any individual term, a new page will take you to the Women Wr
                                     width = 12
                                   ),
                                   box(
-
                                     DT::dataTableOutput("analogies_table"),
                                     width = 12
                                   )
+                      )
+                 ),
+                 box(
+                   p("Addition allows you to add the contexts associated with two terms to each other, while subtraction allows you to subtract the contexts associated with one word from another. To see how these work, try “orange” + “red” and “orange” - “red” and compare the results."),
+                   p("The analogies operation allows you to subtract the contexts associated with one term from another, and then add the contexts associated with a third term. For example, you might subtract “man” from “woman” to get a vector associated with the contexts of “woman” as distinct from “man”; then, adding the vector for “king” will bring in its contexts to give you words associated with the distinction between woman and man AND with royalty; in many models, this will be “queen.” Or, put more simply: woman - man + king = queen; woman is to man as queen is to king."),
+                   p("The advanced option allows you to create a query of your own using multiple operations."),
+                   p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
+                     tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
+                     " for information on subscribing and setting up a free trial) to search for your term in the WWO collection."),
+                   width = 5
                  )
 
                )
@@ -532,40 +528,43 @@ p("If you click on any individual term, a new page will take you to the Women Wr
                     class = "visualization",
                     shinyjs::useShinyjs(),
                     tags$head(tags$style("#word_cloud{height:calc(100vh - 200px) !important;}")),
-                    box( solidHeader = TRUE, textInput("word_cloud_word", "Query term:", width = "500px"), width=12),
+                    box( solidHeader = TRUE, 
+                         textInput("word_cloud_word", "Query term:", width = "500px"), 
+                         width=12),
                     box(
                       solidHeader = FALSE,
                       box(
                         solidHeader = TRUE,
-                        plotOutput("word_cloud"),
+                        plotOutput("word_cloud", height="600px"),
                         width = 8
                       ),
                       box(
-                        solidHeader = TRUE,
-                        div(class = "model_desc", p("The visualizations tab allows you to create a
-                                                    word cloud for the query term you would like to
-                                                    analyze. The word cloud will produce a collage
-                                                    of the most similar words to your query term
-                                                    using the WWO general corpus model. You can
-                                                    adjust the visualization based on the amount
-                                                    of words you would like to see appear
-                                                    (top slider bar on the left of this page).
-                                                    These terms are based on their percentage of
-                                                    similarity to the query term. The similarity
-                                                    percentage is also represented in the visualization
-                                                    by the color of each word. See below for the color
-                                                    key. The second slider down from the similarity
-                                                    bar will allow you to adjust the amount of words you
-                                                    would like in your word cloud, and the bottom-most
-                                                    slider controls the size of the plot image."),
-                                                  div("Similarity Color Key"),
-                                                  div("Similarity % -- Color"),
-                                                  div("91- 100 -- gray"),
-                                                  div("81 – 90 -- brown"),
-                                                  div("71 – 80 -- orange"),
-                                                  div("51 - 70 -- green"),
-                                                  div("00 - 50 -- pink")
-                      ),
+                        #solidHeader = TRUE,
+                        div(class = "model_desc", 
+                            p("The visualizations tab allows you to create a
+                              word cloud for the query term you would like to
+                              analyze. The word cloud will produce a collage
+                              of the most similar words to your query term
+                              using the WWO general corpus model. You can
+                              adjust the visualization based on the number
+                              of words you would like to see appear
+                              (top slider bar on the left of this page).
+                              These terms are based on their percentage of
+                              similarity to the query term. The similarity
+                              percentage is also represented in the visualization
+                              by the color of each word. See below for the color
+                              key. The second slider down from the similarity
+                              bar will allow you to adjust the number of words you
+                              would like in your word cloud, and the bottom-most
+                              slider controls the size of the plot image."),
+                                    div("Similarity Color Key"),
+                                    div("Similarity % -- Color"),
+                                    div("91 – 100 -- gray"),
+                                    div("81 – 90 -- brown"),
+                                    div("71 – 80 -- orange"),
+                                    div("51 – 70 -- green"),
+                                    div("00 – 50 -- pink")
+                        ),
                         width = 4
                       ),
                       width = 12
@@ -577,7 +576,7 @@ p("If you click on any individual term, a new page will take you to the Women Wr
                       class = "visualization",
                       shinyjs::useShinyjs(),
                       box(
-                         plotOutput("scatter_plot",height = "600px"),
+                         plotOutput("scatter_plot", height = "600px"),
                          width = 8
                       )
                  ),
@@ -626,10 +625,9 @@ shinyApp(
         # )
       )
     ,
+
     # dashboardHeader(),
     dashboardSidebar(
-
-
 
       conditionalPanel(condition="input.tabset1==1",
                        selectInput("modelSelect", "Model",
@@ -692,7 +690,10 @@ shinyApp(
                                    selected = Selected_default),
 
                        selectInput("visualisation_selector","Select visualisation",
-                                   choices =  list("Word Cloud" = "wc", "2d Scatter plot" = "scatter", "closest scatter plot" = "scatter_closest"),
+                                   choices = list(
+                                     "Word Cloud" = "wc",
+                                     "Query Term Scatterplot" = "scatter_closest",
+                                     "Cluster Scatterplot" = "scatter"),
                                    selected = 1),
 
                        conditionalPanel(condition="input.visualisation_selector=='wc'",
@@ -710,16 +711,16 @@ shinyApp(
                        ),
                        conditionalPanel(condition="input.visualisation_selector=='scatter'",
                             selectInput("scatter_cluster", "Cluster",
-                                        choices = list("cluster 1" = "V1",
-                                                       "cluster 2" = "V2",
-                                                       "cluster 3" = "V3",
-                                                       "cluster 4" = "V4",
-                                                       "cluster 5" = "V5",
-                                                       "cluster 6" = "V6",
-                                                       "cluster 7" = "V7",
-                                                       "cluster 8" = "V8",
-                                                       "cluster 9" = "V9",
-                                                       "cluster 10" = "V10" ),
+                                        choices = list("Cluster 1" = "V1",
+                                                       "Cluster 2" = "V2",
+                                                       "Cluster 3" = "V3",
+                                                       "Cluster 4" = "V4",
+                                                       "Cluster 5" = "V5",
+                                                       "Cluster 6" = "V6",
+                                                       "Cluster 7" = "V7",
+                                                       "Cluster 8" = "V8",
+                                                       "Cluster 9" = "V9",
+                                                       "Cluster 10" = "V10" ),
                                         selected = 1),
                             sliderInput("scatter_number",
                                         "Number of Words:",
@@ -729,12 +730,12 @@ shinyApp(
                        ),
                        conditionalPanel(condition="input.visualisation_selector=='scatter_closest'",
                                         selectInput("scatter_plot_closest_choice", "Cluster",
-                                                    choices = list("top 10",
-                                                                   "top 20",
-                                                                   "top 40",
-                                                                   "top 60",
-                                                                   "top 80",
-                                                                   "top 150"),
+                                                    choices = list("Top 10",
+                                                                   "Top 20",
+                                                                   "Top 40",
+                                                                   "Top 60",
+                                                                   "Top 80",
+                                                                   "Top 150"),
                                                     selected = 1)
 
                        )
@@ -743,12 +744,12 @@ shinyApp(
     ),
     body
   ),
+  
   server = function(input, output) {
     # The currently selected tab from the first box
     output$tabset1Selected <- renderText({
       input$tabset1
     })
-
 
 
     set.seed(122)
@@ -839,7 +840,6 @@ shinyApp(
         tagList(paste(list_Desc[[input$modelSelect_analogies_tabs[[1]]]], "The text has been regularized."), url)
       })
 
-
     })
 
 
@@ -856,29 +856,28 @@ shinyApp(
 
 
     output$word_cloud <- renderPlot({
-        validate(need(tolower(input$word_cloud_word) != "", "Please enter a valid Query term:"))
-        data <-  list_models[[input$modelSelect_Visualisation_tabs[[1]]]] %>% closest_to(tolower(input$word_cloud_word), 150)
+        validate(
+          need(tolower(input$word_cloud_word) != "", 
+               "To generate a word cloud, enter a query term in the text field above."))
+        data <- list_models[[input$modelSelect_Visualisation_tabs[[1]]]] %>% closest_to(tolower(input$word_cloud_word), 150)
         colnames(data) <- c("words", "sims")
         data <- mutate(data, sims = as.integer(sims * 100))
 
         set.seed(1234)
         wordcloud(words = data$words, freq = data$sims,
                   min.freq = input$freq, max.words=input$max,
-                  random.order=FALSE, random.color = FALSE,rot.per = 0.30, ordered.colors = F,
-                  colors = brewer.pal(8,"Dark2"), scale=c(input$scale,0.5))
-
+                  random.order=FALSE, random.color = FALSE, rot.per = 0.30, ordered.colors = FALSE,
+                  colors = brewer.pal(8,"Dark2"), scale= c(input$scale,0.5),
+                  use.r.layout = TRUE)
     })
-
 
     # rv <- reactiveValues()
     # rv$setupComplete <- FALSE
 
 
-
     dataset <- reactive({
 
       times <- input$clustering_reset_input_visualisation
-
 
       df2 <- sapply(sample(1:150,10),function(n) {
         paste0(names(list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster[list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster==n][1:150]))
@@ -892,14 +891,12 @@ shinyApp(
     datascatter <- reactive({
 
       df2 <- dataset()
-
       # print(df2)
 
       x <- c()
       y <- c()
       names <- c()
       cluster <- c()
-
 
       vector <- vectors[[input$modelSelect_Visualisation_tabs[[1]]]]
       for (column in colnames(df2))
@@ -912,10 +909,7 @@ shinyApp(
         }
       }
 
-
-
-
-      df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster) ,stringsAsFactors = FALSE)
+      df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster), stringsAsFactors = FALSE)
       df_new
 
     })
@@ -928,9 +922,9 @@ shinyApp(
 
 
     output$scatter_plot <- renderPlot({
-      ggplot(datascatter(), aes(x=x, y=y, colour=cluster), height = 600,width = 800) +
+      ggplot(datascatter(), aes(x=x, y=y, colour=cluster), height="600px", width="800px") +
         geom_point() +
-        geom_text_repel(aes(label=ifelse(cluster == input$scatter_cluster ,as.character(names),'')), hjust=0.5,vjust=-0.5)
+        geom_text_repel(aes(label = ifelse(cluster == input$scatter_cluster, as.character(names),'')), hjust=0.5,vjust=-0.5)
 
     })
 
@@ -950,7 +944,6 @@ shinyApp(
 
       closeword <- list_models[['WWO Full Corpus']] %>% closest_to(tolower(input$scatter_plot_term), 150)
 
-
       i = 0
       for(word in closeword[[1]])
       {
@@ -966,7 +959,7 @@ shinyApp(
         i <- i + 1
         names <- append(names,word)
       }
-      df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster) ,stringsAsFactors = FALSE)
+      df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster), stringsAsFactors = FALSE)
       df_new
 
     })
@@ -980,12 +973,10 @@ shinyApp(
     outputOptions(output, "scatter_plot_closest", suspendWhenHidden = FALSE)
 
 
-
-
     output$addition_table <- DT::renderDataTable(DT::datatable({
       validate(need(input$addition_word1 != "" && input$addition_word2 != "", "Enter query term into word 1 and word 2."))
       data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$addition_word1),] +
-                                                                                  list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$addition_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+                                                                                  list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$addition_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
 
     }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
 
@@ -993,14 +984,14 @@ shinyApp(
     output$subtraction_table <- DT::renderDataTable(DT::datatable({
       validate(need(input$subtraction_word1 != "" && input$subtraction_word2 != "", "Enter query term into word 1 and word 2."))
       data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$subtraction_word1),] -
-                                                                                  list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$subtraction_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+                                                                                  list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$subtraction_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
 
     }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
 
 
     output$analogies_table <- DT::renderDataTable(DT::datatable({
       validate(need(input$analogies_word1 != "" && input$analogies_word2 != "" && input$analogies_word3 != "", "Enter query term into Word 1, Word 2, and Word 3."))
-      data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word3),], input$all_count) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+      data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word3),], input$all_count) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
 
     }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
 
@@ -1010,71 +1001,71 @@ shinyApp(
       data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(tolower(input$advanced_word1), 150)
       if (input$advanced_word2 != "" && input$advanced_word3 == "") {
         if (input$advanced_math == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
         if (input$advanced_math == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
         if (input$advanced_math == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
         if (input$advanced_math == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==(input$advanced_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==(input$advanced_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
       }
 
       if (input$advanced_word2 != "" && input$advanced_word3 != "") {
 
         if (input$advanced_math == "+" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
         if (input$advanced_math == "+" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
         if (input$advanced_math == "+" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
         if (input$advanced_math == "+" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
 
         if (input$advanced_math == "-" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
         if (input$advanced_math == "-" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
         if (input$advanced_math == "-" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
         if (input$advanced_math == "-" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
 
         if (input$advanced_math == "*" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
         if (input$advanced_math == "*" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
         if (input$advanced_math == "*" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
         if (input$advanced_math == "*" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
 
         if (input$advanced_math == "/" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
         if (input$advanced_math == "/" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
         if (input$advanced_math == "/" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
         if (input$advanced_math == "/" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
         }
 
       }
@@ -1083,28 +1074,28 @@ shinyApp(
 
     output$basic_table <- DT::renderDataTable(DT::datatable({
       # list_models[[input$modelSelect[[1]]]]
-      data <- list_models[[input$modelSelect[[1]]]] %>% closest_to(tolower(input$basic_word1), 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+      data <- list_models[[input$modelSelect[[1]]]] %>% closest_to(tolower(input$basic_word1), 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
 
     }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
 
 
     output$basic_table_c1 <- DT::renderDataTable(DT::datatable({
       # list_models[[input$modelSelect[[1]]]]
-      data <- list_models[[input$modelSelectc1[[1]]]] %>% closest_to(tolower(input$basic_word_c), 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+      data <- list_models[[input$modelSelectc1[[1]]]] %>% closest_to(tolower(input$basic_word_c), 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
 
     }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(dom = 't', pageLength = input$max_words, searching = FALSE)))
 
 
     output$basic_table_c2 <- DT::renderDataTable(DT::datatable({
       # list_models[[input$modelSelect[[1]]]]
-      data <- list_models[[input$modelSelectc2[[1]]]] %>% closest_to(tolower(input$basic_word_c), 150) %>% mutate("Link" <- paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+      data <- list_models[[input$modelSelectc2[[1]]]] %>% closest_to(tolower(input$basic_word_c), 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
 
     }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(dom = 't', pageLength = input$max_words, searching = FALSE)))
 
 
     output$tbl <- DT::renderDataTable(DT::datatable({
       data <- sapply(sample(1:150,4),function(n) {
-        paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"</a>")
+        paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"</a>")
       }) %>% as_data_frame()
     }, escape = FALSE, colnames=c(paste0("cluster_",1:4)), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
 
@@ -1112,7 +1103,7 @@ shinyApp(
     observeEvent(input$clustering_reset_input, {
       output$tbl <- DT::renderDataTable(DT::datatable({
         data <- sapply(sample(1:150,4),function(n) {
-          paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"</a>")
+          paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"</a>")
         }) %>% as_data_frame()
       }, escape = FALSE, colnames=c(paste0("cluster_",1:4)),options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
     })
@@ -1121,7 +1112,7 @@ shinyApp(
     output$clusters_full <- DT::renderDataTable(DT::datatable({
       data <- sapply(sample(1:150,10),function(n) {
         ls_download_cluster <<- c(ls_download_cluster,n)
-        paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"</a>")
+        paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"</a>")
       }) %>% as_data_frame()
 
     }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
@@ -1133,7 +1124,7 @@ shinyApp(
       output$clusters_full <- DT::renderDataTable(DT::datatable({
         data <- sapply(sample(1:150,10),function(n) {
           ls_download_cluster <<- c(ls_download_cluster,n)
-          paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"</a>")
+          paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"</a>")
         }) %>% as_data_frame()
       }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
     })
@@ -1144,7 +1135,7 @@ shinyApp(
       output$clusters_full <- DT::renderDataTable(DT::datatable({
         data <- sapply(sample(1:150,10),function(n) {
           ls_download_cluster <<- c(ls_download_cluster,n)
-          paste0("<a target='_blank' href='http://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"</a>")
+          paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"</a>")
         }) %>% as_data_frame()
       }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
     })
