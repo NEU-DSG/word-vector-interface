@@ -77,7 +77,7 @@
     "location": "data/vwwp_xquery_nonreg.bin",
 	"shortDescription" : "The Victorian Women Writers Project Corpus",
 	"public" : "true",
-    "description": "Currently displayed: the entire Victorian Women Writers Project corpus of women's writing from 1830 to 1929. This corpus contains 8,065,805 words in 199 texts."
+    "description": "Currently displayed: the entire Victorian Women Writers Project corpus of women’s writing from 1830 to 1929. This corpus contains 8,065,805 words in 199 texts."
   },
 
     "VWWP and WWO": {
@@ -127,7 +127,7 @@
     "location": "data/wwo.bin",
 	"shortDescription" : "All texts from WWO",
 	"public" : "true",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women's writing from 1526 to 1850. This corpus contains 10,978,553 words in 415 texts."
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850. This corpus contains 10,978,553 words in 415 texts."
   },
 
   "WWO Body Content": {
