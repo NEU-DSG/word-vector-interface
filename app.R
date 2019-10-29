@@ -103,15 +103,6 @@ body <- dashboardBody(
                             width: 100% !important;
                             }
 
-                            #tabset1 > li:nth-child(2) {
-                            display: none;
-                            }
-
-                            #tabset1 > li:nth-child(5) {
-                            display: none;
-                            }
-
-
                             #wwvt-home {
                             margin-left: 16px !important;
                             align-self: center !important;
