@@ -1,5 +1,22 @@
 {
 
+  "WWO Corpus": {
+    "shortName": "WWO Full Corpus",
+    "location": "data/wwo.bin",
+	"shortDescription" : "All texts from WWO",
+	"public" : "true",
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850. This corpus contains 10,978,553 words in 415 texts."
+  },
+  
+    "WWO Regularized Corpus": {
+    "shortName": "WWO Regularized Full Corpus",
+    "location": "data/wwo-regularized.bin",
+	"shortDescription" : "All texts from WWO, regularized",
+	"public" : "true",
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, regularized with routines developed by the Visualizing Early Print project. This corpus contains 11,279,989 words in 421 texts."
+  },
+
+  
   "Emerson and WWO": {
     "shortName": "Emerson and WWO",
     "location": "data/wwo-emerson.bin",
@@ -7,14 +24,22 @@
 	"public" : "true",
     "description": "Currently displayed: a corpus with the full Women Writers Online collection, including the Almanacks of Mary Moody Emerson. This corpus contains 11,301,160 words in 439 texts."
   },
-
-  "WWO Regularized Corpus": {
-    "shortName": "WWO Regularized Full Corpus",
-    "location": "data/wwo-regularized.bin",
-	"shortDescription" : "All texts from WWO, regularized",
+  "VWWP": {
+    "shortName": "VWWP Full Corpus",
+    "location": "data/vwwp_xquery_nonreg.bin",
+	"shortDescription" : "The Victorian Women Writers Project Corpus",
 	"public" : "true",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, regularized with routines developed by the Visualizing Early Print project. This corpus contains 11,279,989 words in 421 texts."
+    "description": "Currently displayed: the entire Victorian Women Writers Project corpus of women’s writing from 1830 to 1929. This corpus contains 8,065,805 words in 199 texts."
   },
+
+    "VWWP and WWO": {
+    "shortName": "VWWP and WWO",
+    "location": "data/wwo-vwwp.bin",
+	"shortDescription" : "The Victorian Women Writers Project and Women Writers Online Combined Corpus",
+	"public" : "true",
+    "description": "Currently displayed: a combined corpus that includes all texts from both the Victorian Women Writers Project and Women Writers Online. This corpus contains 19,044,358 words in 614 texts."
+  },
+ 
 
   "WWO Authorial Corpus": {
     "shortName": "WWO Authorial Corpus",
@@ -30,6 +55,66 @@
 	"shortDescription" : "All texts from WWO, restricted to those by the authors and regularized",
 	"public" : "true",
     "description": "Currently displayed: a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, restricted to those contents written by the texts’ authors and regularized with routines developed by the Visualizing Early Print project. This corpus contains 10,983,868 words in 421 texts."
+  },
+  
+
+
+
+  "WWO 17th century": {
+    "shortName": "WWO 16th and 17th Centuries",
+    "location": "data/wwo-16-17.bin",
+	"shortDescription" : "WWO texts from the 17th century",
+	"public" : "true",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 16th and 17th centuries. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,886,257 words in 201 texts."
+  },
+
+  "WWO 18th century": {
+    "shortName": "WWO 18th Century",
+    "location": "data/wwo-18.bin",
+	"shortDescription" : "WWO texts from the 18th century",
+	"public" : "true",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 18th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,408,243 words in 119 texts."
+  },
+
+  "WWO 19th Century": {
+    "shortName": "WWO 19th Century",
+    "location": "data/wwo-19.bin",
+	"shortDescription" : "WWO texts from the 19th century",
+	"public" : "true",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 19th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,559,440 words in 96 texts."
+  },
+
+  
+  "VWWP and 19thc WWO": {
+    "shortName": "VWWP and 19th-Century WWO",
+    "location": "data/wwo-19-vwwp.bin",
+	"shortDescription" : "The Victorian Women Writers Project and 19thC Women Writers Online Combined Corpus",
+	"public" : "true",
+    "description": "Currently displayed: a combined corpus that includes the full set of Victorian Women Writers Projects texts and the subset of the Women Writers Online corpus that was published in the 19th century. This corpus contains 11,625,245 words in 295 texts."
+  },
+
+  "WWO Body Content": {
+    "shortName": "WWO Body Content",
+    "location": "data/wwo-body.bin",
+	"shortDescription" : "Text content extracted from the <body> element in the WWO, excludes front and back matter",
+	"public" : "true",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes the body of each text, without front or back matter. This corpus contains 10,669,922 words in 405 texts."
+  },
+
+  "WWO Verse": {
+    "shortName": "WWO Verse",
+    "location": "data/wwo-lg.bin",
+	"shortDescription" : "Poetry and verse subset of the WWO",
+	"public" : "true",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a verse line group (<lg>). Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 4,973,946 words in 290 texts."
+  },
+
+  "WWO Prose": {
+    "shortName": "WWO Prose",
+    "location": "data/wwo-p.bin",
+	"shortDescription" : "Prose only subset of the WWO",
+	"public" : "true",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a paragraph (<p>). This corpus contains 8,433,255 words in 406 texts."
   },
 
         "TCP1": {
@@ -64,87 +149,9 @@
 		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,343,987 words in 69 texts."
     },
 
-  "VWWP": {
-    "shortName": "VWWP Full Corpus",
-    "location": "data/vwwp_xquery_nonreg.bin",
-	"shortDescription" : "The Victorian Women Writers Project Corpus",
-	"public" : "true",
-    "description": "Currently displayed: the entire Victorian Women Writers Project corpus of women’s writing from 1830 to 1929. This corpus contains 8,065,805 words in 199 texts."
-  },
-
-    "VWWP and WWO": {
-    "shortName": "VWWP and WWO",
-    "location": "data/wwo-vwwp.bin",
-	"shortDescription" : "The Victorian Women Writers Project and Women Writers Online Combined Corpus",
-	"public" : "true",
-    "description": "Currently displayed: a combined corpus that includes all texts from both the Victorian Women Writers Project and Women Writers Online. This corpus contains 19,044,358 words in 614 texts."
-  },
 
 
-  "VWWP and 19thc WWO": {
-    "shortName": "VWWP and 19th-Century WWO",
-    "location": "data/wwo-19-vwwp.bin",
-	"shortDescription" : "The Victorian Women Writers Project and 19thC Women Writers Online Combined Corpus",
-	"public" : "true",
-    "description": "Currently displayed: a combined corpus that includes the full set of Victorian Women Writers Projects texts and the subset of the Women Writers Online corpus that was published in the 19th century. This corpus contains 11,625,245 words in 295 texts."
-  },
 
-
-  "WWO 17th century": {
-    "shortName": "WWO 16th and 17th Centuries",
-    "location": "data/wwo-16-17.bin",
-	"shortDescription" : "WWO texts from the 17th century",
-	"public" : "true",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 16th and 17th centuries. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,886,257 words in 201 texts."
-  },
-
-  "WWO 18th century": {
-    "shortName": "WWO 18th Century",
-    "location": "data/wwo-18.bin",
-	"shortDescription" : "WWO texts from the 18th century",
-	"public" : "true",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 18th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,408,243 words in 119 texts."
-  },
-
-  "WWO 19th Century": {
-    "shortName": "WWO 19th Century",
-    "location": "data/wwo-19.bin",
-	"shortDescription" : "WWO texts from the 19th century",
-	"public" : "true",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 19th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,559,440 words in 96 texts."
-  },
-
-  "WWO Corpus": {
-    "shortName": "WWO Full Corpus",
-    "location": "data/wwo.bin",
-	"shortDescription" : "All texts from WWO",
-	"public" : "true",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850. This corpus contains 10,978,553 words in 415 texts."
-  },
-
-  "WWO Body Content": {
-    "shortName": "WWO Body Content",
-    "location": "data/wwo-body.bin",
-	"shortDescription" : "Text content extracted from the <body> element in the WWO, excludes front and back matter",
-	"public" : "true",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes the body of each text, without front or back matter. This corpus contains 10,669,922 words in 405 texts."
-  },
-
-  "WWO Verse": {
-    "shortName": "WWO Verse",
-    "location": "data/wwo-lg.bin",
-	"shortDescription" : "Poetry and verse subset of the WWO",
-	"public" : "true",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a verse line group (<lg>). Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 4,973,946 words in 290 texts."
-  },
-
-  "WWO Prose": {
-    "shortName": "WWO Prose",
-    "location": "data/wwo-p.bin",
-	"shortDescription" : "Prose only subset of the WWO",
-	"public" : "true",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a paragraph (<p>). This corpus contains 8,433,255 words in 406 texts."
-  },
 
   "EEBO": {
 		"shortName": "Early English Books Online",
