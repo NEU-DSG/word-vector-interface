@@ -1,5 +1,36 @@
 {
 
+  "Emerson and WWO": {
+    "shortName": "Emerson and WWO",
+    "location": "data/wwo-emerson.bin",
+	"shortDescription" : "Mary Moody Emerson Almanacks and Women Writers Online Combined Corpus",
+	"public" : "true",
+    "description": "Currently displayed: a corpus with the full Women Writers Online collection, including the Almanacks of Mary Moody Emerson. This corpus contains 11,301,160 words in 439 texts."
+  },
+
+  "WWO Regularized Corpus": {
+    "shortName": "WWO Regularized Full Corpus",
+    "location": "data/wwo-regularized.bin",
+	"shortDescription" : "All texts from WWO, regularized",
+	"public" : "true",
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, regularized with routines developed by the Visualizing Early Print project. This corpus contains 11,279,989 words in 421 texts."
+  },
+
+  "WWO Authorial Corpus": {
+    "shortName": "WWO Authorial Corpus",
+    "location": "data/wwo-authorial.bin",
+	"shortDescription" : "All texts from WWO, restricted to those by the authors",
+	"public" : "true",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, restricted to those contents written by the texts’ authors. This corpus contains 10,965,568 words in 421 texts."
+  },
+  
+    "WWO Regularized Authorial Corpus": {
+    "shortName": "WWO Regularized Authorial Corpus",
+    "location": "data/wwo-authorial-regularized.bin",
+	"shortDescription" : "All texts from WWO, restricted to those by the authors and regularized",
+	"public" : "true",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, restricted to those contents written by the texts’ authors and regularized with routines developed by the Visualizing Early Print project. This corpus contains 10,983,868 words in 421 texts."
+  },
 
         "TCP1": {
 		"shortName": "Text Creation Partnership 1",
