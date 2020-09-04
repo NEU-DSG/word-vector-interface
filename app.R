@@ -71,6 +71,17 @@ for(fn in json_data) {
   }
 }
 
+# Create a link to search WWO, optionally with a proxy URL
+linkToWWO <- function(keyword, session) {
+  url = paste0("https://wwo.wwp.northeastern.edu/WWO/search?keyword=",keyword)
+  requestParams <- parseQueryString(session$clientData$url_search)
+  proxy = requestParams$proxy
+  # Only use the proxy value if it starts with HTTP or HTTPS protocol
+  if ( exists("proxy") && grepl('^https?://', proxy) ) {
+    url = paste0(proxy,url)
+  }
+  paste0("<a target='_blank' href='",url,"'>",keyword,"</a>")
+}
 
 
 
@@ -745,7 +756,7 @@ shinyApp(
     body
   ),
   
-  server = function(input, output) {
+  server = function(input, output, session) {
     # The currently selected tab from the first box
     output$tabset1Selected <- renderText({
       input$tabset1
@@ -976,7 +987,7 @@ shinyApp(
     output$addition_table <- DT::renderDataTable(DT::datatable({
       validate(need(input$addition_word1 != "" && input$addition_word2 != "", "Enter query term into word 1 and word 2."))
       data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$addition_word1),] +
-                                                                                  list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$addition_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+                                                                                  list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$addition_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
 
     }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
 
@@ -1074,7 +1085,7 @@ shinyApp(
 
     output$basic_table <- DT::renderDataTable(DT::datatable({
       # list_models[[input$modelSelect[[1]]]]
-      data <- list_models[[input$modelSelect[[1]]]] %>% closest_to(tolower(input$basic_word1), 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+      data <- list_models[[input$modelSelect[[1]]]] %>% closest_to(tolower(input$basic_word1), 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
 
     }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
 
