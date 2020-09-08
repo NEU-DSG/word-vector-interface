@@ -76,14 +76,15 @@ linkToWWO <- function(keyword, session) {
   url = paste0("https://wwo.wwp.northeastern.edu/WWO/search?keyword=",keyword)
   requestParams <- parseQueryString(session$clientData$url_search)
   proxy = requestParams$proxy
+  proxy = ifelse( exists("proxy") && proxy != '', proxy, 'none' )
   # Only use the proxy value if it starts with HTTP or HTTPS protocol
-  if ( exists("proxy") && grepl('^https?://', proxy) ) {
+  if ( grepl('^https?://', proxy) ) {
     url = paste0(proxy,url)
   }
   paste0("<a target='_blank' href='",url,"'>",keyword,"</a>")
 }
 
-
+  
 
 body <- dashboardBody(
 
