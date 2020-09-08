@@ -1110,9 +1110,8 @@ shinyApp(
 
     output$tbl <- DT::renderDataTable(DT::datatable({
       data <- sapply(sample(1:150,4),function(n) {
-        cword = names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
+        cword <- names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
         linkToWWO(keyword = cword, session = session)
-        #paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=",,"'>",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"</a>")
       }) %>% as_data_frame()
     }, escape = FALSE, colnames=c(paste0("cluster_",1:4)), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
 
@@ -1120,9 +1119,8 @@ shinyApp(
     observeEvent(input$clustering_reset_input, {
       output$tbl <- DT::renderDataTable(DT::datatable({
         data <- sapply(sample(1:150,4),function(n) {
-          cword = names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
+          cword <- names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
           linkToWWO(keyword = cword, session = session)
-          #paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=","'>",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"</a>")
         }) %>% as_data_frame()
       }, escape = FALSE, colnames=c(paste0("cluster_",1:4)),options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
     })
@@ -1131,9 +1129,8 @@ shinyApp(
     output$clusters_full <- DT::renderDataTable(DT::datatable({
       data <- sapply(sample(1:150,10),function(n) {
         ls_download_cluster <<- c(ls_download_cluster,n)
-        cword = names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
+        cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
         linkToWWO(keyword = cword, session = session)
-        #paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=",,"'>",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"</a>")
       }) %>% as_data_frame()
 
     }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
@@ -1145,9 +1142,8 @@ shinyApp(
       output$clusters_full <- DT::renderDataTable(DT::datatable({
         data <- sapply(sample(1:150,10),function(n) {
           ls_download_cluster <<- c(ls_download_cluster,n)
-          cword = names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
+          cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
           linkToWWO(keyword = cword, session = session)
-          #paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=",,"'>",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"</a>")
         }) %>% as_data_frame()
       }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
     })
@@ -1158,9 +1154,8 @@ shinyApp(
       output$clusters_full <- DT::renderDataTable(DT::datatable({
         data <- sapply(sample(1:150,10),function(n) {
           ls_download_cluster <<- c(ls_download_cluster,n)
-          cword = names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
+          cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
           linkToWWO(keyword = cword, session = session)
-          #paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=",,"'>",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"</a>")
         }) %>% as_data_frame()
       }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
     })
