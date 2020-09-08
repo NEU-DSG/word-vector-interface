@@ -12,8 +12,6 @@ library(ggrepel)
 
 
 
-
-
 json_file <- "data/catalog.json"
 json_data <- fromJSON(file=json_file)
 
@@ -30,9 +28,6 @@ Selected_compare_1 <- 1
 Selected_compare_2 <- 1
 
 ls_download_cluster <- c()
-
-
-
 
 
 
@@ -71,7 +66,9 @@ for(fn in json_data) {
   }
 }
 
-# Create a link to search WWO, optionally with a proxy URL
+
+
+# Create a link to search WWO, optionally with a proxy URL.
 linkToWWO <- function(keyword, session) {
   url = paste0("https://wwo.wwp.northeastern.edu/WWO/search?keyword=",keyword)
   requestParams <- parseQueryString(session$clientData$url_search)
@@ -197,7 +194,15 @@ body <- dashboardBody(
                             margin-top:20px;
                             }
 
-                            .btn-group-vertical>.btn-group:after, .btn-group-vertical>.btn-group:before, .btn-toolbar:after, .btn-toolbar:before, .clearfix:after, .clearfix:before, .container-fluid:after, .container-fluid:before, .container:after, .container:before, .dl-horizontal dd:after, .dl-horizontal dd:before, .form-horizontal .form-group:after, .form-horizontal .form-group:before, .modal-footer:after, .modal-footer:before, .modal-header:after, .modal-header:before, .nav:after, .nav:before, .navbar-collapse:after, .navbar-collapse:before, .navbar-header:after, .navbar-header:before, .navbar:after, .navbar:before, .pager:after, .pager:before, .panel-body:after, .panel-body:before, .row:after, .row:before {
+                            .btn-group-vertical>.btn-group:after, .btn-group-vertical>.btn-group:before, 
+                            .btn-toolbar:after, .btn-toolbar:before, .clearfix:after, .clearfix:before, 
+                            .container-fluid:after, .container-fluid:before, .container:after, .container:before, 
+                            .dl-horizontal dd:after, .dl-horizontal dd:before, .form-horizontal .form-group:after, 
+                            .form-horizontal .form-group:before, .modal-footer:after, .modal-footer:before, 
+                            .modal-header:after, .modal-header:before, .nav:after, .nav:before, 
+                            .navbar-collapse:after, .navbar-collapse:before, .navbar-header:after, .navbar-header:before, 
+                            .navbar:after, .navbar:before, .pager:after, .pager:before, 
+                            .panel-body:after, .panel-body:before, .row:after, .row:before {
                             display: table;
                             content: unset;
                             }
@@ -229,8 +234,10 @@ body <- dashboardBody(
                             font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
                             font-size: 14px !important;
                             }
-                            .main-header .navbar {     position: unset; margin : 0; font-size: 18px !important; height:68px !important;};
-                            .box{-webkit-box-shadow: none; -moz-box-shadow: none;box-shadow: none;}
+                            .main-header .navbar {
+                            position: unset; margin : 0; font-size: 18px !important; height:68px !important;
+                            };
+                            .box{-webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none;}
                             .content-wrapper {overflow-y: scroll;}
                             .model_header {height : 160px}
 
@@ -373,14 +380,10 @@ body <- dashboardBody(
                          tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
                          " for information on subscribing and setting up a free trial) to search for your term in the WWO collection.")),
 
-
-
                    tags$h1(textOutput("model_name_cluster")),
                    div(class = "model_desc", p(uiOutput("model_desc_cluster"))),
                    br(),
                    actionButton("clustering_reset_input_fullcluster1", "Reset clusters"),
-
-
 
                    # div(class = "model_desc", p(textOutput("model_desc_cluster"),
                    #                             "The text has been regularized",
