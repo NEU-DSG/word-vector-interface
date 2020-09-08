@@ -51,16 +51,13 @@ for(fn in json_data) {
       Selected_compare_2 <- val
     }
 
-
     fileList <- append(fileList, val)
     list_models[[fn$shortName]] <- read.vectors(fn$location)
     list_Desc[[fn$shortName]] <- fn$description
     list_clustering [[fn$shortName]] <- kmeans( list_models[[fn$shortName]] , centers=150,iter.max = 40)
 
-
     data <- as.matrix(list_models[[fn$shortName]])
     vectors[[fn$shortName]] <-stats::predict(stats::prcomp(data))[,1:2]
-
 
     i = i + 1
   }
@@ -70,13 +67,13 @@ for(fn in json_data) {
 
 # Create a link to search WWO, optionally with a proxy URL.
 linkToWWO <- function(keyword, session) {
-  url = paste0("https://wwo.wwp.northeastern.edu/WWO/search?keyword=",keyword)
+  url <- paste0("https://wwo.wwp.northeastern.edu/WWO/search?keyword=",keyword)
   requestParams <- parseQueryString(session$clientData$url_search)
-  proxy = requestParams$proxy
-  proxy = ifelse( exists("proxy") && proxy != '', proxy, 'none' )
+  proxy <- requestParams$proxy
+  proxy <- ifelse( exists("proxy") && proxy != '', proxy, 'none' )
   # Only use the proxy value if it starts with HTTP or HTTPS protocol
   if ( grepl('^https?://', proxy) ) {
-    url = paste0(proxy,url)
+    url <- paste0(proxy,url)
   }
   paste0("<a target='_blank' href='",url,"'>",keyword,"</a>")
 }
