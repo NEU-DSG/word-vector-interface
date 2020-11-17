@@ -12,8 +12,6 @@ library(ggrepel)
 
 
 
-
-
 json_file <- "data/catalog.json"
 json_data <- fromJSON(file=json_file)
 
@@ -30,9 +28,6 @@ Selected_compare_1 <- 1
 Selected_compare_2 <- 1
 
 ls_download_cluster <- c()
-
-
-
 
 
 
@@ -56,16 +51,13 @@ for(fn in json_data) {
       Selected_compare_2 <- val
     }
 
-
     fileList <- append(fileList, val)
     list_models[[fn$shortName]] <- read.vectors(fn$location)
     list_Desc[[fn$shortName]] <- fn$description
     list_clustering [[fn$shortName]] <- kmeans( list_models[[fn$shortName]] , centers=150,iter.max = 40)
 
-
     data <- as.matrix(list_models[[fn$shortName]])
     vectors[[fn$shortName]] <-stats::predict(stats::prcomp(data))[,1:2]
-
 
     i = i + 1
   }
@@ -73,6 +65,20 @@ for(fn in json_data) {
 
 
 
+# Create a link to search WWO, optionally with a proxy URL.
+linkToWWO <- function(keyword, session) {
+  url <- paste0("https://wwo.wwp.northeastern.edu/WWO/search?keyword=",keyword)
+  requestParams <- parseQueryString(session$clientData$url_search)
+  proxy <- requestParams$proxy
+  proxy <- ifelse( exists("proxy") && proxy != '', proxy, 'none' )
+  # Only use the proxy value if it starts with HTTP or HTTPS protocol
+  if ( grepl('^https?://', proxy) ) {
+    url <- paste0(proxy,url)
+  }
+  paste0("<a target='_blank' href='",url,"'>",keyword,"</a>")
+}
+
+  
 
 body <- dashboardBody(
 
@@ -176,7 +182,15 @@ body <- dashboardBody(
                             margin-top:20px;
                             }
 
-                            .btn-group-vertical>.btn-group:after, .btn-group-vertical>.btn-group:before, .btn-toolbar:after, .btn-toolbar:before, .clearfix:after, .clearfix:before, .container-fluid:after, .container-fluid:before, .container:after, .container:before, .dl-horizontal dd:after, .dl-horizontal dd:before, .form-horizontal .form-group:after, .form-horizontal .form-group:before, .modal-footer:after, .modal-footer:before, .modal-header:after, .modal-header:before, .nav:after, .nav:before, .navbar-collapse:after, .navbar-collapse:before, .navbar-header:after, .navbar-header:before, .navbar:after, .navbar:before, .pager:after, .pager:before, .panel-body:after, .panel-body:before, .row:after, .row:before {
+                            .btn-group-vertical>.btn-group:after, .btn-group-vertical>.btn-group:before, 
+                            .btn-toolbar:after, .btn-toolbar:before, .clearfix:after, .clearfix:before, 
+                            .container-fluid:after, .container-fluid:before, .container:after, .container:before, 
+                            .dl-horizontal dd:after, .dl-horizontal dd:before, .form-horizontal .form-group:after, 
+                            .form-horizontal .form-group:before, .modal-footer:after, .modal-footer:before, 
+                            .modal-header:after, .modal-header:before, .nav:after, .nav:before, 
+                            .navbar-collapse:after, .navbar-collapse:before, .navbar-header:after, .navbar-header:before, 
+                            .navbar:after, .navbar:before, .pager:after, .pager:before, 
+                            .panel-body:after, .panel-body:before, .row:after, .row:before {
                             display: table;
                             content: unset;
                             }
@@ -208,8 +222,10 @@ body <- dashboardBody(
                             font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
                             font-size: 14px !important;
                             }
-                            .main-header .navbar {     position: unset; margin : 0; font-size: 18px !important; height:68px !important;};
-                            .box{-webkit-box-shadow: none; -moz-box-shadow: none;box-shadow: none;}
+                            .main-header .navbar {
+                            position: unset; margin : 0; font-size: 18px !important; height:68px !important;
+                            };
+                            .box{-webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none;}
                             .content-wrapper {overflow-y: scroll;}
                             .model_header {height : 160px}
 
@@ -352,14 +368,10 @@ body <- dashboardBody(
                          tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
                          " for information on subscribing and setting up a free trial) to search for your term in the WWO collection.")),
 
-
-
                    tags$h1(textOutput("model_name_cluster")),
                    div(class = "model_desc", p(uiOutput("model_desc_cluster"))),
                    br(),
                    actionButton("clustering_reset_input_fullcluster1", "Reset clusters"),
-
-
 
                    # div(class = "model_desc", p(textOutput("model_desc_cluster"),
                    #                             "The text has been regularized",
@@ -736,7 +748,7 @@ shinyApp(
     body
   ),
   
-  server = function(input, output) {
+  server = function(input, output, session) {
     # The currently selected tab from the first box
     output$tabset1Selected <- renderText({
       input$tabset1
@@ -967,7 +979,7 @@ shinyApp(
     output$addition_table <- DT::renderDataTable(DT::datatable({
       validate(need(input$addition_word1 != "" && input$addition_word2 != "", "Enter query term into word 1 and word 2."))
       data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$addition_word1),] +
-                                                                                  list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$addition_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+                                                                                  list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$addition_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
 
     }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
 
@@ -975,14 +987,14 @@ shinyApp(
     output$subtraction_table <- DT::renderDataTable(DT::datatable({
       validate(need(input$subtraction_word1 != "" && input$subtraction_word2 != "", "Enter query term into word 1 and word 2."))
       data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$subtraction_word1),] -
-                                                                                  list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$subtraction_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+                                                                                  list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$subtraction_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
 
     }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
 
 
     output$analogies_table <- DT::renderDataTable(DT::datatable({
       validate(need(input$analogies_word1 != "" && input$analogies_word2 != "" && input$analogies_word3 != "", "Enter query term into Word 1, Word 2, and Word 3."))
-      data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word3),], input$all_count) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+      data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word3),], input$all_count) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
 
     }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
 
@@ -992,71 +1004,71 @@ shinyApp(
       data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(tolower(input$advanced_word1), 150)
       if (input$advanced_word2 != "" && input$advanced_word3 == "") {
         if (input$advanced_math == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
         if (input$advanced_math == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
         if (input$advanced_math == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
         if (input$advanced_math == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==(input$advanced_word2),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==(input$advanced_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
       }
 
       if (input$advanced_word2 != "" && input$advanced_word3 != "") {
 
         if (input$advanced_math == "+" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
         if (input$advanced_math == "+" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
         if (input$advanced_math == "+" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
         if (input$advanced_math == "+" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
 
         if (input$advanced_math == "-" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
         if (input$advanced_math == "-" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
         if (input$advanced_math == "-" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
         if (input$advanced_math == "-" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
 
         if (input$advanced_math == "*" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
         if (input$advanced_math == "*" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
         if (input$advanced_math == "*" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
         if (input$advanced_math == "*" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
 
         if (input$advanced_math == "/" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
         if (input$advanced_math == "/" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
         if (input$advanced_math == "/" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
         if (input$advanced_math == "/" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
         }
 
       }
@@ -1065,28 +1077,29 @@ shinyApp(
 
     output$basic_table <- DT::renderDataTable(DT::datatable({
       # list_models[[input$modelSelect[[1]]]]
-      data <- list_models[[input$modelSelect[[1]]]] %>% closest_to(tolower(input$basic_word1), 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+      data <- list_models[[input$modelSelect[[1]]]] %>% closest_to(tolower(input$basic_word1), 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
 
     }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
 
 
     output$basic_table_c1 <- DT::renderDataTable(DT::datatable({
       # list_models[[input$modelSelect[[1]]]]
-      data <- list_models[[input$modelSelectc1[[1]]]] %>% closest_to(tolower(input$basic_word_c), 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+      data <- list_models[[input$modelSelectc1[[1]]]] %>% closest_to(tolower(input$basic_word_c), 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
 
     }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(dom = 't', pageLength = input$max_words, searching = FALSE)))
 
 
     output$basic_table_c2 <- DT::renderDataTable(DT::datatable({
       # list_models[[input$modelSelect[[1]]]]
-      data <- list_models[[input$modelSelectc2[[1]]]] %>% closest_to(tolower(input$basic_word_c), 150) %>% mutate("Link" <- paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=", .$word,"'>",.$word,"</a>")) %>% .[c(3,2)]
+      data <- list_models[[input$modelSelectc2[[1]]]] %>% closest_to(tolower(input$basic_word_c), 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
 
     }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(dom = 't', pageLength = input$max_words, searching = FALSE)))
 
 
     output$tbl <- DT::renderDataTable(DT::datatable({
       data <- sapply(sample(1:150,4),function(n) {
-        paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"</a>")
+        cword <- names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
+        linkToWWO(keyword = cword, session = session)
       }) %>% as_data_frame()
     }, escape = FALSE, colnames=c(paste0("cluster_",1:4)), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
 
@@ -1094,7 +1107,8 @@ shinyApp(
     observeEvent(input$clustering_reset_input, {
       output$tbl <- DT::renderDataTable(DT::datatable({
         data <- sapply(sample(1:150,4),function(n) {
-          paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150]),"</a>")
+          cword <- names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
+          linkToWWO(keyword = cword, session = session)
         }) %>% as_data_frame()
       }, escape = FALSE, colnames=c(paste0("cluster_",1:4)),options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
     })
@@ -1103,7 +1117,8 @@ shinyApp(
     output$clusters_full <- DT::renderDataTable(DT::datatable({
       data <- sapply(sample(1:150,10),function(n) {
         ls_download_cluster <<- c(ls_download_cluster,n)
-        paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"</a>")
+        cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
+        linkToWWO(keyword = cword, session = session)
       }) %>% as_data_frame()
 
     }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
@@ -1115,7 +1130,8 @@ shinyApp(
       output$clusters_full <- DT::renderDataTable(DT::datatable({
         data <- sapply(sample(1:150,10),function(n) {
           ls_download_cluster <<- c(ls_download_cluster,n)
-          paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"</a>")
+          cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
+          linkToWWO(keyword = cword, session = session)
         }) %>% as_data_frame()
       }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
     })
@@ -1126,7 +1142,8 @@ shinyApp(
       output$clusters_full <- DT::renderDataTable(DT::datatable({
         data <- sapply(sample(1:150,10),function(n) {
           ls_download_cluster <<- c(ls_download_cluster,n)
-          paste0("<a target='_blank' href='https://wwo.wwp.northeastern.edu/WWO/search?keyword=",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"'>",names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]),"</a>")
+          cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
+          linkToWWO(keyword = cword, session = session)
         }) %>% as_data_frame()
       }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
     })
