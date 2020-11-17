@@ -92,6 +92,30 @@
 	"public" : "true",
     "description": "Currently displayed: a combined corpus that includes the full set of Victorian Women Writers Projects texts and the subset of the Women Writers Online corpus that was published in the 19th century. This corpus contains 11,625,245 words in 295 texts."
   },
+  
+  "WW0 Placenames Tokenized": {
+    "shortName": "WWO Placenames Tokenized",
+    "location": "data/wwo-tokenized-placename",
+	"shortDescription" : "WWO corpus with tokenized content for <placeName> element",
+	"public" : "true",
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place names. This corpus contains 10,383,949 words in 427 texts. The text has been regularized."
+  },
+
+  "WWO Person Names Tokenized": {
+    "shortName": "WWO Person Names Tokenized",
+    "location": "data/wwo-tokenized-persnames.bin",
+	"shortDescription" : "WWO corpus with tokenized content for <persName> element",
+	"public" : "true",
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for person names. This corpus contains 10,354,112 words in 427 texts. The text has been regularized."
+  },
+
+  "WWO Place and Person Names Tokenized": {
+    "shortName": "WWO Place and Person Names Tokenized",
+    "location": "data/wwo-tokenized-persname-placename.bin",
+	"shortDescription" : "WWO corpus with tokenized content for <persName> and <placeName> elements",
+	"public" : "true",
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place and person names. This corpus contains 10,343,504 words in 427 texts. The text has been regularized."
+  },
 
   "WWO Body Content": {
     "shortName": "WWO Body Content",
