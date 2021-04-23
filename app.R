@@ -52,7 +52,7 @@ for(fn in json_data) {
     }
 
     fileList <- append(fileList, val)
-    list_models[[fn$shortName]] <- read.vectors(fn$location)
+    list_models[[fn$shortName]] <- read.vectors(fn$location) # TODO: try/catch if the file isn't present
     list_Desc[[fn$shortName]] <- fn$description
     list_clustering [[fn$shortName]] <- kmeans( list_models[[fn$shortName]] , centers=150,iter.max = 40)
 
