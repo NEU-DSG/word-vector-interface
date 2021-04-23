@@ -56,8 +56,46 @@
     "description": "Long desc."
   },
   
-  
 
+        "Experimental no names": {
+    "shortName": "Experimental: No Names",
+    "location": "data/experimentals/wwo-exp-nonames.bin",
+    "shortDescription" : "WWO Experimental: no names",
+    "public" : "false",
+    "description": "An experimental model trained on a dataset of texts from Women Writers Online in which names have been removed."
+    },
+
+        "Experimental tiny": {
+    "shortName": "Experimental: Small Corpus",
+    "location": "data/experimentals/wwo-exp-tiny.bin",
+    "shortDescription" : "WWO Experimental: small corpus",
+    "public" : "true",
+    "description": "An experimental model trained on a corpus of several novels from WWO, comprising approximately 500K words."
+    },
+
+        "Experimental no prep": {
+    "shortName": "Experimental: Unprepped",
+    "location": "data/experimentals/wwo-exp-unprepped.bin",
+    "shortDescription" : "WWO Experimental: unprepped",
+    "public" : "true",
+    "description": "An experimental model trained on a dataset of texts from Women Writers Online that has been minimally processed."
+    },
+
+        "Experimental win 2": {
+    "shortName": "Experimental: Window-size 2",
+    "location": "data/experimentals/wwo-exp-window2.bin",
+    "shortDescription" : "WWO Experimental: window s",
+    "public" : "true",
+    "description": "An experimental model trained on the texts in Women Writers Online, using a window size of 2 in the model training process."
+    },
+
+        "Experimental dim 1000": {
+    "shortName": "Experimental: 1000 Dimensions",
+    "location": "data/experimentals/wwo-exp-dimensions1000.bin",
+    "shortDescription" : "WWO Experimental: dimensions 1000",
+    "public" : "true",
+    "description": "An experimental model trained on the texts in Women Writers Online, using 1000 dimensions in the model training process"
+    },
 
   "WWO Corpus": {
     "shortName": "WWO Full Corpus",
@@ -74,15 +112,15 @@
 	"public" : "true",
     "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, regularized with routines developed by the Visualizing English Print project. This corpus contains 11,279,989 words in 421 texts."
   },
-
   
   "Emerson and WWO": {
     "shortName": "Emerson and WWO",
     "location": "data/wwo-emerson.bin",
 	"shortDescription" : "Mary Moody Emerson Almanacks and Women Writers Online Combined Corpus",
-	"public" : "true",
+	"public" : "false",
     "description": "Currently displayed: a corpus with the full Women Writers Online collection, including the Almanacks of Mary Moody Emerson. This corpus contains 11,301,160 words in 439 texts."
   },
+  
   "VWWP": {
     "shortName": "VWWP Full Corpus",
     "location": "data/vwwp_xquery_nonreg.bin",
@@ -123,7 +161,7 @@
     "shortName": "WWO 16th and 17th Centuries",
     "location": "data/wwo-16-17.bin",
 	"shortDescription" : "WWO texts from the 17th century",
-	"public" : "true",
+	"public" : "false",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 16th and 17th centuries. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,886,257 words in 201 texts."
   },
 
@@ -131,7 +169,7 @@
     "shortName": "WWO 18th Century",
     "location": "data/wwo-18.bin",
 	"shortDescription" : "WWO texts from the 18th century",
-	"public" : "true",
+	"public" : "false",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 18th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,408,243 words in 119 texts."
   },
 
@@ -139,7 +177,7 @@
     "shortName": "WWO 19th Century",
     "location": "data/wwo-19.bin",
 	"shortDescription" : "WWO texts from the 19th century",
-	"public" : "true",
+	"public" : "false",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 19th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,559,440 words in 96 texts."
   },
 
@@ -151,29 +189,29 @@
 	"public" : "true",
     "description": "Currently displayed: a combined corpus that includes the full set of Victorian Women Writers Projects texts and the subset of the Women Writers Online corpus that was published in the 19th century. This corpus contains 11,625,245 words in 295 texts."
   },
-  
-  "WW0 Placenames Tokenized": {
-    "shortName": "WWO Placenames Tokenized",
-    "location": "data/wwo-tokenized-placename.bin",
+
+  "WWO Place Names Tokenized": {
+    "shortName": "WWO Place Names Tokenized",
+    "location": "data/all-wwo_placeName-tokenized.bin",
 	"shortDescription" : "WWO corpus with tokenized content for <placeName> element",
 	"public" : "true",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place names. This corpus contains 10,383,949 words in 427 texts. The text has been regularized."
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place names. This corpus contains 11,488,313 words in 427 texts. The text has been regularized."
   },
 
   "WWO Person Names Tokenized": {
     "shortName": "WWO Person Names Tokenized",
-    "location": "data/wwo-tokenized-persname.bin",
+    "location": "data/all-wwo_persName-tokenized.bin",
 	"shortDescription" : "WWO corpus with tokenized content for <persName> element",
 	"public" : "true",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for person names. This corpus contains 10,354,112 words in 427 texts. The text has been regularized."
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for person names. This corpus contains 11,432,470 words in 427 texts. The text has been regularized."
   },
 
   "WWO Place and Person Names Tokenized": {
     "shortName": "WWO Place and Person Names Tokenized",
-    "location": "data/wwo-tokenized-persname-placename.bin",
+    "location": "data/all-wwo_entity-tokenized.bin",
 	"shortDescription" : "WWO corpus with tokenized content for <persName> and <placeName> elements",
 	"public" : "true",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place and person names. This corpus contains 10,343,504 words in 427 texts. The text has been regularized."
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place and person names. This corpus contains 11,420,187 words in 427 texts. The text has been regularized."
   },
 
   "WWO Body Content": {
