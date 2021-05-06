@@ -1,8 +1,51 @@
 {
 
+
+ "Evans": {
+    "shortName": "Evans Early American Imprints (TCP)",
+    "location": "data/samples/evans_early-american-imprints-reg.bin",
+    "shortDescription" : "Evans",
+    "public" : "true",
+    "description": "A model trained on a corpus of printed books, pamphlets, and broadsides from the Evans Early American Imprint Collection, transcribed by the Text Creation Partnership and regularized by the Visualizing Early Print project. The corpus contains 101,787,912 words in 5,012 texts."
+    },
+    
+    
+     "DocSouth": {
+    "shortName": "DocSouth North American Slave Narratives",
+    "location": "data/samples/doc-south_north-american-slave-narratives.bin",
+    "shortDescription" : "DocSouth",
+    "public" : "true",
+    "description": "A model trained on a corpus of of books and articles that document the individual and collective stories of African Americans in the eighteenth–early twentieth century in the United States. It is part of the Documenting the American South Project from the University of North Carolina. The corpus contains 11,376,694 words in 294 texts."
+    },
+    
+     "Wright": {
+    "shortName": "Wright American Fiction",
+    "location": "data/samples/wright_american-fiction.bin",
+    "shortDescription" : "Wright",
+    "public" : "true",
+    "description": "A model trained on a corpus of eighteenth- and nineteenth-century American fiction from the Wright American Fiction project. The corpus contains 234,607,442 words in 2,876 texts."
+    },
+
+
+     "ECCO": {
+    "shortName": "Eighteenth Century Collections Online",
+    "location": "data/samples/ecco.bin",
+    "shortDescription" : "ECCO",
+    "public" : "true",
+    "description": "A model trained on the standardized version of the Eighteenth Century Collections Online corpus published by the Visualizing Early Print project. The corpus contains 74,556,712 words in 2,473 texts."
+    },
+    
+       "EEBO": {
+    "shortName": "Early Modern 1080",
+    "location": "data/samples/eebo1080.bin",
+    "shortDescription" : "EEBO",
+    "public" : "true",
+    "description": "A model trained on the “Early Modern 1080” corpus published by the Visualizing Early Print project; this corpus includes 40 randomly-selected texts per decade from the Early English Books Online–Text Creation Partnership collection. The corpus contains 37,614,609 words in 1,080 texts."
+    },
+  
         "Experimental no names": {
     "shortName": "Experimental: No Names",
-    "location": "data/wwo-exp-nonames.bin",
+    "location": "data/experimentals/wwo-exp-nonames.bin",
     "shortDescription" : "WWO Experimental: no names",
     "public" : "false",
     "description": "An experimental model trained on a dataset of texts from Women Writers Online in which names have been removed."
@@ -11,7 +54,7 @@
     
         "Experimental no prep": {
     "shortName": "Experimental corpus: Unprepped",
-    "location": "data/wwo-exp-unprepped.bin",
+    "location": "data/experimentals/wwo-exp-unprepped.bin",
     "shortDescription" : "WWO Experimental: unprepped",
     "public" : "false",
     "description": "An experimental model trained on a dataset of texts from Women Writers Online that has been minimally processed."
@@ -19,7 +62,7 @@
     
        "Experimental authorial": {
     "shortName": "Experimental corpus: Authorial",
-    "location": "data/wwo-exp-authorial.bin",
+    "location": "data/experimentals/wwo-exp-authorial.bin",
     "shortDescription" : "WWO Experimental: authorial",
     "public" : "false",
     "description": "A model trained on a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, restricted to those contents written by the texts’ authors."
@@ -27,7 +70,7 @@
 
       "Experimental regularized": {
     "shortName": "Experimental corpus: Regularized",
-    "location": "data/wwo-exp-regularized",
+    "location": "data/experimentals/wwo-exp-regularized",
     "shortDescription" : "WWO Experimental: regularized",
     "public" : "false",
     "description": "A model trained on a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, regularized with routines developed by the Visualizing English Print project."
@@ -35,7 +78,7 @@
     
         "Experimental tokenized": {
     "shortName": "Experimental corpus: Tokenized",
-    "location": "data/wwo-exp-entity-tokenized",
+    "location": "data/experimentals/wwo-exp-entity-tokenized",
     "shortDescription" : "WWO Experimental: tokenized",
     "public" : "false",
     "description": "A model trained on a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place and person names."
@@ -44,7 +87,7 @@
 
         "Experimental win 2": {
     "shortName": "Experimental training: Window-size 2",
-    "location": "data/wwo-exp-dimensions10.bin",
+    "location": "data/experimentals/wwo-exp-dimensions10.bin",
     "shortDescription" : "WWO Experimental: window s",
     "public" : "false",
     "description": "An experimental model trained on the texts in Women Writers Online, using a window size of 2 in the model training process."
@@ -52,7 +95,7 @@
 
     "Experimental tiny": {
     "shortName": "Experimental: Small Corpus",
-    "location": "data/wwo-exp-tiny.bin",
+    "location": "data/experimentals/wwo-exp-tiny.bin",
     "shortDescription" : "WWO Experimental training: small corpus",
     "public" : "false",
     "description": "An experimental model trained on a corpus of several novels from WWO, comprising approximately 500K words."
@@ -89,6 +132,7 @@
 	"public" : "true",
     "description": "Currently displayed: a corpus with the full Women Writers Online collection, including the Almanacks of Mary Moody Emerson. This corpus contains 11,301,160 words in 439 texts."
   },
+  
   "VWWP": {
     "shortName": "VWWP Full Corpus",
     "location": "data/vwwp_xquery_nonreg.bin",
@@ -121,8 +165,6 @@
 	"public" : "true",
     "description": "Currently displayed: a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, restricted to those contents written by the texts’ authors and regularized with routines developed by the Visualizing English Print project. This corpus contains 10,983,868 words in 421 texts."
   },
-  
-
 
 
   "WWO 17th century": {
