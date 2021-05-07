@@ -260,7 +260,7 @@
     "shortName": "WWO Place Names Tokenized",
     "location": "data/all-wwo_placeName-tokenized.bin",
 	"shortDescription" : "WWO corpus with tokenized content for <placeName> element",
-	"public" : "true",
+	"public" : "false",
     "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place names. This corpus contains 11,488,313 words in 427 texts. The text has been regularized."
   },
 
@@ -268,7 +268,7 @@
     "shortName": "WWO Person Names Tokenized",
     "location": "data/all-wwo_persName-tokenized.bin",
 	"shortDescription" : "WWO corpus with tokenized content for <persName> element",
-	"public" : "true",
+	"public" : "false",
     "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for person names. This corpus contains 11,432,470 words in 427 texts. The text has been regularized."
   },
 
@@ -276,7 +276,7 @@
     "shortName": "WWO Place and Person Names Tokenized",
     "location": "data/all-wwo_entity-tokenized.bin",
 	"shortDescription" : "WWO corpus with tokenized content for <persName> and <placeName> elements",
-	"public" : "true",
+	"public" : "false",
     "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place and person names. This corpus contains 11,420,187 words in 427 texts. The text has been regularized."
   },
 
