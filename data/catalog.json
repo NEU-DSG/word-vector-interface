@@ -5,7 +5,7 @@
     "location": "data/participants/ahmed_sahih.bin",
 	"shortDescription" : "Short desc",
 	"public" : "true",
-    "description": "Long desc."
+    "description": "A model trained on the Sahih Collection of al-Bukhari. The corpus contains 802,640 words."
   },
 
   "croxall_erdrich": {
@@ -13,7 +13,7 @@
     "location": "data/participants/croxall_erdrich.bin",
 	"shortDescription" : "Short desc",
 	"public" : "true",
-    "description": "Long desc."
+    "description": "A model trained on the works of Louise Erdrich. The corpus contains 2,152,565 words."
   },
 
   "croxall_hemingway": {
@@ -21,7 +21,7 @@
     "location": "data/participants/croxall_hemingway.bin",
 	"shortDescription" : "Short desc",
 	"public" : "true",
-    "description": "Long desc."
+    "description": "A model trained on the works of Ernest Hemingway. The corpus contains 1,171,671 words."
   },
 
   "lucenko_women": {
@@ -29,7 +29,7 @@
     "location": "data/participants/lucenko_women.bin",
 	"shortDescription" : "Short desc",
 	"public" : "true",
-    "description": "Long desc."
+    "description": "A model trained on a corpus of seventeenth-century texts by women who use vocabulary around the multiple and shifting meanings of civility: as a sign of merit, virtue, and decorum; as a communal system of sociability and conversation; and as a marker of class, gender, and racial difference. The corpus contains 1,357,543 words."
   },
 
   "marcos_spanish": {
@@ -37,7 +37,7 @@
     "location": "data/participants/marcos_spanish.bin",
 	"shortDescription" : "Short desc",
 	"public" : "true",
-    "description": "Long desc."
+    "description": "A model trained on transcriptions from three upper-level undergraduate second language Spanish content-based courses; the corpus is primarily in Spanish but also contains some English. The corpus contains 152,386 words."
   },
 
   "roos_translations": {
@@ -45,15 +45,15 @@
     "location": "data/participants/roos_translations.bin",
 	"shortDescription" : "Short desc",
 	"public" : "true",
-    "description": "Long desc."
+    "description": "A model trained on a corpus of religious translations. The corpus contains 962,646 words."
   },
 
   "stefan_gun-violence": {
-    "shortName": "stefan_gun-violence",
+    "shortName": "stefan_shootings-novels",
     "location": "data/participants/stefan_gun-violence.bin",
 	"shortDescription" : "Short desc",
 	"public" : "true",
-    "description": "Long desc."
+    "description": "A model trained on a corpus of novels related to school shootings published between 1977 and 2020. The corpus contains 1,686,851 words."
   },
   
 
