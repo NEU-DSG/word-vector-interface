@@ -3,7 +3,7 @@
   "ahmed_sahih": {
     "shortName": "ahmed_sahih",
     "location": "data/participants/ahmed_sahih.bin",
-	"shortDescription" : "Short desc",
+	"shortDescription" : "Ahmed: Sahih Collection of al-Bukhari",
 	"public" : "true",
     "description": "A model trained on the Sahih Collection of al-Bukhari. The corpus contains 802,640 words."
   },
@@ -11,7 +11,7 @@
   "croxall_erdrich": {
     "shortName": "croxall_erdrich",
     "location": "data/participants/croxall_erdrich.bin",
-	"shortDescription" : "Short desc",
+	"shortDescription" : "Croxall: Works of Erdrich",
 	"public" : "true",
     "description": "A model trained on the works of Louise Erdrich. The corpus contains 2,152,565 words."
   },
@@ -19,7 +19,7 @@
   "croxall_hemingway": {
     "shortName": "croxall_hemingway",
     "location": "data/participants/croxall_hemingway.bin",
-	"shortDescription" : "Short desc",
+	"shortDescription" : "Croxall: Works of Hemingway",
 	"public" : "true",
     "description": "A model trained on the works of Ernest Hemingway. The corpus contains 1,171,671 words."
   },
@@ -27,7 +27,7 @@
   "lucenko_women": {
     "shortName": "lucenko_women",
     "location": "data/participants/lucenko_women.bin",
-	"shortDescription" : "Short desc",
+	"shortDescription" : "Lucenko: Early modern women",
 	"public" : "true",
     "description": "A model trained on a corpus of seventeenth-century texts by women who use vocabulary around the multiple and shifting meanings of civility: as a sign of merit, virtue, and decorum; as a communal system of sociability and conversation; and as a marker of class, gender, and racial difference. The corpus contains 1,357,543 words."
   },
@@ -35,7 +35,7 @@
   "marcos_spanish": {
     "shortName": "marcos_spanish",
     "location": "data/participants/marcos_spanish.bin",
-	"shortDescription" : "Short desc",
+	"shortDescription" : "Marcos: Spanish courses",
 	"public" : "true",
     "description": "A model trained on transcriptions from three upper-level undergraduate second language Spanish content-based courses; the corpus is primarily in Spanish but also contains some English. The corpus contains 152,386 words."
   },
@@ -43,7 +43,7 @@
   "roos_translations": {
     "shortName": "roos_translations",
     "location": "data/participants/roos_translations.bin",
-	"shortDescription" : "Short desc",
+	"shortDescription" : "Roos: Religious translations",
 	"public" : "true",
     "description": "A model trained on a corpus of religious translations. The corpus contains 962,646 words."
   },
@@ -51,7 +51,7 @@
   "stefan_gun-violence": {
     "shortName": "stefan_shootings-novels",
     "location": "data/participants/stefan_gun-violence.bin",
-	"shortDescription" : "Short desc",
+	"shortDescription" : "Stefan: School shootings novels",
 	"public" : "true",
     "description": "A model trained on a corpus of novels related to school shootings published between 1977 and 2020. The corpus contains 1,686,851 words."
   },
