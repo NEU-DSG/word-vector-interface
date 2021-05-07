@@ -35,7 +35,7 @@
     "description": "A model trained on the standardized version of the Eighteenth Century Collections Online corpus published by the Visualizing Early Print project. The corpus contains 74,556,712 words in 2,473 texts."
     },
     
-       "EEBO": {
+       "EEBO 1080": {
     "shortName": "Early Modern 1080",
     "location": "data/samples/eebo1080.bin",
     "shortDescription" : "EEBO",
@@ -56,7 +56,7 @@
     "shortName": "Experimental corpus: Unprepped",
     "location": "data/experimentals/wwo-exp-unprepped.bin",
     "shortDescription" : "WWO Experimental: unprepped",
-    "public" : "false",
+    "public" : "true",
     "description": "An experimental model trained on a dataset of texts from Women Writers Online that has been minimally processed."
     },
     
@@ -64,32 +64,32 @@
     "shortName": "Experimental corpus: Authorial",
     "location": "data/experimentals/wwo-exp-authorial.bin",
     "shortDescription" : "WWO Experimental: authorial",
-    "public" : "false",
+    "public" : "true",
     "description": "A model trained on a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, restricted to those contents written by the texts’ authors."
     },
 
       "Experimental regularized": {
     "shortName": "Experimental corpus: Regularized",
-    "location": "data/experimentals/wwo-exp-regularized",
+    "location": "data/experimentals/wwo-exp-regularized.bin",
     "shortDescription" : "WWO Experimental: regularized",
-    "public" : "false",
+    "public" : "true",
     "description": "A model trained on a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, regularized with routines developed by the Visualizing English Print project."
     },
     
         "Experimental tokenized": {
     "shortName": "Experimental corpus: Tokenized",
-    "location": "data/experimentals/wwo-exp-entity-tokenized",
+    "location": "data/experimentals/wwo-exp-entity-tokenized.bin",
     "shortDescription" : "WWO Experimental: tokenized",
-    "public" : "false",
+    "public" : "true",
     "description": "A model trained on a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place and person names."
     },
 
 
         "Experimental win 2": {
     "shortName": "Experimental training: Window-size 2",
-    "location": "data/experimentals/wwo-exp-dimensions10.bin",
-    "shortDescription" : "WWO Experimental: window s",
-    "public" : "false",
+    "location": "data/experimentals/wwo-exp-window2.bin",
+    "shortDescription" : "WWO Experimental: window 2",
+    "public" : "true",
     "description": "An experimental model trained on the texts in Women Writers Online, using a window size of 2 in the model training process."
     },
 
@@ -97,7 +97,7 @@
     "shortName": "Experimental: Small Corpus",
     "location": "data/experimentals/wwo-exp-tiny.bin",
     "shortDescription" : "WWO Experimental training: small corpus",
-    "public" : "false",
+    "public" : "true",
     "description": "An experimental model trained on a corpus of several novels from WWO, comprising approximately 500K words."
     },
 
@@ -105,7 +105,7 @@
     "shortName": "Experimental training: 1000 Dimensions",
     "location": "data/experimentals/wwo-exp-dimensions1000.bin",
     "shortDescription" : "WWO Experimental: dimensions 1000",
-    "public" : "false",
+    "public" : "true",
     "description": "An experimental model trained on the texts in Women Writers Online, using 1000 dimensions in the model training process"
     },
   
