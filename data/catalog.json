@@ -1,7 +1,7 @@
 {
 
   "ahmed_sahih": {
-    "shortName": "ahmed_sahih",
+    "shortName": "Ahmed: Sahih Collection of al-Bukhari",
     "location": "data/participants/ahmed_sahih.bin",
 	"shortDescription" : "Ahmed: Sahih Collection of al-Bukhari",
 	"public" : "true",
@@ -9,7 +9,7 @@
   },
 
   "croxall_erdrich": {
-    "shortName": "croxall_erdrich",
+    "shortName": "Croxall: Works of Erdrich",
     "location": "data/participants/croxall_erdrich.bin",
 	"shortDescription" : "Croxall: Works of Erdrich",
 	"public" : "true",
@@ -17,7 +17,7 @@
   },
 
   "croxall_hemingway": {
-    "shortName": "croxall_hemingway",
+    "shortName": "Croxall: Works of Hemingway",
     "location": "data/participants/croxall_hemingway.bin",
 	"shortDescription" : "Croxall: Works of Hemingway",
 	"public" : "true",
@@ -25,7 +25,7 @@
   },
 
   "lucenko_women": {
-    "shortName": "lucenko_women",
+    "shortName": "Lucenko: Early modern women",
     "location": "data/participants/lucenko_women.bin",
 	"shortDescription" : "Lucenko: Early modern women",
 	"public" : "true",
@@ -33,7 +33,7 @@
   },
 
   "marcos_spanish": {
-    "shortName": "marcos_spanish",
+    "shortName": "Marcos: Spanish courses",
     "location": "data/participants/marcos_spanish.bin",
 	"shortDescription" : "Marcos: Spanish courses",
 	"public" : "true",
@@ -41,7 +41,7 @@
   },
 
   "roos_translations": {
-    "shortName": "roos_translations",
+    "shortName": "Roos: Religious translations",
     "location": "data/participants/roos_translations.bin",
 	"shortDescription" : "Roos: Religious translations",
 	"public" : "true",
@@ -49,7 +49,7 @@
   },
 
   "stefan_gun-violence": {
-    "shortName": "stefan_shootings-novels",
+    "shortName": "Stefan: School shootings novels",
     "location": "data/participants/stefan_shootings-novels.bin",
 	"shortDescription" : "Stefan: School shootings novels",
 	"public" : "true",
