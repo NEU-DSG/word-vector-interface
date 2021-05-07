@@ -50,7 +50,7 @@
 
   "stefan_gun-violence": {
     "shortName": "stefan_shootings-novels",
-    "location": "data/participants/stefan_gun-violence.bin",
+    "location": "data/participants/stefan_shootings-novels.bin",
 	"shortDescription" : "Stefan: School shootings novels",
 	"public" : "true",
     "description": "A model trained on a corpus of novels related to school shootings published between 1977 and 2020. The corpus contains 1,686,851 words."
