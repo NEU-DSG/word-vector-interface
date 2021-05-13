@@ -150,7 +150,7 @@
     },
 
     "Experimental tiny": {
-    "shortName": "Experimental: Small Corpus",
+    "shortName": "Experimental training: small corpus",
     "location": "data/experimentals/wwo-exp-tiny.bin",
     "shortDescription" : "WWO Experimental training: small corpus",
     "public" : "true",
