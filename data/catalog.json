@@ -1,5 +1,150 @@
 {
 
+    "brinkman_crisis": {
+    "shortName": "Brinkman: The Crisis",
+    "location": "data/participants/brinkman_crisis.bin",
+	"shortDescription" : "Brinkman: The Crisis",
+	"public" : "true",
+    "description": "A model trained on articles in the first 148 issues of The Crisis magazine. The corpus contains 5,231,436 words and has a vocabulary size of 24,636."
+  },
+
+  "cloutier_frus": {
+    "shortName": "Cloutier: Foreign Records of the US",
+    "location": "data/participants/cloutier_frus.bin",
+	"shortDescription" : "Cloutier: Foreign Records of the US",
+	"public" : "true",
+    "description": "A model trained on documents related to foreign relations with Central America from 1955 to 1980. This corpus is taken from the Foreign Relations of the United States series which contains documents relating to official policy decisions and activity by the US government. The corpus contains 3,922,271 words and has a vocabulary size of 17,826."
+  },
+  
+    "derose_19c-novels": {
+    "shortName": "DeRose: British novels",
+    "location": "data/participants/derose_19c-novels.bin",
+	"shortDescription" : "DeRose: British novels",
+	"public" : "true",
+    "description": "A model trained on over 200 nineteenth-century British novels. The corpus contains 38,047,069 words and has a vocabulary size of 57,343."
+  },
+  
+   "higgins_abstracts": {
+    "shortName": "Higgins: Thesis and dissertation abstracts",
+    "location": "data/participants/higgins_abstracts.bin",
+	"shortDescription" : "Higgins: Thesis and dissertation abstracts",
+	"public" : "true",
+    "description": "A model trained on abstracts only of 41,342 theses and dissertations from ProQuest’s open access collection. The corpus contains 11,258,294 words and has a vocabulary size of 50,650."
+  },
+
+   "higgins_msu-dissertations": {
+    "shortName": "Higgins: MSU thesis and dissertation abstracts",
+    "location": "data/participants/higgins_msu-dissertations.bin",
+	"shortDescription" : "Higgins: Thesis and dissertation abstracts",
+	"public" : "true",
+    "description": "A model trained on the full text of all 7,262 theses and dissertations submitted to Michigan State in the last 10 years, since electronic submission became mandatory. The corpus contains 254,786,348 words and has a vocabulary size of 57,0984."
+  },
+  
+  
+     "johnson_apparition": {
+    "shortName": "Johnson: 17th-18thc “apparition” texts",
+    "location": "data/participants/johnson_apparition.bin",
+	"shortDescription" : "Johnson: 17th-18thc “apparition” texts",
+	"public" : "true",
+    "description": "A model trained on a corpus of approximately 600 texts spanning monographs and periodicals from multiple Gale Primary Source databases, between the years 1660 and 1830, which contain at least one instance of a word with the stem “apparit” (such as “apparition”). The corpus contains 16,367,365 words and has a vocabulary size of 99,813."
+  },
+
+  "kim_gothic": {
+    "shortName": "Kim: British Gothic",
+    "location": "data/participants/kim_gothic.bin",
+	"shortDescription" : "Kim: British Gothic",
+	"public" : "true",
+    "description": "A model trained on a corpus of 72 British Gothic stories of the long nineteenth century; the corpus is in English and the appearance of terms ‘ghost,’ ‘specter(re),’ or ‘apparition’ in a story is an essential of selection for the corpus. The corpus contains 2,039,933 words and has a vocabulary size of 14,787."
+  },
+  
+    "loewen_book-reviews": {
+    "shortName": "Loewen and Jackson: PoR Book Reviews",
+    "location": "data/participants/loewen_book-reviews.bin",
+	"shortDescription" : "Loewen and Jackson: PoR Book Reviews",
+	"public" : "true",
+    "description": "A model trained on post-1950 book reviews from eight philosophy of religion journals. The corpus contains 5,195,244 words and has a vocabulary size of 38,200."
+  },
+  
+      "loewen_research-articles": {
+    "shortName": "Loewen and Jackson: PoR Research Articles",
+    "location": "data/participants/loewen_research-articles.bin",
+	"shortDescription" : "Loewen and Jackson: PoR Research Articles",
+	"public" : "true",
+    "description": "A model trained on post-1950 research articles from eight philosophy of religion journals. The corpus contains 34,969,910 words and has a vocabulary size of 121,124."
+  },
+
+
+   "loewen_por-periodicals": {
+    "shortName": "Loewen and Jackson: PoR Complete Periodicals",
+    "location": "data/participants/loewen_por-periodicals.bin",
+	"shortDescription" : "Loewen and Jackson: PoR Complete Periodicals",
+	"public" : "true",
+    "description": "A model trained on the entire contents of eight philosophy of religion journals since 1950. The corpus contains 40,267,546 words and has a vocabulary size of 129,180."
+    
+    
+  },
+  
+   "parr_na-slave-narratives": {
+    "shortName": "Parr: North American Slave Narratives",
+    "location": "data/participants/parr_na-slave-narratives.bin",
+	"shortDescription" : "Parr: North American Slave Narratives",
+	"public" : "true",
+    "description": "A model trained on English language transcriptions of North American slave narratives. The corpus contains 11,334,854 words and has a vocabulary size of 31,900."
+    
+    
+  },
+  
+     "pejsa_new-europe": {
+    "shortName": "Pejša: The New Europe",
+    "location": "data/participants/pejsa_new-europe.bin",
+	"shortDescription" : "Pejša: The New Europe",
+	"public" : "true",
+    "description": "A model trained on articles published in a British foreign-policy weekly The New Europe between 1916 and 1920; the corpus is primarily in English but contains considerable number of non-English words that use diacritics—mainly geographic terms. The corpus contains 2,712,116 words and has a vocabulary size of 16,963."
+    
+    
+  },
+  
+    
+     "stewart_harpers": {
+    "shortName": "Stewart: Harper’s Weekly",
+    "location": "data/participants/stewart_harpers.bin",
+	"shortDescription" : "Stewart: Harper’s Weekly",
+	"public" : "true",
+    "description": "A model trained on the transcriptions of every issue for the first four years (1857-60) of Harper's Weekly (1857-1916), the leading national periodical in the United States in the mid-nineteenth century. Each issue included sixteen handsomely illustrated pages filled with news bulletins, columns, short and serial fiction, and reviews; this corpus does not contain the advertisements that were a part of each issue. The corpus contains 8,367,396 words and has a vocabulary size of 34,459."
+    
+    
+  },
+  
+       "weenik_gothic": {
+    "shortName": "Weenik: Gothic novels",
+    "location": "data/participants/weenik_gothic.bin",
+	"shortDescription" : "Weenik: Gothic novels",
+	"public" : "true",
+    "description": "A model trained on Optical Character Recognition-generated texts from scans of Early Gothic novels and chapbooks. The corpus contains 7,103,939 words and has a vocabulary size of 39,772."
+    
+    
+  },
+  
+       "zimmer_bignames": {
+    "shortName": "Zimmer: Big names of science",
+    "location": "data/participants/zimmer_bignames.bin",
+	"shortDescription" : "Zimmer: Big names of science",
+	"public" : "true",
+    "description": "A model trained on a corpus created by the Visualizing English Print project containing 329 early modern scientific texts by 100 ‘Big Name’ authors, published between 1530 and 1724. The corpus contains 18,006,840 words and has a vocabulary size of 54,794."
+    
+    
+  },
+  
+         "zimmer_superscience": {
+    "shortName": "Zimmer: Super science",
+    "location": "data/participants/zimmer_superscience.bin",
+	"shortDescription" : "Zimmer: Super science",
+	"public" : "true",
+    "description": "A model trained on a corpus created by the Visualizing English Print project containing every ‘scientific’ text from EEBO-TCP Phases I and II, ECCO-TCP, and Evans-TCP. The corpus comprises 1,979 texts and covers the period 1482-1710. The corpus contains 71,255,891 words and has a vocabulary size of 151,428."
+    
+    
+  },
+  
   "ahmed_sahih": {
     "shortName": "Ahmed: Sahih Collection of al-Bukhari",
     "location": "data/participants/ahmed_sahih.bin",
