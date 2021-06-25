@@ -1,3 +1,9 @@
+**NOTE: The official repository for the Word Vector Interface has _moved_ as of June 25th, 2021. Please update your bookmarks to <https://github.com/NEU-DSG/word-vector-interface>.**
+
+Creating a new GitHub repository allowed us to move word embedding models into [Git Large File Storage](https://git-lfs.github.com/). This reduces the size of the cloned repository, and allows us to version the models despite their large file size. GitHub does not currently allow public forks to use the LFS.
+
+---
+
 # Word Vector Interface
 
 This repository is the code base for the [Word Vector Interface](http://lab.wwp.northeastern.edu/tool/), a Shiny application for exploring word vector models. The app includes the models generated from the corpus of [Women Writers Online](https://wwp.northeastern.edu/wwo/).
