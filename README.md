@@ -2,6 +2,8 @@
 
 This repository is the code base for the [Word Vector Interface](http://lab.wwp.northeastern.edu/tool/), a Shiny application for exploring word vector models. The app includes the models generated from the corpus of [Women Writers Online](https://wwp.northeastern.edu/wwo/).
 
+The Word Vector Interface was created by Jonathan Fitzgerald, whose [original repository can be found on GitHub](https://github.com/jonathandfitzgerald/wwp-w2vonline). Parth Tandel continued the application’s development and added many new features and improvements. The Women Writers Project thanks them for their vision and their work on this project!
+
 ## Running the application
 
 To run the Shiny app on your own machine, you’ll need R, a programming language available at <https://www.r-project.org/>.
