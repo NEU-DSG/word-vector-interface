@@ -31,14 +31,6 @@
 	"public" : "true",
     "description": "A model trained on abstracts only of 41,342 theses and dissertations from ProQuest’s open access collection. The corpus contains 11,258,294 words and has a vocabulary size of 50,650."
   },
-
-   "higgins_msu-dissertations": {
-    "shortName": "Higgins: MSU thesis and dissertation abstracts",
-    "location": "data/participants/higgins_msu-dissertations.bin",
-	"shortDescription" : "Higgins: Thesis and dissertation abstracts",
-	"public" : "true",
-    "description": "A model trained on the full text of all 7,262 theses and dissertations submitted to Michigan State in the last 10 years, since electronic submission became mandatory. The corpus contains 254,786,348 words and has a vocabulary size of 57,0984."
-  },
   
   
      "johnson_apparition": {
