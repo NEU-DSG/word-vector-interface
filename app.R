@@ -89,183 +89,6 @@ body <- dashboardBody(
              ".shiny-output-error:before { visibility: hidden; }"
   ),
 
-  tags$head(tags$style(HTML("
-
-@media only screen and (max-width: 1000px) {
-                            body {
-                            }
-
-
-                            #table-main-2 {
-                            display: none !important;
-                            }
-
-                            .col-sm-6 {
-                            flex: 0 0 100% !important;
-                            max-width: 100% !important;
-                            }
-
-                            .compare_width {
-                            width: 100% !important;
-                            }
-
-                            #wwvt-home {
-                            margin-left: 16px !important;
-                            align-self: center !important;
-                            color: #fefefe !important;
-                            font-size: 16px !important;
-                            }
-
-
-                            .navbar-collapse.collapse {
-                            height: auto!important;
-                            padding-bottom: 0;
-                            overflow: visible!important;
-                            display: none !important;
-                            }
-
-
-                            .navbar-nav {
-                            display: none !important;
-
-                            }
-
-                            .side-open {
-                            transform: none !important;
-                            }
-
-                            .side-close {
-                            -webkit-transform: translate(-230px,0) !important;
-                            -ms-transform: translate(-230px,0) !important;
-                            -o-transform: translate(-230px,0) !important;
-                            transform: translate(-230px,0) !important;
-                            }
-
-                            }
-
-                            #downloadData {
-                            margin-top: 6px !important;
-                            height: fit-content !important;
-                            color: #444 !important;
-                            }
-
-
-
-                            .dataTables_wrapper {
-                            overflow-y : auto;
-                            }
-
-                            .visualization {
-                            width : 100%;
-                            }
-
-                            #Download_reset_button {
-                            display: flex !important;
-                            margin: 0 !important;
-                            padding: 0 !important;
-                            }
-
-                            .datatables {
-                            min-height : 20px !important;
-                            }
-
-
-                            .nav-item {
-                            margin: 0px 2px;
-                            }
-
-                            .dropdown-menu {
-                            font-size:16px !important;
-                            }
-
-                            #sidebarItemExpanded {
-                            margin-top:20px;
-                            }
-
-                            .btn-group-vertical>.btn-group:after, .btn-group-vertical>.btn-group:before, 
-                            .btn-toolbar:after, .btn-toolbar:before, .clearfix:after, .clearfix:before, 
-                            .container-fluid:after, .container-fluid:before, .container:after, .container:before, 
-                            .dl-horizontal dd:after, .dl-horizontal dd:before, .form-horizontal .form-group:after, 
-                            .form-horizontal .form-group:before, .modal-footer:after, .modal-footer:before, 
-                            .modal-header:after, .modal-header:before, .nav:after, .nav:before, 
-                            .navbar-collapse:after, .navbar-collapse:before, .navbar-header:after, .navbar-header:before, 
-                            .navbar:after, .navbar:before, .pager:after, .pager:before, 
-                            .panel-body:after, .panel-body:before, .row:after, .row:before {
-                            display: table;
-                            content: unset;
-                            }
-
-                            #word_cloud.shiny-output-error-validation {
-                              visibility: visible;
-                              color: inherit;
-                              font-size: 1.25em;
-                              font-style: italic;
-                            }
-
-                            #word_cloud > img {
-                            display: block;
-                            margin-left: auto;
-                            margin-right: auto;
-                            }
-
-                            .btn {
-                            font-size:14px !important;
-                            }
-                            .form-control {
-                            font-size:14px !important;
-                            }
-                            .compare_width {
-                            width: 60%
-                            }
-
-                            body {
-                            font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
-                            font-size: 14px !important;
-                            }
-                            .main-header .navbar {
-                            position: unset; margin : 0; font-size: 18px !important; height:68px !important;
-                            };
-                            .box{-webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none;}
-                            .content-wrapper {overflow-y: scroll;}
-                            .model_header {height : 160px}
-
-                            #wwvt-home {
-                            margin-left: 16px !important;
-                            align-self: center !important;
-                            color: #fefefe !important;
-                            font-size: 21.6px !important;
-                            }
-
-                            #wwvt-home:hover {
-                            color: #ccc !important;
-                            text-decoration: none !important;
-                            }
-
-                            .box {
-                              overflow: auto;
-                            }
-
-                            .home_desc {
-                              font-size: 14px !important;
-                              border-bottom-style: solid !important;
-                              margin-bottom: 47px !important;
-                              border-radius: 2px !important;
-                              padding: 20px !important;
-                              border-bottom-width: medium !important;
-                            }
-
-                            .welcome_desc {
-                              font-size: 1.2em !important;
-                            }
-
-                            .dataTables_filter {
-                                display: none !important;
-                            }
-
-                            .nav-over-flow{
-                            background-color: #343a40!important
-                            }"))),
-
   fluidRow(
     tabBox(
       # The id lets us use input$tabset1 on the server to find the current tab
@@ -600,37 +423,20 @@ body <- dashboardBody(
 
 shinyApp(
   ui = dashboardPage(
-      tags$header(
+      title = "Word Vector Interface | Women Writers Vector Toolkit",
+      header = tags$header(
         class = "main-header", checked = NA,
 
         tags$link(rel = "stylesheet", type = "text/css", href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"),
+        tags$link(rel = "stylesheet", type = "text/css", href = "styles/main.css"),
         # tags$script(src = "https://code.jquery.com/jquery-3.3.1.slim.min.js"),
         # tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"),
         # tags$script(src = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"),
         htmlTemplate("template.html", name = "header-component")
-
-        # tags$link(rel = "stylesheet", type = "text/css", href = "style/main.css"),
-        # tags$nav(
-        #   class = "navbar navbar-expand-lg navbar-dark bg-dark fixed-top",
-        #   tags$div(
-        #     class = "container",
-        #     tags$div(
-        #       class = "d-inline-flex",
-        #
-        #       tags$img(class="d-inline-block align-top", src='assets/logo.png', height='52', width='61'),
-        #       tags$a(id="wwvt-home", href="www.rstudio.com", "Women Writers Vector Toolkit")
-        #
-        #     ),
-        #     tags$div(
-        #
-        #     )
-        #   )
-        # )
       )
     ,
 
-    # dashboardHeader(),
-    dashboardSidebar(
+    sidebar = dashboardSidebar(
 
       conditionalPanel(condition="input.tabset1==1",
                        selectInput("modelSelect", "Model",
@@ -703,7 +509,7 @@ shinyApp(
                               sliderInput("freq",
                                           "Similarity",
                                           step = 5,
-                                          ticks = c(1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100),
+                                          ticks = TRUE,
                                           min = 0,  max = 100, value = 15),
                               sliderInput("max",
                                           "Maximum Number of Words:",
@@ -745,7 +551,7 @@ shinyApp(
       )
 
     ),
-    body
+    body = body
   ),
   
   server = function(input, output, session) {
