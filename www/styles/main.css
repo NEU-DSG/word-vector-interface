@@ -10,6 +10,10 @@ body {
   overflow: hidden;
 }
 
+h1, h2, h3 {
+  font-size: 2em;
+}
+
 .content-wrapper {
   display: flex;
   align-items: stretch;
@@ -29,12 +33,6 @@ body {
   color: #99a4ac;
 }
 
-#downloadData {
-  margin-top: 6px !important;
-  height: fit-content !important;
-  color: #444 !important;
-}
-
 .dataTables_wrapper {
   overflow-y : auto;
 }
@@ -44,9 +42,18 @@ body {
 }
 
 #Download_reset_button {
-  display: flex !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+#clustering_reset_input_fullcluster,
+#downloadData {
+  margin: auto;
+}
+
+#downloadData {
+  color: #444;
 }
 
 .datatables {
@@ -62,7 +69,7 @@ body {
 }
 
 #sidebarItemExpanded {
-  margin-top: 20px;
+  /*margin-top: 20px;*/
 }
 
 .btn-group-vertical>.btn-group:after, .btn-group-vertical>.btn-group:before, 
@@ -95,19 +102,28 @@ body {
 }
 
 .btn, .form-control {
-  font-size: 0.875em;
+  font-size: 0.875rem;
 }
 
 .compare_width {
   width: 60%;
 }
 
+.main-header {
+  height: 10%;
+}
+
 .main-header .navbar {
   position: unset; 
   margin : 0; 
-  font-size: 1.275em; 
-  height: 68px !important;
-};
+  font-size: 1.275em;
+}
+
+.main-sidebar {
+  margin-top: 10%;
+  min-height: unset;
+  padding-top: 0;
+}
 
 .box {
   -webkit-box-shadow: none; 
@@ -121,28 +137,27 @@ body {
 }
 
 #wwvt-home {
-  margin-left: 1rem !important;
-  align-self: center !important;
-  color: #fefefe !important;
-  font-size: 21.6px !important;
+  margin-left: 1rem;
+  align-self: center;
+  color: #fefefe;
+  font-size: 21.6px;
 }
 
 #wwvt-home:hover {
-  color: #ccc !important;
-  text-decoration: none !important;
+  color: #ccc;
+  text-decoration: none;
 }
 
 .home_desc {
-  font-size: 0.875rem !important;
-  border-bottom-style: solid !important;
-  margin-bottom: 47px !important;
-  border-radius: 2px !important;
-  padding: 20px !important;
-  border-bottom-width: medium !important;
+  border-bottom: medium solid;
+  border-radius: 0.125rem;
+  font-size: 0.875em;
+  margin-bottom: 2.25em;
+  padding: 1.25rem;
 }
 
 .welcome_desc {
-  font-size: 1.2em !important;
+  font-size: 1.2em;
 }
 
 .dataTables_filter {

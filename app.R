@@ -427,11 +427,9 @@ shinyApp(
       header = tags$header(
         class = "main-header", checked = NA,
 
-        tags$link(rel = "stylesheet", type = "text/css", href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"),
+        tags$link(rel = "stylesheet", type = "text/css", 
+          href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"),
         tags$link(rel = "stylesheet", type = "text/css", href = "styles/main.css"),
-        # tags$script(src = "https://code.jquery.com/jquery-3.3.1.slim.min.js"),
-        # tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"),
-        # tags$script(src = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"),
         htmlTemplate("template.html", name = "header-component")
       )
     ,
