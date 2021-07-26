@@ -409,9 +409,11 @@ body <- dashboardBody(
                  conditionalPanel(condition="input.visualisation_selector=='scatter_closest'",
                       class = "visualization",
                       shinyjs::useShinyjs(),
-                      box( solidHeader = TRUE, textInput("scatter_plot_term", "Query term:", width = "500px"), width=12),
+                      box( solidHeader = TRUE, 
+                           textInput("scatter_plot_term", "Query term:", width = "500px"), 
+                           width=12),
                       box(
-                        plotOutput("scatter_plot_closest",height = "600px"),
+                        plotOutput("scatter_plot_closest", height = "600px"),
                         width = 8
                       )
                  )
@@ -558,10 +560,8 @@ shinyApp(
       input$tabset1
     })
 
-
     set.seed(122)
     histdata <- rnorm(500)
-
 
     output$plot1 <- renderPlot({
       plot(mtcars$wt, mtcars$mpg)
@@ -569,26 +569,22 @@ shinyApp(
 
     outputOptions(output, "plot1", suspendWhenHidden = FALSE)
 
-
-
     output$downloadData <- downloadHandler(
       filename = function() {
         paste(input$modelSelect_clusters[[1]], ".csv", sep = "")
-      },
+    },
 
-      content = function(file) {
-        data <- sapply(ls_download_cluster,function(n) {
-          paste0(names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]))
-        }) %>% as_data_frame()
+    content = function(file) {
+      data <- sapply(ls_download_cluster,function(n) {
+        paste0(names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]))
+      }) %>% as_data_frame()
 
-        write.csv(data, file, row.names = FALSE)
-      })
-
+      write.csv(data, file, row.names = FALSE)
+    })
 
     observeEvent(input$modelSelect, {
       output$model_name_basic <- renderText(input$modelSelect[[1]])
       # output$model_desc_basic <- renderText({list_Desc[[input$modelSelect[[1]]]]})
-
 
       url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
       output$model_desc_basic <- renderUI({
@@ -607,19 +603,16 @@ shinyApp(
         tagList(paste(list_Desc[[input$modelSelectc1[[1]]]], "The text has been regularized."), url)
       })
 
-
     })
 
     observeEvent(input$modelSelectc2, {
       output$model_name_compare_2 <- renderText(input$modelSelectc2[[1]])
       # output$model_desc_compare_2 <- renderText({list_Desc[[input$modelSelectc2[[1]]]]})
 
-
       url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
       output$model_desc_compare_2 <- renderUI({
         tagList(paste(list_Desc[[input$modelSelectc2[[1]]]], "The text has been regularized."), url)
       })
-
 
     })
 
@@ -632,8 +625,6 @@ shinyApp(
       output$model_desc_cluster <- renderUI({
         tagList(paste(list_Desc[[input$modelSelect_clusters[[1]]]], "The text has been regularized."), url)
       })
-
-
 
     })
 

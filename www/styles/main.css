@@ -1,17 +1,21 @@
 /* Custom CSS for the Word Vector Interface */
 
 html {
-  font-size: unset;
+  font-size: 1rem;
 }
 
 body {
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 0.875rem;
+  font-size: 1rem;
   overflow: hidden;
 }
 
 h1, h2, h3 {
   font-size: 2em;
+}
+
+.wrapper {
+  font-size: 0.875rem;
 }
 
 .content-wrapper {
@@ -136,24 +140,24 @@ h1, h2, h3 {
   height : 160px;
 }
 
-#wwvt-home {
-  margin-left: 1rem;
-  align-self: center;
-  color: #fefefe;
-  font-size: 21.6px;
-}
-
-#wwvt-home:hover {
-  color: #ccc;
-  text-decoration: none;
-}
-
 .home_desc {
   border-bottom: medium solid;
   border-radius: 0.125rem;
   font-size: 0.875em;
   margin-bottom: 2.25em;
   padding: 1.25rem;
+}
+
+#wwvt-home {
+  margin-left: 1rem;
+  align-self: center;
+  color: #fefefe;
+  font-size: 1.35rem;
+}
+
+#wwvt-home:hover {
+  color: #ccc;
+  text-decoration: none;
 }
 
 .welcome_desc {
@@ -189,9 +193,9 @@ h1, h2, h3 {
   }
 
   .navbar-collapse.collapse {
-    height: auto!important;
+    height: auto !important;
     padding-bottom: 0;
-    overflow: visible!important;
+    overflow: visible !important;
     display: none !important;
   }
 
