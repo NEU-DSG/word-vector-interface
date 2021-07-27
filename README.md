@@ -22,9 +22,9 @@ If you plan to do any customization of the code, you should instead download the
 
 If you do plan to make edits, and want to put those edits under version control, you can clone the repository in the command line.
 
-	git clone https://github.com/NEU-DSG/wwp-w2vonline.git
+	git clone https://github.com/NEU-DSG/word-vector-interface.git
 
-Alternatively, you can download and decompress this file: <https://github.com/NEU-DSG/wwp-w2vonline/archive/master.zip>.
+Alternatively, you can download and decompress this file: <https://github.com/NEU-DSG/word-vector-interface/archive/main.zip>.
 
 
 ### Running a local copy with RStudio
@@ -68,7 +68,7 @@ With the required libraries present, you can simply open `app.R`, and select the
 
 ## Customizing the application
 
-When run, the Word Vector Interface will read in models from the “data” folder, and make them available for querying. Models are only published, however, if (1) they have a corresponding entry in the catalog [“data/catalog.json”](https://github.com/NEU-DSG/wwp-w2vonline/blob/master/data/catalog.json), and (2) that entry is marked “public”.
+When run, the Word Vector Interface will read in models from the “data” folder, and make them available for querying. Models are only published, however, if (1) they have a corresponding entry in the catalog [“data/catalog.json”](https://github.com/NEU-DSG/word-vector-interface/blob/main/data/catalog.json), and (2) that entry is marked “public”.
 
 To add your own pre-generated model(s), place them in the “data” directory. Then edit “data/catalog.json”. Here's a sample entry:
 
