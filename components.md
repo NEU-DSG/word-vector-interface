@@ -13,7 +13,7 @@ WVI. The Shiny application pulls all the other components together. The app:
 * reads the JSON catalog to determine which word embedding models to load;
 * loads those models, as well as their titles and descriptions;
 * constructs a skeleton web page, including any links to [web 
-assets](./#web-assets) that the browser should use;
+assets](#web-assets) that the browser should use;
 * lays out the form controls for each WVI tab (“Home”, “Compare”, etc.);
 * defines what happens when someone changes a setting or types in a query;
 * opens up access to the web application at port 3939 on the computer’s network
