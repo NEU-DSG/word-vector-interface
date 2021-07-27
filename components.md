@@ -1,7 +1,9 @@
 # Application components
 
-This file describes the parts of the Word Vector Interface (WVI), an R Shiny
-application.
+This file describes the parts which make up the [Word Vector Interface 
+(WVI)](http://lab.wwp.northeastern.edu/wwvt/), an R Shiny application created by
+Jonathan Fitzgerald, Parth Tandel, and the [Women Writers 
+Project](https://wwp.northeastern.edu/).
 
 ## R code
 
@@ -10,13 +12,13 @@ WVI. The Shiny application pulls all the other components together. The app:
 
 * reads the JSON catalog to determine which word embedding models to load;
 * loads those models, as well as their titles and descriptions;
-* constructs the skeleton web page, including any links to web assets that the 
-browser should use;
+* constructs a skeleton web page, including any links to [web 
+assets](./#web-assets) that the browser should use;
 * lays out the form controls for each WVI tab (“Home”, “Compare”, etc.);
 * defines what happens when someone changes a setting or types in a query;
-* opens up access to the web application at the computer’s port 3939 
+* opens up access to the web application at port 3939 on the computer’s network
 ([localhost:3939](http://localhost:3939)); and
-* performs queries for users on request.
+* transforms data from the models into HTML.
 
 ## Word embedding models
 
@@ -48,6 +50,12 @@ All models are currently stored in the [data folder](./data/), but they could be
 stored anywhere, as long as the filepath listed in the catalog is correct and 
 the model is accessible. The Shiny app only needs to know where the catalog can 
 be found.
+
+For more on how the word embedding models are created, see the
+[Methodology](https://wwp.northeastern.edu/lab/wwvt/methodology/index.html) and
+[Downloads](https://wwp.northeastern.edu/lab/wwvt/resources/downloads/index.html) 
+pages of the [Women Writers Vector
+Toolkit](https://wwp.northeastern.edu/lab/wwvt/index.html).
 
 ## Web assets
 
