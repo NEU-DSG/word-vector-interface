@@ -1,16 +1,17 @@
 # Application components
 
-The Word Vector Interface (WVI) is an R Shiny application. The code which 
-defines and runs the application is in a file called [app.R](./app.R), located 
-in the same directory as this documentation.
+This file describes the parts of the Word Vector Interface (WVI), an R Shiny
+application.
 
 ## R code
 
-The Shiny application pulls all the other components together. The application:
+A file called [app.R](./app.R) consists of R code which sets up and runs the 
+WVI. The Shiny application pulls all the other components together. The app:
 
 * reads the JSON catalog to determine which word embedding models to load;
 * loads those models, as well as their titles and descriptions;
-* constructs the skeleton web page;
+* constructs the skeleton web page, including any links to web assets that the 
+browser should use;
 * lays out the form controls for each WVI tab (“Home”, “Compare”, etc.);
 * defines what happens when someone changes a setting or types in a query;
 * opens up access to the web application at the computer’s port 3939 
@@ -50,4 +51,25 @@ be found.
 
 ## Web assets
 
+Once the Shiny server puts out a complete web page in HTML, more files are 
+needed to make the page appear and behave as it does. The WVI makes use of
+Cascading Style Sheets (CSS) for styling, and Javascript for interactivity.
+
+* [Shiny Dashboard](http://rstudio.github.io/shinydashboard/index.html) is the R
+library that structures the web application. Installing the library also 
+installs its pre-made CSS and Javascript, which give the web page its dashboard 
+appearance. The R library automatically puts links to the assets in the output 
+webpage.
+* [Bootstrap](https://getbootstrap.com/) (version 4.1.2) provides CSS for a 
+clean, flexible, and customizable foundation. The Bootstrap CSS is linked in the 
+Shiny app’s output web page, and is hosted by a [content delivery 
+network](https://www.bootstrapcdn.com/), not a local file.
+* Local assets consist of CSS, JS, and image files specific to the Shiny app and
+the Women Writers Project. The primary files are:
+  * [main.css](./www/styles/main.css) adds WVI-specific styles to the CSS 
+  library themes described above. R code places a link to the stylesheet in the 
+  output webpage.
+  * [script.js](./script.js) shows or hides the WVI sidebar on request. The 
+  contents of the file are inserted directly into the output webpage by the 
+  Shiny app.
 
