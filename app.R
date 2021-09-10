@@ -1,20 +1,18 @@
-library(shinydashboard)
-
-library("rjson")
 library(shiny)
-library(magrittr)
-library(tidyverse)
+library(shinydashboard)
 library(shinyjs)
-library(wordVectors)
+library(magrittr)
 library(DT)
+library("rjson")
 library(wordcloud)
 library(ggrepel)
+library(tidyverse)
+library(wordVectors)
 
 
 
 json_file <- "data/catalog.json"
 json_data <- fromJSON(file=json_file)
-
 
 
 fileList <- c()
