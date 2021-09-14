@@ -145,16 +145,14 @@ html, body, .wrapper {
 
 .main-header .navbar {
   font-size: 1.275em;
-  height: 100%;
   margin : 0;
   padding: 0.15rem 0.25rem;
   position: unset;
 }
 
 .main-header .navbar .container {
-  flex: 100%;
   margin: 0.25rem 1rem;
-  padding: 0;
+  max-width: unset;
 }
 
 .main-sidebar {
@@ -224,10 +222,6 @@ html, body, .wrapper {
 
   .compare_width {
     width: 100% !important;
-  }
-
-  #wwvt-home {
-    font-size: 1rem;
   }
 
   .navbar-collapse.collapse {
