@@ -1,6 +1,6 @@
 library(shiny)
-library(shinydashboard)
 library(shinyjs)
+library(shinydashboard)
 library(magrittr)
 library(DT)
 library("rjson")
@@ -87,10 +87,9 @@ body <- dashboardBody(
              ".shiny-output-error:before { visibility: hidden; }"
   ),
 
-  fluidRow(
     tabBox(
       # The id lets us use input$tabset1 on the server to find the current tab
-      id = "tabset1", height = "250px", width = 12,
+      id = "tabset1", width = 12, #height = "250px",
       tabPanel("Home", value=1,
                div(
                  fluidRow (
@@ -418,15 +417,13 @@ body <- dashboardBody(
                )
       )
     )
-  )
 )
 
 shinyApp(
   ui = dashboardPage(
       title = "Word Vector Interface | Women Writers Vector Toolkit",
       header = tags$header(
-        class = "main-header", checked = NA,
-
+        class = "main-header",
         tags$link(rel = "stylesheet", type = "text/css", 
           href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"),
         tags$link(rel = "stylesheet", type = "text/css", href = "styles/main.css"),
