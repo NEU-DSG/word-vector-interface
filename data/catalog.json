@@ -117,13 +117,15 @@
     "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850. This corpus contains 10,978,553 words in 415 texts."
   },
   
-    "WWO Regularized Corpus": {
+  
+  "WWO Regularized Corpus": {
     "shortName": "WWO Regularized Full Corpus",
     "location": "data/wwo-regularized.bin",
 	"shortDescription" : "All texts from WWO, regularized",
 	"public" : "true",
     "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, regularized with routines developed by the Visualizing English Print project. This corpus contains 11,279,989 words in 421 texts."
   },
+  
   
   "Emerson and WWO": {
     "shortName": "Emerson and WWO",
@@ -133,6 +135,7 @@
     "description": "Currently displayed: a corpus with the full Women Writers Online collection, including the Almanacks of Mary Moody Emerson. This corpus contains 11,301,160 words in 439 texts."
   },
   
+  
   "VWWP": {
     "shortName": "VWWP Full Corpus",
     "location": "data/vwwp_xquery_nonreg.bin",
@@ -140,8 +143,9 @@
 	"public" : "true",
     "description": "Currently displayed: the entire Victorian Women Writers Project corpus of women’s writing from 1830 to 1929. This corpus contains 8,065,805 words in 199 texts."
   },
+  
 
-    "VWWP and WWO": {
+  "VWWP and WWO": {
     "shortName": "VWWP and WWO",
     "location": "data/wwo-vwwp.bin",
 	"shortDescription" : "The Victorian Women Writers Project and Women Writers Online Combined Corpus",
@@ -158,7 +162,8 @@
     "description": "Currently displayed: a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, restricted to those contents written by the texts’ authors. This corpus contains 10,965,568 words in 421 texts."
   },
   
-    "WWO Regularized Authorial Corpus": {
+  
+  "WWO Regularized Authorial Corpus": {
     "shortName": "WWO Regularized Authorial Corpus",
     "location": "data/wwo-authorial-regularized.bin",
 	"shortDescription" : "All texts from WWO, restricted to those by the authors and regularized",
@@ -175,6 +180,7 @@
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 16th and 17th centuries. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,886,257 words in 201 texts."
   },
 
+
   "WWO 18th century": {
     "shortName": "WWO 18th Century",
     "location": "data/wwo-18.bin",
@@ -182,6 +188,7 @@
 	"public" : "true",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 18th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,408,243 words in 119 texts."
   },
+
 
   "WWO 19th Century": {
     "shortName": "WWO 19th Century",
@@ -200,6 +207,7 @@
     "description": "Currently displayed: a combined corpus that includes the full set of Victorian Women Writers Projects texts and the subset of the Women Writers Online corpus that was published in the 19th century. This corpus contains 11,625,245 words in 295 texts."
   },
   
+  
   "WWO Place Names Tokenized": {
     "shortName": "WWO Place Names Tokenized",
     "location": "data/all-wwo_placeName-tokenized.bin",
@@ -207,6 +215,7 @@
 	"public" : "true",
     "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place names. This corpus contains 11,488,313 words in 427 texts. The text has been regularized."
   },
+  
 
   "WWO Person Names Tokenized": {
     "shortName": "WWO Person Names Tokenized",
@@ -215,6 +224,7 @@
 	"public" : "true",
     "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for person names. This corpus contains 11,432,470 words in 427 texts. The text has been regularized."
   },
+  
 
   "WWO Place and Person Names Tokenized": {
     "shortName": "WWO Place and Person Names Tokenized",
@@ -224,6 +234,7 @@
     "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place and person names. This corpus contains 11,420,187 words in 427 texts. The text has been regularized."
   },
 
+
   "WWO Body Content": {
     "shortName": "WWO Body Content",
     "location": "data/wwo-body.bin",
@@ -231,6 +242,7 @@
 	"public" : "true",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes the body of each text, without front or back matter. This corpus contains 10,669,922 words in 405 texts."
   },
+
 
   "WWO Verse": {
     "shortName": "WWO Verse",
@@ -240,6 +252,7 @@
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a verse line group (<lg>). Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 4,973,946 words in 290 texts."
   },
 
+
   "WWO Prose": {
     "shortName": "WWO Prose",
     "location": "data/wwo-p.bin",
@@ -248,7 +261,8 @@
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a paragraph (<p>). This corpus contains 8,433,255 words in 406 texts."
   },
 
-        "TCP1": {
+
+  "TCP1": {
 		"shortName": "Text Creation Partnership 1",
 		"location": "data/tcp1.bin",
 		"shortDescription" : "TCP Selected Corpus 1",
@@ -256,7 +270,7 @@
 		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,329,588 words in 205 texts."
     },
 
-        "TCP2": {
+  "TCP2": {
 		"shortName": "Text Creation Partnership 2",
 		"location": "data/tcp2.bin",
 		"shortDescription" : "TCP Selected Corpus 2",
@@ -264,7 +278,7 @@
 		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,002,431 words in 1,796 texts."
     },
 
-        "TCP3": {
+  "TCP3": {
 		"shortName": "Text Creation Partnership 3",
 		"location": "data/tcp3.bin",
 		"shortDescription" : "TCP Selected Corpus 3",
@@ -272,7 +286,7 @@
 		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 7,990,878 words in 470 texts."
     },
 
-        "TCP4": {
+  "TCP4": {
 		"shortName": "Text Creation Partnership 4",
 		"location": "data/tcp4.bin",
 		"shortDescription" : "TCP Selected Corpus 4",
@@ -281,182 +295,39 @@
     },
 
 
-
-
-
   "EEBO": {
-		"shortName": "Early English Books Online",
-		"location": "data/eebo.bin",
-		"shortDescription" : "EEBO Selected Corpus",
-		"public" : "false",
-		"description": "This subset of texts from Early English Books Online contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is the first of several EEBO corpora that will be included in the Word Vector Interface."
+     "shortName": "Early English Books Online",
+     "location": "data/eebo.bin",
+     "shortDescription" : "EEBO Selected Corpus",
+     "public" : "false",
+     "description": "This subset of texts from Early English Books Online contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is the first of several EEBO corpora that will be included in the Word Vector Interface."
     },
-
-    "VWWP Morphadorned": {
+    
+    
+  "VWWP Morphadorned": {
     "shortName": "Morphed VWWP",
     "location": "data/vwwp+wwo-adorned.bin",
-	"shortDescription" : "Morphadorned Victorian Women Writers Project Corpus",
-	"public" : "false",
+       "shortDescription" : "Morphadorned Victorian Women Writers Project Corpus",
+       "public" : "false",
     "description": "We have parsed the TEI of the VWWP and extracted its body content. It has been further regularized with Morphadorner."
-  },
+    },
+
 
   "WWO Global Publications": {
     "shortName": "WWO Global Publications",
     "location": "data/wwo_xquery-nonreg_non-us.bin",
-	"shortDescription" : "Texts published outside the U.S. in the WWO",
-	"public" : "false",
+       "shortDescription" : "Texts published outside the U.S. in the WWO",
+       "public" : "false",
     "description": "Texts published outside the U.S. Texts have been prepared using XSLT and XQuery processes that clean and regularize the corpus."
-  },
+    },
+    
 
   "WWO U.S. Publications": {
     "shortName": "WWO U.S. Publications",
     "location": "data/wwo_xquery-nonreg_us.bin",
-	"shortDescription" : "U.S. publications in the WWO",
-	"public" : "false",
+       "shortDescription" : "U.S. publications in the WWO",
+       "public" : "false",
     "description": "Only texts published in the United States. Texts have been prepared using XSLT and XQuery processes that clean and regularize the corpus."
-  },
+    }
 
-  "eme-Morphed WWO 17th Century": {
-    "shortName": "eme-Morphed WWO 17th Century",
-    "location": "data/wwo_eme-morph_17C.bin",
-	"shortDescription" : "Morphadorned (eme) WWO texts from the 17th century",
-	"public" : "false",
-    "description": "This subset of the WWO corpus includes texts that appear in the 16th and 17th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
-  },
-
-  "eme-Morphed WWO 18th Century": {
-    "shortName": "eme-Morphed WWO 18th Century",
-    "location": "data/wwo_eme-morph_18C.bin",
-	"shortDescription" : "Morphadorned (eme) WWO texts from the 18th century",
-	"public" : "false",
-    "description": "This subset of the WWO corpus includes texts that appear in the 18th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
-  },
-
-  "eme-Morphed WWO 19th Century": {
-    "shortName": "eme-Morphed WWO 19th Century",
-    "location": "data/wwo_eme-morph_19C.bin",
-	"shortDescription" : "Morphadorned (eme) WWO texts from the 19th century",
-	"public" : "false",
-    "description": "This subset of the WWO corpus includes texts that appear in the 19th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
-  },
-
-  "eme-Morphed WWO Corpus": {
-    "shortName": "eme-Morphed WWO Corpus",
-    "location": "data/wwo_eme-morph_allTexts.bin",
-	"shortDescription" : "All Morphadorned (eme) texts from the WWO",
-	"public" : "false",
-    "description": "This is the entire corpus of the WWO. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
-  },
-
-  "eme-Morphed WWO Body Content": {
-    "shortName": "eme-Morphed WWO Body Content",
-    "location": "data/wwo_eme-morph_gi-body.bin",
-	"shortDescription" : "Text content extracted from the <body> element in the WWO and Morphadorned (eme), excludes front and back matter",
-	"public" : "false",
-    "description": "This includes text content from the <body> element in the WWO. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
-  },
-
-  "eme-Morphed WWO Verse": {
-    "shortName": "eme-Morphed WWO Verse",
-    "location": "data/wwo_eme-morph_gi-lg.bin",
-	"shortDescription" : "Morphadorned (eme) poetry and verse subset of the WWO",
-	"public" : "false",
-    "description": "Text content extracted from the <lg> element (line group) of the WWO. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
-  },
-
-  "eme-Morphed WWO Prose": {
-    "shortName": "eme-Morphed WWO Prose",
-    "location": "data/wwo_eme-morph_gi-p.bin",
-	"shortDescription" : "Morphadorned (eme) prose only subset of the WWO",
-	"public" : "false",
-    "description": "Text content extracted from the <p> element (paragraph) of the WWO. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
-  },
-
-  "eme-Morphed WWO Global Publications": {
-    "shortName": "eme-Morphed WWO Global Publications",
-    "location": "data/wwo_eme-morph_non-us.bin",
-	"shortDescription" : "Morphadorned (eme) texts published outside the U.S. in the WWO",
-	"public" : "false",
-    "description": "Texts published outside the U.S. Texts have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
-  },
-
-  "eme-Morphed WWO U.S. Publications": {
-    "shortName": "eme-Morphed WWO U.S. Publications",
-    "location": "data/wwo_eme-morph_us.bin",
-	"shortDescription" : "Morphadorned (eme) U.S. publications in the WWO",
-	"public" : "false",
-    "description": "Only texts published in the United States. Texts have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
-  },
-
-  "Morphadorned WWO 17th Century": {
-    "shortName": "Morphadorned WWO 17th Century",
-    "location": "data/wwo_reg-morph_17C.bin",
-	"shortDescription" : "Morphadorned WWO texts from the 17th century",
-	"public" : "false",
-    "description": "This subset of the WWO corpus includes texts that appear in the 16th and 17th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with Morphadorner."
-  },
-
-  "Morphadorned WWO 18th Century": {
-    "shortName": "Morphadorned WWO 18th Century",
-    "location": "data/wwo_reg-morph_18C.bin",
-	"shortDescription" : "Morphadorned WWO texts from the 18th century",
-	"public" : "false",
-    "description": "This subset of the WWO corpus includes texts that appear in the 18th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with Morphadorner."
-  },
-
-  "Morphadorned WWO 19th Century": {
-    "shortName": "Morphadorned WWO 19th Century",
-    "location": "data/wwo_reg-morph_19C.bin",
-	"shortDescription" : "Morphadorned WWO texts from the 19th century",
-	"public" : "false",
-    "description": "This subset of the WWO corpus includes texts that appear in the 19th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with Morphadorner."
-  },
-
-  "Morphadorned WWO Corpus": {
-    "shortName": "Morphadorned WWO Corpus",
-    "location": "data/wwo_reg-morph_allTexts.bin",
-	"shortDescription" : "All Morphadorned texts from the WWO",
-	"public" : "false",
-    "description": "This is the entire corpus of the WWO. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with Morphadorner."
-  },
-
-  "Morphadorned WWO Body Content": {
-    "shortName": "Morphadorned WWO Body Content",
-    "location": "data/wwo_reg-morph_gi-body.bin",
-	"shortDescription" : "Text content extracted from the <body> element in the WWO and Morphadorned, excludes front and back matter",
-	"public" : "false",
-    "description": "This includes text content from the <body> element in the WWO. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with Morphadorner."
-  },
-
-  "Morphadorned WWO Verse": {
-    "shortName": "Morphadorned WWO Verse",
-    "location": "data/wwo_reg-morph_gi-lg.bin",
-	"shortDescription" : "Morphadorned poetry and verse subset of the WWO",
-	"public" : "false",
-    "description": "Text content extracted from the <lg> element (line group) of the WWO. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with Morphadorner."
-  },
-
-  "Morphadorned WWO Prose": {
-    "shortName": "Morphadorned WWO Prose",
-    "location": "data/wwo_reg-morph_gi-p.bin",
-	"shortDescription" : "Morphadorned prose only subset of the WWO",
-	"public" : "false",
-    "description": "Text content extracted from the <p> element (paragraph) of the WWO. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with Morphadorner."
-  },
-
-  "Morphadorned WWO Global Publications": {
-    "shortName": "Morphadorned WWO Global Publications",
-    "location": "data/wwo_reg-morph_non-us.bin",
-	"shortDescription" : "Morphadorned texts published outside the U.S. in the WWO",
-	"public" : "false",
-    "description": "Texts published outside the U.S. Texts have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with Morphadorner."
-  },
-
-  "Morphadorned WWO U.S. Publications": {
-    "shortName": "Morphadorned WWO U.S. Publications",
-    "location": "data/wwo_reg-morph_nonreg_us.bin",
-	"shortDescription" : "Morphadorned U.S. publications in the WWO",
-	"public" : "false",
-    "description": "Only texts published in the United States. Texts have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with Morphadorner."
-  }
 }
