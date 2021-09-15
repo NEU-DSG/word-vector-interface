@@ -16,7 +16,7 @@ WVI. The Shiny application pulls all the other components together. The app:
 assets](#web-assets) that the browser should use;
 * lays out the form controls for each WVI tab (“Home”, “Compare”, etc.);
 * defines what happens when someone changes a setting or types in a query;
-* opens up access to the web application at port 3939 on the computer’s network
+* opens up access to the web application at port 3939 on the computer’s local network
 ([localhost:3939](http://localhost:3939)); and
 * transforms data from the models into HTML.
 
@@ -57,6 +57,7 @@ For more on how the word embedding models are created, see the
 pages of the [Women Writers Vector
 Toolkit](https://wwp.northeastern.edu/lab/wwvt/index.html).
 
+
 ## Web assets
 
 Once the Shiny server puts out a complete web page in HTML, more files are 
@@ -68,7 +69,7 @@ library that structures the web application. Installing the library also
 installs its pre-made CSS and Javascript, which give the web page its dashboard 
 appearance. The R library automatically puts links to the assets in the output 
 webpage.
-* [Bootstrap](https://getbootstrap.com/) (version 4.1.2) provides CSS for a 
+  * [Bootstrap](https://getbootstrap.com/) provides CSS for a 
 clean, flexible, and customizable foundation. The Bootstrap CSS is linked in the 
 Shiny app’s output web page, and is hosted by a [content delivery 
 network](https://www.bootstrapcdn.com/), not a local file.
