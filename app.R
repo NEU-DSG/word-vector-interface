@@ -350,7 +350,6 @@ body <- dashboardBody(
                  conditionalPanel(condition="input.visualisation_selector=='wc'",
                     class = "visualization",
                     shinyjs::useShinyjs(),
-                    #tags$head(tags$style("#word_cloud{height:calc(100vh - 200px) !important;}")),
                     box( solidHeader = TRUE, 
                          textInput("word_cloud_word", "Query term:", width = "500px"), 
                          width=12),

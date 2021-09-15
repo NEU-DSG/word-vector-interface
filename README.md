@@ -6,7 +6,7 @@ The Word Vector Interface was created by Jonathan Fitzgerald, whose [original re
 
 ## Running the application
 
-To run the Shiny app on your own machine, you’ll need R, a programming language available at <https://www.r-project.org/>.
+To run the Shiny app on your own machine, you’ll need R, a programming language available at <https://www.r-project.org/>. [RStudio Desktop](https://www.rstudio.com/products/rstudio/) is recommended but not required.
 
 ### Getting the code
 
@@ -18,7 +18,7 @@ The simplest method for obtaining the code is also the simplest way of running t
 	library(shiny)
 	runGitHub("word-vector-interface", "NEU-DSG")
 
-If you plan to do any customization of the code, you should instead download the code yourself.
+If you plan to do any customization of the code, you should instead download the code yourself. For more information on the components of the app, see the “[Application Components](./components.md)” document.
 
 If you do plan to make edits, and want to put those edits under version control, you can clone the repository in the command line.
 
