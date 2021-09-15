@@ -213,6 +213,10 @@ html, body, .wrapper {
   background-color: #343a40 !important;
 }
 
+#word_cloud{
+  height: calc(100vh - 200px);
+}
+
 
 @media only screen and (max-width: 1000px) {
   

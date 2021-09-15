@@ -350,7 +350,7 @@ body <- dashboardBody(
                  conditionalPanel(condition="input.visualisation_selector=='wc'",
                     class = "visualization",
                     shinyjs::useShinyjs(),
-                    tags$head(tags$style("#word_cloud{height:calc(100vh - 200px) !important;}")),
+                    #tags$head(tags$style("#word_cloud{height:calc(100vh - 200px) !important;}")),
                     box( solidHeader = TRUE, 
                          textInput("word_cloud_word", "Query term:", width = "500px"), 
                          width=12),
@@ -399,7 +399,7 @@ body <- dashboardBody(
                       class = "visualization",
                       shinyjs::useShinyjs(),
                       box(
-                         plotOutput("scatter_plot", height = "600px"),
+                         plotOutput("scatter_plot", height = 600),
                          width = 8
                       )
                  ),
@@ -407,10 +407,10 @@ body <- dashboardBody(
                       class = "visualization",
                       shinyjs::useShinyjs(),
                       box( solidHeader = TRUE, 
-                           textInput("scatter_plot_term", "Query term:", width = "500px"), 
+                           textInput("scatter_plot_term", "Query term:", width = 500), 
                            width=12),
                       box(
-                        plotOutput("scatter_plot_closest", height = "600px"),
+                        plotOutput("scatter_plot_closest", height = 600),
                         width = 8
                       )
                  )
@@ -562,7 +562,7 @@ shinyApp(
       plot(mtcars$wt, mtcars$mpg)
     })
 
-    outputOptions(output, "plot1", suspendWhenHidden = FALSE)
+    outputOptions(output, "plot1", suspendWhenHidden = TRUE)
 
     output$downloadData <- downloadHandler(
       filename = function() {
@@ -715,14 +715,14 @@ shinyApp(
 
 
     output$scatter_plot <- renderPlot({
-      ggplot(datascatter(), aes(x=x, y=y, colour=cluster), height="600px", width="800px") +
+      ggplot(datascatter(), aes(x=x, y=y, colour=cluster), height="600px", width="100%") +
         geom_point() +
-        geom_text_repel(aes(label = ifelse(cluster == input$scatter_cluster, as.character(names),'')), hjust=0.5,vjust=-0.5)
-
+        geom_text_repel(
+          aes(label = ifelse(cluster == input$scatter_cluster, as.character(names),'')), 
+          hjust=0.5, vjust=-0.5, max.overlaps = 12)
     })
 
-
-    outputOptions(output, "scatter_plot", suspendWhenHidden = FALSE)
+    outputOptions(output, "scatter_plot", suspendWhenHidden = TRUE)
 
 
     dataset_closet <- reactive({
@@ -763,7 +763,7 @@ shinyApp(
         geom_text_repel(aes(label=ifelse(cluster == tolower(input$scatter_plot_closest_choice) ,as.character(names),'')), hjust=0.5,vjust=-0.5)
     })
 
-    outputOptions(output, "scatter_plot_closest", suspendWhenHidden = FALSE)
+    outputOptions(output, "scatter_plot_closest", suspendWhenHidden = TRUE)
 
 
     output$addition_table <- DT::renderDataTable(DT::datatable({
