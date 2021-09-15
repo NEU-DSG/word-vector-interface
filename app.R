@@ -1,20 +1,18 @@
-library(shinydashboard)
-
-library("rjson")
 library(shiny)
-library(magrittr)
-library(tidyverse)
 library(shinyjs)
-library(wordVectors)
+library(shinydashboard)
+library(magrittr)
 library(DT)
+library("rjson")
 library(wordcloud)
 library(ggrepel)
+library(tidyverse)
+library(wordVectors)
 
 
 
 json_file <- "data/catalog.json"
 json_data <- fromJSON(file=json_file)
-
 
 
 fileList <- c()
@@ -89,187 +87,9 @@ body <- dashboardBody(
              ".shiny-output-error:before { visibility: hidden; }"
   ),
 
-  tags$head(tags$style(HTML("
-
-@media only screen and (max-width: 1000px) {
-                            body {
-                            }
-
-
-                            #table-main-2 {
-                            display: none !important;
-                            }
-
-                            .col-sm-6 {
-                            flex: 0 0 100% !important;
-                            max-width: 100% !important;
-                            }
-
-                            .compare_width {
-                            width: 100% !important;
-                            }
-
-                            #wwvt-home {
-                            margin-left: 16px !important;
-                            align-self: center !important;
-                            color: #fefefe !important;
-                            font-size: 16px !important;
-                            }
-
-
-                            .navbar-collapse.collapse {
-                            height: auto!important;
-                            padding-bottom: 0;
-                            overflow: visible!important;
-                            display: none !important;
-                            }
-
-
-                            .navbar-nav {
-                            display: none !important;
-
-                            }
-
-                            .side-open {
-                            transform: none !important;
-                            }
-
-                            .side-close {
-                            -webkit-transform: translate(-230px,0) !important;
-                            -ms-transform: translate(-230px,0) !important;
-                            -o-transform: translate(-230px,0) !important;
-                            transform: translate(-230px,0) !important;
-                            }
-
-                            }
-
-                            #downloadData {
-                            margin-top: 6px !important;
-                            height: fit-content !important;
-                            color: #444 !important;
-                            }
-
-
-
-                            .dataTables_wrapper {
-                            overflow-y : auto;
-                            }
-
-                            .visualization {
-                            width : 100%;
-                            }
-
-                            #Download_reset_button {
-                            display: flex !important;
-                            margin: 0 !important;
-                            padding: 0 !important;
-                            }
-
-                            .datatables {
-                            min-height : 20px !important;
-                            }
-
-
-                            .nav-item {
-                            margin: 0px 2px;
-                            }
-
-                            .dropdown-menu {
-                            font-size:16px !important;
-                            }
-
-                            #sidebarItemExpanded {
-                            margin-top:20px;
-                            }
-
-                            .btn-group-vertical>.btn-group:after, .btn-group-vertical>.btn-group:before, 
-                            .btn-toolbar:after, .btn-toolbar:before, .clearfix:after, .clearfix:before, 
-                            .container-fluid:after, .container-fluid:before, .container:after, .container:before, 
-                            .dl-horizontal dd:after, .dl-horizontal dd:before, .form-horizontal .form-group:after, 
-                            .form-horizontal .form-group:before, .modal-footer:after, .modal-footer:before, 
-                            .modal-header:after, .modal-header:before, .nav:after, .nav:before, 
-                            .navbar-collapse:after, .navbar-collapse:before, .navbar-header:after, .navbar-header:before, 
-                            .navbar:after, .navbar:before, .pager:after, .pager:before, 
-                            .panel-body:after, .panel-body:before, .row:after, .row:before {
-                            display: table;
-                            content: unset;
-                            }
-
-                            #word_cloud.shiny-output-error-validation {
-                              visibility: visible;
-                              color: inherit;
-                              font-size: 1.25em;
-                              font-style: italic;
-                            }
-
-                            #word_cloud > img {
-                            display: block;
-                            margin-left: auto;
-                            margin-right: auto;
-                            }
-
-                            .btn {
-                            font-size:14px !important;
-                            }
-                            .form-control {
-                            font-size:14px !important;
-                            }
-                            .compare_width {
-                            width: 60%
-                            }
-
-                            body {
-                            font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
-                            font-size: 14px !important;
-                            }
-                            .main-header .navbar {
-                            position: unset; margin : 0; font-size: 18px !important; height:68px !important;
-                            };
-                            .box{-webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none;}
-                            .content-wrapper {overflow-y: scroll;}
-                            .model_header {height : 160px}
-
-                            #wwvt-home {
-                            margin-left: 16px !important;
-                            align-self: center !important;
-                            color: #fefefe !important;
-                            font-size: 21.6px !important;
-                            }
-
-                            #wwvt-home:hover {
-                            color: #ccc !important;
-                            text-decoration: none !important;
-                            }
-
-                            .box {
-                              overflow: auto;
-                            }
-
-                            .home_desc {
-                              font-size: 14px !important;
-                              border-bottom-style: solid !important;
-                              margin-bottom: 47px !important;
-                              border-radius: 2px !important;
-                              padding: 20px !important;
-                              border-bottom-width: medium !important;
-                            }
-
-                            .welcome_desc {
-                              font-size: 1.2em !important;
-                            }
-
-                            .dataTables_filter {
-                                display: none !important;
-                            }
-
-                            .nav-over-flow{
-                            background-color: #343a40!important
-                            }"))),
-
-  fluidRow(
     tabBox(
       # The id lets us use input$tabset1 on the server to find the current tab
-      id = "tabset1", height = "250px", width = 12,
+      id = "tabset1", width = 12, #height = "250px",
       tabPanel("Home", value=1,
                div(
                  fluidRow (
@@ -530,7 +350,7 @@ body <- dashboardBody(
                  conditionalPanel(condition="input.visualisation_selector=='wc'",
                     class = "visualization",
                     shinyjs::useShinyjs(),
-                    tags$head(tags$style("#word_cloud{height:calc(100vh - 200px) !important;}")),
+                    #tags$head(tags$style("#word_cloud{height:calc(100vh - 200px) !important;}")),
                     box( solidHeader = TRUE, 
                          textInput("word_cloud_word", "Query term:", width = "500px"), 
                          width=12),
@@ -579,58 +399,39 @@ body <- dashboardBody(
                       class = "visualization",
                       shinyjs::useShinyjs(),
                       box(
-                         plotOutput("scatter_plot", height = "600px"),
+                         plotOutput("scatter_plot", height = 600),
                          width = 8
                       )
                  ),
                  conditionalPanel(condition="input.visualisation_selector=='scatter_closest'",
                       class = "visualization",
                       shinyjs::useShinyjs(),
-                      box( solidHeader = TRUE, textInput("scatter_plot_term", "Query term:", width = "500px"), width=12),
+                      box( solidHeader = TRUE, 
+                           textInput("scatter_plot_term", "Query term:", width = 500), 
+                           width=12),
                       box(
-                        plotOutput("scatter_plot_closest",height = "600px"),
+                        plotOutput("scatter_plot_closest", height = 600),
                         width = 8
                       )
                  )
                )
       )
     )
-  )
 )
 
 shinyApp(
   ui = dashboardPage(
-      tags$header(
-        class = "main-header", checked = NA,
-
-        tags$link(rel = "stylesheet", type = "text/css", href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"),
-        # tags$script(src = "https://code.jquery.com/jquery-3.3.1.slim.min.js"),
-        # tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"),
-        # tags$script(src = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"),
+      title = "Word Vector Interface | Women Writers Vector Toolkit",
+      header = tags$header(
+        class = "main-header",
+        tags$link(rel = "stylesheet", type = "text/css", 
+          href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"),
+        tags$link(rel = "stylesheet", type = "text/css", href = "styles/main.css"),
         htmlTemplate("template.html", name = "header-component")
-
-        # tags$link(rel = "stylesheet", type = "text/css", href = "style/main.css"),
-        # tags$nav(
-        #   class = "navbar navbar-expand-lg navbar-dark bg-dark fixed-top",
-        #   tags$div(
-        #     class = "container",
-        #     tags$div(
-        #       class = "d-inline-flex",
-        #
-        #       tags$img(class="d-inline-block align-top", src='assets/logo.png', height='52', width='61'),
-        #       tags$a(id="wwvt-home", href="www.rstudio.com", "Women Writers Vector Toolkit")
-        #
-        #     ),
-        #     tags$div(
-        #
-        #     )
-        #   )
-        # )
       )
     ,
 
-    # dashboardHeader(),
-    dashboardSidebar(
+    sidebar = dashboardSidebar(
 
       conditionalPanel(condition="input.tabset1==1",
                        selectInput("modelSelect", "Model",
@@ -703,7 +504,7 @@ shinyApp(
                               sliderInput("freq",
                                           "Similarity",
                                           step = 5,
-                                          ticks = c(1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100),
+                                          ticks = TRUE,
                                           min = 0,  max = 100, value = 15),
                               sliderInput("max",
                                           "Maximum Number of Words:",
@@ -745,7 +546,7 @@ shinyApp(
       )
 
     ),
-    body
+    body = body
   ),
   
   server = function(input, output, session) {
@@ -754,37 +555,31 @@ shinyApp(
       input$tabset1
     })
 
-
     set.seed(122)
     histdata <- rnorm(500)
-
 
     output$plot1 <- renderPlot({
       plot(mtcars$wt, mtcars$mpg)
     })
 
-    outputOptions(output, "plot1", suspendWhenHidden = FALSE)
-
-
+    outputOptions(output, "plot1", suspendWhenHidden = TRUE)
 
     output$downloadData <- downloadHandler(
       filename = function() {
         paste(input$modelSelect_clusters[[1]], ".csv", sep = "")
-      },
+    },
 
-      content = function(file) {
-        data <- sapply(ls_download_cluster,function(n) {
-          paste0(names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]))
-        }) %>% as_data_frame()
+    content = function(file) {
+      data <- sapply(ls_download_cluster,function(n) {
+        paste0(names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]))
+      }) %>% as_data_frame()
 
-        write.csv(data, file, row.names = FALSE)
-      })
-
+      write.csv(data, file, row.names = FALSE)
+    })
 
     observeEvent(input$modelSelect, {
       output$model_name_basic <- renderText(input$modelSelect[[1]])
       # output$model_desc_basic <- renderText({list_Desc[[input$modelSelect[[1]]]]})
-
 
       url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
       output$model_desc_basic <- renderUI({
@@ -803,19 +598,16 @@ shinyApp(
         tagList(paste(list_Desc[[input$modelSelectc1[[1]]]], "The text has been regularized."), url)
       })
 
-
     })
 
     observeEvent(input$modelSelectc2, {
       output$model_name_compare_2 <- renderText(input$modelSelectc2[[1]])
       # output$model_desc_compare_2 <- renderText({list_Desc[[input$modelSelectc2[[1]]]]})
 
-
       url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
       output$model_desc_compare_2 <- renderUI({
         tagList(paste(list_Desc[[input$modelSelectc2[[1]]]], "The text has been regularized."), url)
       })
-
 
     })
 
@@ -828,8 +620,6 @@ shinyApp(
       output$model_desc_cluster <- renderUI({
         tagList(paste(list_Desc[[input$modelSelect_clusters[[1]]]], "The text has been regularized."), url)
       })
-
-
 
     })
 
@@ -925,14 +715,14 @@ shinyApp(
 
 
     output$scatter_plot <- renderPlot({
-      ggplot(datascatter(), aes(x=x, y=y, colour=cluster), height="600px", width="800px") +
+      ggplot(datascatter(), aes(x=x, y=y, colour=cluster), height="600px", width="100%") +
         geom_point() +
-        geom_text_repel(aes(label = ifelse(cluster == input$scatter_cluster, as.character(names),'')), hjust=0.5,vjust=-0.5)
-
+        geom_text_repel(
+          aes(label = ifelse(cluster == input$scatter_cluster, as.character(names),'')), 
+          hjust=0.5, vjust=-0.5, max.overlaps = 12)
     })
 
-
-    outputOptions(output, "scatter_plot", suspendWhenHidden = FALSE)
+    outputOptions(output, "scatter_plot", suspendWhenHidden = TRUE)
 
 
     dataset_closet <- reactive({
@@ -973,7 +763,7 @@ shinyApp(
         geom_text_repel(aes(label=ifelse(cluster == tolower(input$scatter_plot_closest_choice) ,as.character(names),'')), hjust=0.5,vjust=-0.5)
     })
 
-    outputOptions(output, "scatter_plot_closest", suspendWhenHidden = FALSE)
+    outputOptions(output, "scatter_plot_closest", suspendWhenHidden = TRUE)
 
 
     output$addition_table <- DT::renderDataTable(DT::datatable({

@@ -12,19 +12,19 @@ To run the Shiny app on your own machine, you’ll need R, a programming languag
 
 You’ll also need a copy of the code from this GitHub repository.
 
-The simplest method for obtaining the code is also the simplest way of running the app. In an R console or in RStudio’s console, install the “shiny” package, then use it to run the application via GitHub.
+The simplest method for obtaining the code is also the simplest way of running the app. In an R console or in RStudio’s console, install the “shiny” package, then use it to run the application using the files published on GitHub.
 
 	install.packages("shiny")
 	library(shiny)
-	runGitHub("wwp-w2vonline", "NEU-DSG")
+	runGitHub("word-vector-interface", "NEU-DSG")
 
 If you plan to do any customization of the code, you should instead download the code yourself.
 
 If you do plan to make edits, and want to put those edits under version control, you can clone the repository in the command line.
 
-	git clone https://github.com/NEU-DSG/wwp-w2vonline.git
+	git clone https://github.com/NEU-DSG/word-vector-interface.git
 
-Alternatively, you can download and decompress this file: <https://github.com/NEU-DSG/wwp-w2vonline/archive/master.zip>.
+Alternatively, you can download and decompress this file: <https://github.com/NEU-DSG/word-vector-interface/archive/main.zip>.
 
 
 ### Running a local copy with RStudio
@@ -32,6 +32,7 @@ Alternatively, you can download and decompress this file: <https://github.com/NE
 Open RStudio and make sure the following packages are installed:
 
 * “shiny”
+* “shinydashboard”
 * “shinyjs”
 * “magrittr”
 * “DT”
@@ -43,7 +44,7 @@ Open RStudio and make sure the following packages are installed:
 
 With the exception of “wordVectors”, these libraries are available on the Comprehensive R Archive Network (CRAN) and can be downloaded by running the following in RStudio’s console window:
 
-	install.packages(c("shiny", "shinyjs", "magrittr", "DT", "rjson", "tidyverse", "wordcloud", "ggrepel"))
+	install.packages(c("shiny", "shinydashboard", "shinyjs", "magrittr", "DT", "rjson", "tidyverse", "wordcloud", "ggrepel"))
 
 To install “wordVectors”, first install and load “devtools”.
 
@@ -68,7 +69,7 @@ With the required libraries present, you can simply open `app.R`, and select the
 
 ## Customizing the application
 
-When run, the Word Vector Interface will read in models from the “data” folder, and make them available for querying. Models are only published, however, if (1) they have a corresponding entry in the catalog [“data/catalog.json”](https://github.com/NEU-DSG/wwp-w2vonline/blob/master/data/catalog.json), and (2) that entry is marked “public”.
+When run, the Word Vector Interface will read in models from the “data” folder, and make them available for querying. Models are only published, however, if (1) they have a corresponding entry in the catalog [“data/catalog.json”](https://github.com/NEU-DSG/word-vector-interface/blob/main/data/catalog.json), and (2) that entry is marked “public”.
 
 To add your own pre-generated model(s), place them in the “data” directory. Then edit “data/catalog.json”. Here's a sample entry:
 
