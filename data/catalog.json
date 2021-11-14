@@ -192,7 +192,14 @@
 	"public" : "true",
     "description": "A model trained on a corpus of novels related to school shootings published between 1977 and 2020. The corpus contains 1,686,851 words."
   },
-  
+	
+"Colored Conventions": {
+    "shortName": "Colored Conventions Project (CCP)",
+    "location": "data/samples/ccp_model_1.bin",
+    "shortDescription" : "CCP",
+    "public" : "true",
+    "description": "A model trained on a corpus of transcribed minutes and proceedings of the Colored Conventions movement, spanning from the 1830s through the 1890s and representing the buried history of 19th-century Black organizing. This corpus was created through collective effort by the Colored Conventions Project (https://coloredconventions.org). In working with this corpus, users of this tool commit to honoring CCP’s commitment to a use of data that humanizes and acknowledges the Black people whose collective organizational histories are assembled here. Although the subjects of datasets are often reduced to abstract data points, we will contextualize and narrate the conditions of the people who appear as “data” and name them when possible. Users also commit to crediting the CCP's work in any findings from this corpus, and to including the above language in their first citation of any data or results deriving from this corpus. The corpus contains 6,201,208 words in 147 texts."
+    },  
 
  "Evans": {
     "shortName": "Evans Early American Imprints (TCP)",
