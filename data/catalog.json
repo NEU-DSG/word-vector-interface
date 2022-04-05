@@ -1,6 +1,41 @@
 {
 
 
+
+
+"Martin": {
+    "shortName": "Martin: Dickens",
+    "location": "data/samples/martin_dickens.bin",
+    "shortDescription" : "martin_dickens.bin",
+    "public" : "true",
+    "description": "A model trained on the works of Charles Dickens. The corpus contains 3,508,785 words and has a distinct vocabulary of 18,582 words."
+    },
+    
+       "Sedaghat Payam": {
+    "shortName": "Sedaghat Payam Persian Novels",
+    "location": "data/samples/sedaghat_payam_persian-novels.bin",
+    "shortDescription" : "Sedaghat Payam: Persian Novels",
+    "public" : "true",
+    "description": "A model trained on a corpus of Persian novels. The corpus contains 2,659,612 words and has a distinct vocabulary of 30,196 words."
+    },
+    
+    "Wrisley French": {
+    "shortName": "Wrisley: 15c French",
+    "location": "data/samples/wrisley_15cfrench.bin",
+    "shortDescription" : "Wrisley: 15c French",
+    "public" : "true",
+    "description": "A model trained on a corpus of fifteenth-century French texts. The corpus contains 5,721,147 words and has a distinct vocabulary of 41,611 words."
+    },
+    
+ 
+"Wrisley Colonial": {
+    "shortName": "Wrisley: 19c Colonial",
+    "location": "data/samples/wrisley_bushire.bin",
+    "shortDescription" : "Wrisley: 19c Colonial",
+    "public" : "true",
+    "description": "A model trained on a corpus of 19th century English colonial texts from the Persian Gulf. The corpus contains 733,486 words and has a distinct vocabulary of 7,837 words."
+    },
+    
  "Evans": {
     "shortName": "Evans Early American Imprints (TCP)",
     "location": "data/samples/evans_early-american-imprints-reg.bin",
