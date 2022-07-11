@@ -160,9 +160,9 @@ html, body, .wrapper {
   grid-area: sidebar;
   margin: 0 5%;
   min-height: unset;
+  padding-right: 1.5rem;
   padding-top: 0;
-  position: unset;
-  width: 90%;
+  position: initial;
 }
 
 #sidebarItemExpanded {
