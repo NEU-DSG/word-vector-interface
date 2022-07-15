@@ -863,7 +863,8 @@ shinyApp(
       vector1 <- use_model[[tolower(input$advanced_word1)]]
       # If there's only 1 word, no math needs to be done.
       if (input$advanced_word2 == "" && input$advanced_word3 == "") {
-        data <- use_model %>% closest_to(vector1)
+        data <- use_model %>% closest_to(vector1) %>%
+          mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
       # If the 1st and 2nd words were provided...
       } else if (input$advanced_word2 != "" && input$advanced_word3 == "") {
         vector2 <- use_model[[tolower(input$advanced_word2)]]
@@ -879,6 +880,8 @@ shinyApp(
           # We have to coerce the result of vector division into VectorSpaceModel format
           data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 / vector2), 150)
         }
+        data <- data %>%
+          mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
       # If all 3 words have been provided...
       } else if (input$advanced_word2 != "" && input$advanced_word3 != "") {
         vector2 <- use_model[[tolower(input$advanced_word2)]]
