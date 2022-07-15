@@ -77,6 +77,20 @@ linkToWWO <- function(keyword, session) {
   paste0("<a target='_blank' href='",url,"'>",keyword,"</a>")
 }
 
+tableSimpleOpts <- list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)
+tableSidebarOpts <- function(page_len) {
+  return(list(dom = 't', pageLength = page_len, searching = FALSE))
+}
+
+getDataForTable <- function(model, vector, session, opts = list()) {
+  return(DT::datatable({
+    data <- model %>% closest_to(vector) %>%
+      mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
+      .[c(3,2)]
+  }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
+  options = opts))
+}
+
   
 # Create the app page's body.
 body <- dashboardBody(
@@ -614,7 +628,7 @@ shinyApp(
     content = function(file) {
       data <- sapply(ls_download_cluster,function(n) {
         paste0(names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]))
-      }) %>% as_tibble()
+      }) %>% as_tibble(.name_repair = "minimal")
 
       write.csv(data, file, row.names = FALSE)
     })
@@ -715,7 +729,7 @@ shinyApp(
 
       df2 <- sapply(sample(1:150,10),function(n) {
         paste0(names(list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster[list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster==n][1:150]))
-      }) %>% as_tibble()
+      }) %>% as_tibble(.name_repair = "minimal")
 
       df2
       # rv$setupComplete <- TRUE
@@ -806,132 +820,176 @@ shinyApp(
 
     outputOptions(output, "scatter_plot_closest", suspendWhenHidden = TRUE)
 
+    # Generate table for Addition operation
+    output$addition_table <- DT::renderDataTable({
+      validate(need(input$addition_word1 != "" && input$addition_word2 != "", 
+                    "Enter query term into word 1 and word 2."))
+      use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
+      getDataForTable(use_model, 
+                      as.VectorSpaceModel(use_model[[tolower(input$addition_word1)]] +
+                                            use_model[[tolower(input$addition_word2)]]), 
+                      session,
+                      tableSimpleOpts)
+    })
 
-    output$addition_table <- DT::renderDataTable(DT::datatable({
-      validate(need(input$addition_word1 != "" && input$addition_word2 != "", "Enter query term into word 1 and word 2."))
-      data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$addition_word1),] +
-                                                                                  list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$addition_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+    # Generate table for Subtraction operation
+    output$subtraction_table <- DT::renderDataTable({
+      validate(need(input$subtraction_word1 != "" && input$subtraction_word2 != "", 
+                    "Enter query term into word 1 and word 2."))
+      use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
+      getDataForTable(use_model,
+                      use_model[[tolower(input$subtraction_word1)]] -
+                        use_model[[tolower(input$subtraction_word2)]], 
+                      session,
+                      tableSimpleOpts)
+    })
 
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
-
-    # Subtraction tab
-    output$subtraction_table <- DT::renderDataTable(DT::datatable({
-      validate(need(input$subtraction_word1 != "" && input$subtraction_word2 != "", "Enter query term into word 1 and word 2."))
-      data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$subtraction_word1),] -
-                                                                                  list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$subtraction_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
-
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
-
-
-    output$analogies_table <- DT::renderDataTable(DT::datatable({
+    # Generate table for Analogies operation
+    output$analogies_table <- DT::renderDataTable({
       validate(need(input$analogies_word1 != "" && input$analogies_word2 != "" && input$analogies_word3 != "", "Enter query term into Word 1, Word 2, and Word 3."))
-      data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word3),], input$all_count) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+      use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
+      getDataForTable(use_model, as.VectorSpaceModel(
+        use_model[[tolower(input$analogies_word1)]] -
+          use_model[[tolower(input$analogies_word2)]] + 
+          use_model[[tolower(input$analogies_word3)]]),
+        session,
+        tableSimpleOpts)
+    })
 
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
-
-
+    # Generate table for Advanced math operation
     output$advanced_table <- DT::renderDataTable(DT::datatable({
       validate(need(input$advanced_word1 != "", "Enter query term into Word 1."))
-      data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(tolower(input$advanced_word1), 150)
-      if (input$advanced_word2 != "" && input$advanced_word3 == "") {
+      use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
+      vector1 <- use_model[[tolower(input$advanced_word1)]]
+      # If there's only 1 word, no math needs to be done.
+      if (input$advanced_word2 == "" && input$advanced_word3 == "") {
+        data <- use_model %>% closest_to(vector1)
+      # If the 1st and 2nd words were provided...
+      } else if (input$advanced_word2 != "" && input$advanced_word3 == "") {
+        vector2 <- use_model[[tolower(input$advanced_word2)]]
         if (input$advanced_math == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          # We have to coerce the result of vector addition into VectorSpaceModel format
+          data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 + vector2), 150)
+        } else if (input$advanced_math == "-") {
+          data <- use_model %>% closest_to(vector1 - vector2, 150)
+        } else if (input$advanced_math == "*") {
+          # We have to coerce the result of vector multiplication into VectorSpaceModel format
+          data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 * vector2), 150)
+        } else if (input$advanced_math == "/") {
+          # We have to coerce the result of vector division into VectorSpaceModel format
+          data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 / vector2), 150)
         }
-        if (input$advanced_math == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
-        }
-        if (input$advanced_math == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
-        }
-        if (input$advanced_math == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==(input$advanced_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
-        }
-      }
-
-      if (input$advanced_word2 != "" && input$advanced_word3 != "") {
-
+      # If all 3 words have been provided...
+      } else if (input$advanced_word2 != "" && input$advanced_word3 != "") {
+        vector2 <- use_model[[tolower(input$advanced_word2)]]
+        vector3 <- use_model[[tolower(input$advanced_word3)]]
+        # When the first operator is +
         if (input$advanced_math == "+" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 + vector2 + vector3), 150)
         }
         if (input$advanced_math == "+" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 + vector2 - vector3), 150)
         }
         if (input$advanced_math == "+" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 + vector2 * vector3), 150)
         }
         if (input$advanced_math == "+" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 + vector2 / vector3), 150)
         }
-
+        # When the first operator is -
         if (input$advanced_math == "-" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 - vector2 + vector3), 150)
         }
         if (input$advanced_math == "-" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 - vector2 - vector3), 150)
         }
         if (input$advanced_math == "-" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 - vector2 * vector3), 150)
         }
         if (input$advanced_math == "-" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 - vector2 / vector3), 150)
         }
-
+        # When the first operator is *
         if (input$advanced_math == "*" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 * vector2 + vector3), 150)
         }
         if (input$advanced_math == "*" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 * vector2 - vector3), 150)
         }
         if (input$advanced_math == "*" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 * vector2 * vector3), 150)
         }
         if (input$advanced_math == "*" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 * vector2 / vector3), 150)
         }
-
+        # When the first operator is /
         if (input$advanced_math == "/" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 / vector2 + vector3), 150)
         }
         if (input$advanced_math == "/" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 / vector2 - vector3), 150)
         }
         if (input$advanced_math == "/" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 / vector2 * vector3), 150)
         }
         if (input$advanced_math == "/" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 / vector2 / vector3), 150)
         }
-
+        data <- data %>%
+          mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
       }
       data
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"),  options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
+    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = tableSimpleOpts))
 
+    # Generate table for the Home tab
     output$basic_table <- DT::renderDataTable(DT::datatable({
-      # list_models[[input$modelSelect[[1]]]]
-      data <- list_models[[input$modelSelect[[1]]]] %>% closest_to(tolower(input$basic_word1), 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+      data <- list_models[[input$modelSelect[[1]]]] %>% 
+        closest_to(tolower(input$basic_word1), 150) %>% 
+        mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
+        .[c(3,2)]
+    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
+    options = tableSidebarOpts(input$max_words_home)))
 
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
-
-
+    # Generate 1st table for Compare tab
     output$basic_table_c1 <- DT::renderDataTable(DT::datatable({
-      # list_models[[input$modelSelect[[1]]]]
-      data <- list_models[[input$modelSelectc1[[1]]]] %>% closest_to(tolower(input$basic_word_c), 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+      data <- list_models[[input$modelSelectc1[[1]]]] %>% 
+        closest_to(tolower(input$basic_word_c), 150) %>% 
+        mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
+        .[c(3,2)]
+    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
+    options = tableSidebarOpts(input$max_words)))
 
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(dom = 't', pageLength = input$max_words, searching = FALSE)))
-
-
+    # Generate 2nd table for Compare tab
     output$basic_table_c2 <- DT::renderDataTable(DT::datatable({
-      # list_models[[input$modelSelect[[1]]]]
-      data <- list_models[[input$modelSelectc2[[1]]]] %>% closest_to(tolower(input$basic_word_c), 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
-
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(dom = 't', pageLength = input$max_words, searching = FALSE)))
+      data <- list_models[[input$modelSelectc2[[1]]]] %>% 
+        closest_to(tolower(input$basic_word_c), 150) %>% 
+        mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
+        .[c(3,2)]
+    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
+    options = tableSidebarOpts(input$max_words)))
 
 
     output$tbl <- DT::renderDataTable(DT::datatable({
       data <- sapply(sample(1:150,4),function(n) {
         cword <- names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
         linkToWWO(keyword = cword, session = session)
-      }) %>% as_tibble()
+      }) %>% as_tibble(.name_repair = "minimal")
     }, escape = FALSE, colnames=c(paste0("cluster_",1:4)), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
 
     # Handle resetting clusters in the Home tab.
@@ -941,7 +999,7 @@ shinyApp(
         data <- sapply(sample(1:150,4),function(n) {
           cword <- names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
           linkToWWO(keyword = cword, session = session)
-        }) %>% as_tibble()
+        }) %>% as_tibble(.name_repair = "minimal")
       }, escape = FALSE, colnames=c(paste0("cluster_",1:4)),options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
     })
 
@@ -951,7 +1009,7 @@ shinyApp(
         ls_download_cluster <<- c(ls_download_cluster,n)
         cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
         linkToWWO(keyword = cword, session = session)
-      }) %>% as_tibble()
+      }) %>% as_tibble(.name_repair = "minimal")
 
     }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
 
@@ -964,7 +1022,7 @@ shinyApp(
           ls_download_cluster <<- c(ls_download_cluster,n)
           cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
           linkToWWO(keyword = cword, session = session)
-        }) %>% as_tibble()
+        }) %>% as_tibble(.name_repair = "minimal")
       }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
     })
 
@@ -977,7 +1035,7 @@ shinyApp(
           ls_download_cluster <<- c(ls_download_cluster,n)
           cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
           linkToWWO(keyword = cword, session = session)
-        }) %>% as_tibble()
+        }) %>% as_tibble(.name_repair = "minimal")
       }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
     })
 
