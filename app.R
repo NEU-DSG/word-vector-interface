@@ -1,3 +1,6 @@
+##    Word Vector Interface
+
+# Load libraries.
 library(shiny)
 library(shinyjs)
 library(shinydashboard)
@@ -10,24 +13,22 @@ library(tidyverse)
 library(wordVectors)
 
 
-
+# Load JSON catalog of models and information about them.
 json_file <- "data/catalog.json"
 json_data <- fromJSON(file=json_file)
 
-
+# Load models.
 fileList <- c()
 list_clustering <- list()
 list_models <- list()
 list_Desc <- list()
 vectors <- list()
-
+# The default model is either the first public one, or "WWO Full Corpus".
 Selected_default <- 1
 Selected_compare_1 <- 1
 Selected_compare_2 <- 1
 
 ls_download_cluster <- c()
-
-
 
 i <- 1
 for(fn in json_data) {
@@ -76,8 +77,22 @@ linkToWWO <- function(keyword, session) {
   paste0("<a target='_blank' href='",url,"'>",keyword,"</a>")
 }
 
-  
+tableSimpleOpts <- list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)
+tableSidebarOpts <- function(page_len) {
+  return(list(dom = 't', pageLength = page_len, searching = FALSE))
+}
 
+getDataForTable <- function(model, vector, session, opts = list()) {
+  return(DT::datatable({
+    data <- model %>% closest_to(vector) %>%
+      mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
+      .[c(3,2)]
+  }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
+  options = opts))
+}
+
+  
+# Create the app page's body.
 body <- dashboardBody(
 
   includeScript(path = "script.js"),
@@ -87,6 +102,7 @@ body <- dashboardBody(
              ".shiny-output-error:before { visibility: hidden; }"
   ),
 
+  # Create the contents of the "Home" tab.
     tabBox(
       # The id lets us use input$tabset1 on the server to find the current tab
       id = "tabset1", width = 12, #height = "250px",
@@ -126,13 +142,14 @@ body <- dashboardBody(
                   )
                 )
         ),
+      
+      # Create the contents of the "Compare" tab.
       tabPanel("Compare", value=2,
                id = "compareTab-Id",
 
                fluidRow(
                  box( solidHeader = TRUE, textInput("basic_word_c", "Query term:", width = "500px"), width=12)
                ),
-
 
                fluidRow(
                  box(
@@ -176,7 +193,8 @@ body <- dashboardBody(
                  )
                )
           ),
-
+      
+      # Create the contents of the "Clusters" tab.
       tabPanel("Clusters", value=3,
                fluidRow(
                  box(
@@ -191,7 +209,7 @@ body <- dashboardBody(
                    tags$h1(textOutput("model_name_cluster")),
                    div(class = "model_desc", p(uiOutput("model_desc_cluster"))),
                    br(),
-                   actionButton("clustering_reset_input_fullcluster1", "Reset clusters"),
+                   actionButton("clustering_reset_input_fullcluster1", "Reset clusters", class="clustering-reset-full"),
 
                    # div(class = "model_desc", p(textOutput("model_desc_cluster"),
                    #                             "The text has been regularized",
@@ -205,10 +223,11 @@ body <- dashboardBody(
                   DTOutput('clusters_full'), width = 12)
                )
       ),
+      
+      # Create the contents of the "Operations" tab.
       tabPanel("Operations", value=4,
                fluidRow(
                  box(
-
                    div(class="home_desc",
                      p("Using the sidebar on the left, you can select from several different operations and choose which model you would like to query.")
                   ),
@@ -217,6 +236,8 @@ body <- dashboardBody(
                    width=12
                  )
               ),
+              
+              # Create the contents of the "Addition" operation tab.
               fluidRow(
                 box( width = 7,
                  conditionalPanel(condition="input.operator_selector=='Addition'",
@@ -225,12 +246,15 @@ body <- dashboardBody(
                                       solidHeader = TRUE,
                                       shinyjs::useShinyjs(),
                                       id = "addition_panel",
-                                      column(4,
+                                      column(10,
+                                             class = "col-md-5",
                                              textInput("addition_word1", "Word 1")),
                                       column(
-                                        2, br(), tags$label(class = "col-sm-4 control-label", icon("plus"))
+                                        2,
+                                        br(), tags$label(class = "control-label", icon("plus"))
                                       ),
-                                      column(4,
+                                      column(10,
+                                             class = "col-md-5",
                                              textInput("addition_word2", "Word 2")
                                       ),
                                       width = 12
@@ -241,20 +265,24 @@ body <- dashboardBody(
                                     ),
                     width = 12
                  ),
-
+                 
+                 # Create the contents of the "Subtraction" operation tab.
                  conditionalPanel(condition="input.operator_selector=='Subtraction'",
                                   #class = "compare_width",
                                   box(
                                       solidHeader = TRUE,
                                       shinyjs::useShinyjs(),
                                       id = "subtraction_panel",
-                                      column(4,
+                                      column(10,
+                                             class = "col-md-5",
                                              # Sidebar with a inputs
                                              textInput("subtraction_word1", "Word 1")),
                                       column(
-                                        2,br(), tags$label(class = "col-sm-4 control-label", icon("minus"))
+                                        2,
+                                        br(), tags$label(class = "control-label", icon("minus"))
                                       ),
-                                      column(4,
+                                      column(10,
+                                             class = "col-md-5",
                                              textInput("subtraction_word2", "Word 2")
                                       ),
                                       width = 12
@@ -265,28 +293,33 @@ body <- dashboardBody(
                                   ),
                     width = 12
                  ),
+                 
+                 # Create the contents of the "Advanced" operation tab.
                  conditionalPanel(condition="input.operator_selector=='Advanced'",
                                   #class = "compare_width",
                                   box(
                                        solidHeader = TRUE,
                                        shinyjs::useShinyjs(),
                                        id = "advanced_panel",
-                                       column(2,
+                                       column(10,
                                               # Sidebar with a inputs
+                                              class = "col-md-8",
                                               textInput("advanced_word1", "Word 1")),
                                        column(2,
-                                              class = "mathCol",
+                                              class = "col-md-4 mathCol",
                                               selectInput("advanced_math", "Math",
                                                           choices = list("+" = "+", "-" = "-", "*" = "*", "/" = "/"),
                                                           selected = 1)),
-                                       column(2,
+                                       column(10,
+                                              class = "col-md-8",
                                               textInput("advanced_word2", "Word 2")),
                                        column(2,
-                                              class = "mathCol",
+                                              class = "col-md-4 mathCol",
                                               selectInput("advanced_math2", "Math",
                                                           choices = list("+" = "+", "-" = "-", "*" = "*", "/" = "/"),
                                                           selected = 1)),
-                                       column(2,
+                                       column(10,
+                                              class = "col-md-8",
                                               textInput("advanced_word3", "Word 3")
                                        ),
                                        width = 12
@@ -297,25 +330,31 @@ body <- dashboardBody(
                                     ),
                       width = 12
                  ),
-
+                 
+                 # Create the contents of the "Analogies" operation tab.
                  conditionalPanel(condition="input.operator_selector=='Analogies'",
                                   #class = "compare_width",
                                   box(
                                     solidHeader = TRUE,
                                     shinyjs::useShinyjs(),
                                     id = "analogies_panel",
-                                    column(2,
+                                    column(10,
+                                           class = "col-md-5",
                                            # Sidebar with a inputs
                                            textInput("analogies_word1", "Word 1")),
                                     column(
-                                      1, br(), tags$label(class = "col-sm-4 control-label", icon("minus"))
+                                      2, 
+                                      br(), tags$label(class = "control-label", icon("minus"))
                                     ),
-                                    column(2,
+                                    column(10,
+                                           class = "col-md-5",
                                            textInput("analogies_word2", "Word 2")),
                                     column(
-                                      1, br(), tags$label(class = "col-sm-4 control-label", icon("plus"))
+                                      2,
+                                      br(), tags$label(class = "control-label", icon("plus"))
                                     ),
-                                    column(2,
+                                    column(10,
+                                           class = "col-md-5",
                                            textInput("analogies_word3", "Word 3")
                                     ),
                                     width = 12
@@ -326,6 +365,7 @@ body <- dashboardBody(
                                   )
                       )
                  ),
+                
                  box(
                    p("Addition allows you to add the contexts associated with two terms to each other, while subtraction allows you to subtract the contexts associated with one word from another. To see how these work, try “orange” + “red” and “orange” - “red” and compare the results."),
                    p("The analogies operation allows you to subtract the contexts associated with one term from another, and then add the contexts associated with a third term. For example, you might subtract “man” from “woman” to get a vector associated with the contexts of “woman” as distinct from “man”; then, adding the vector for “king” will bring in its contexts to give you words associated with the distinction between woman and man AND with royalty; in many models, this will be “queen.” Or, put more simply: woman - man + king = queen; woman is to man as queen is to king."),
@@ -338,6 +378,8 @@ body <- dashboardBody(
 
                )
       ),
+      
+      # Create the contents of the "Visualization" tab.
       tabPanel("Visualization", value=5,
                fluidRow(
 
@@ -418,6 +460,7 @@ body <- dashboardBody(
     )
 )
 
+# Create an HTML wrapper around the Shiny app content.
 shinyApp(
   ui = dashboardPage(
       title = "Word Vector Interface | Women Writers Vector Toolkit",
@@ -429,9 +472,12 @@ shinyApp(
         htmlTemplate("template.html", name = "header-component")
       )
     ,
-
+    
+    # Create the sidebar and all content, which is shown or hidden depending on 
+    # the current open tab.
     sidebar = dashboardSidebar(
 
+      # Create sidebar content for "Home" tab.
       conditionalPanel(condition="input.tabset1==1",
                        selectInput("modelSelect", "Model",
                                    choices = fileList,
@@ -444,7 +490,8 @@ shinyApp(
                        actionButton("clustering_reset_input", "Reset clusters")
 
       ),
-
+      
+      # Create sidebar content for "Compare" tab.
       conditionalPanel(condition="input.tabset1==2",
                        selectInput("modelSelectc1", "Model 1",
                                    choices = fileList,
@@ -457,7 +504,8 @@ shinyApp(
                                    min = 1,  max = 150,  value = 10)
 
       ),
-
+      
+      # Create sidebar content for "Clusters" tab.
       conditionalPanel(condition="input.tabset1==3",
                        selectInput("modelSelect_clusters", "Model",
                                    choices = fileList,
@@ -466,7 +514,7 @@ shinyApp(
                        column(
                          id = "Download_reset_button",
                          width = 12,
-                         actionButton("clustering_reset_input_fullcluster", "Reset clusters"),
+                         actionButton("clustering_reset_input_fullcluster", "Reset clusters", class="clustering-reset-full"),
                          downloadButton("downloadData", "Download")
                        ),
                        br(),
@@ -476,7 +524,8 @@ shinyApp(
                                    min = 1,  max = 150,  value = 10)
 
       ),
-
+      
+      # Create sidebar content for "Operations" tab.
       conditionalPanel(condition="input.tabset1==4",
                        selectInput("modelSelect_analogies_tabs", "Model",
                                    choices = fileList,
@@ -486,7 +535,8 @@ shinyApp(
                                    choices = c("Addition", "Subtraction", "Analogies", "Advanced"),
                                    selected = 1)
       ),
-
+      
+      # Create sidebar content for "Visualization" tab.
       conditionalPanel(condition="input.tabset1==5",
                        selectInput("modelSelect_Visualisation_tabs", "Model",
                                    choices = fileList,
@@ -499,6 +549,7 @@ shinyApp(
                                      "Cluster Scatterplot" = "scatter"),
                                    selected = 1),
 
+                       # Create sidebar content for word cloud visualization.
                        conditionalPanel(condition="input.visualisation_selector=='wc'",
                               sliderInput("freq",
                                           "Similarity",
@@ -512,6 +563,8 @@ shinyApp(
                                           "Size of plot:",
                                           min = 0,  max = 5,  value = 3)
                        ),
+                       
+                       # Create sidebar content for query term scatterplot.
                        conditionalPanel(condition="input.visualisation_selector=='scatter'",
                             selectInput("scatter_cluster", "Cluster",
                                         choices = list("Cluster 1" = "V1",
@@ -531,6 +584,8 @@ shinyApp(
                             actionButton("clustering_reset_input_visualisation", "Reset clusters")
 
                        ),
+                       
+                       # Create sidebar content for cluster scatterplot.
                        conditionalPanel(condition="input.visualisation_selector=='scatter_closest'",
                                         selectInput("scatter_plot_closest_choice", "Cluster",
                                                     choices = list("Top 10",
@@ -545,9 +600,11 @@ shinyApp(
       )
 
     ),
+    
     body = body
   ),
   
+  # Listen for user interactions and handle them.
   server = function(input, output, session) {
     # The currently selected tab from the first box
     output$tabset1Selected <- renderText({
@@ -571,7 +628,7 @@ shinyApp(
     content = function(file) {
       data <- sapply(ls_download_cluster,function(n) {
         paste0(names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]))
-      }) %>% as_data_frame()
+      }) %>% as_tibble(.name_repair = "minimal")
 
       write.csv(data, file, row.names = FALSE)
     })
@@ -586,7 +643,6 @@ shinyApp(
       })
 
     })
-
 
     observeEvent(input$modelSelectc1, {
       output$model_name_compare_1 <- renderText(input$modelSelectc1[[1]])
@@ -673,7 +729,7 @@ shinyApp(
 
       df2 <- sapply(sample(1:150,10),function(n) {
         paste0(names(list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster[list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster==n][1:150]))
-      }) %>% as_data_frame()
+      }) %>% as_tibble(.name_repair = "minimal")
 
       df2
       # rv$setupComplete <- TRUE
@@ -764,156 +820,204 @@ shinyApp(
 
     outputOptions(output, "scatter_plot_closest", suspendWhenHidden = TRUE)
 
+    # Generate table for Addition operation
+    output$addition_table <- DT::renderDataTable({
+      validate(need(input$addition_word1 != "" && input$addition_word2 != "", 
+                    "Enter query term into word 1 and word 2."))
+      use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
+      getDataForTable(use_model, 
+                      as.VectorSpaceModel(use_model[[tolower(input$addition_word1)]] +
+                                            use_model[[tolower(input$addition_word2)]]), 
+                      session,
+                      tableSimpleOpts)
+    })
 
-    output$addition_table <- DT::renderDataTable(DT::datatable({
-      validate(need(input$addition_word1 != "" && input$addition_word2 != "", "Enter query term into word 1 and word 2."))
-      data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$addition_word1),] +
-                                                                                  list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$addition_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+    # Generate table for Subtraction operation
+    output$subtraction_table <- DT::renderDataTable({
+      validate(need(input$subtraction_word1 != "" && input$subtraction_word2 != "", 
+                    "Enter query term into word 1 and word 2."))
+      use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
+      getDataForTable(use_model,
+                      use_model[[tolower(input$subtraction_word1)]] -
+                        use_model[[tolower(input$subtraction_word2)]], 
+                      session,
+                      tableSimpleOpts)
+    })
 
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
-
-    # Subtraction tab
-    output$subtraction_table <- DT::renderDataTable(DT::datatable({
-      validate(need(input$subtraction_word1 != "" && input$subtraction_word2 != "", "Enter query term into word 1 and word 2."))
-      data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$subtraction_word1),] -
-                                                                                  list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$subtraction_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
-
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
-
-
-    output$analogies_table <- DT::renderDataTable(DT::datatable({
+    # Generate table for Analogies operation
+    output$analogies_table <- DT::renderDataTable({
       validate(need(input$analogies_word1 != "" && input$analogies_word2 != "" && input$analogies_word3 != "", "Enter query term into Word 1, Word 2, and Word 3."))
-      data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$analogies_word3),], input$all_count) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+      use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
+      getDataForTable(use_model, as.VectorSpaceModel(
+        use_model[[tolower(input$analogies_word1)]] -
+          use_model[[tolower(input$analogies_word2)]] + 
+          use_model[[tolower(input$analogies_word3)]]),
+        session,
+        tableSimpleOpts)
+    })
 
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
-
-
+    # Generate table for Advanced math operation
     output$advanced_table <- DT::renderDataTable(DT::datatable({
       validate(need(input$advanced_word1 != "", "Enter query term into Word 1."))
-      data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(tolower(input$advanced_word1), 150)
-      if (input$advanced_word2 != "" && input$advanced_word3 == "") {
+      use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
+      vector1 <- use_model[[tolower(input$advanced_word1)]]
+      # If there's only 1 word, no math needs to be done.
+      if (input$advanced_word2 == "" && input$advanced_word3 == "") {
+        data <- use_model %>% closest_to(vector1) %>%
+          mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+      # If the 1st and 2nd words were provided...
+      } else if (input$advanced_word2 != "" && input$advanced_word3 == "") {
+        vector2 <- use_model[[tolower(input$advanced_word2)]]
         if (input$advanced_math == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          # We have to coerce the result of vector addition into VectorSpaceModel format
+          data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 + vector2), 150)
+        } else if (input$advanced_math == "-") {
+          data <- use_model %>% closest_to(vector1 - vector2, 150)
+        } else if (input$advanced_math == "*") {
+          # We have to coerce the result of vector multiplication into VectorSpaceModel format
+          data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 * vector2), 150)
+        } else if (input$advanced_math == "/") {
+          # We have to coerce the result of vector division into VectorSpaceModel format
+          data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 / vector2), 150)
         }
-        if (input$advanced_math == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
-        }
-        if (input$advanced_math == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
-        }
-        if (input$advanced_math == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==(input$advanced_word2),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
-        }
-      }
-
-      if (input$advanced_word2 != "" && input$advanced_word3 != "") {
-
+        data <- data %>%
+          mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+      # If all 3 words have been provided...
+      } else if (input$advanced_word2 != "" && input$advanced_word3 != "") {
+        vector2 <- use_model[[tolower(input$advanced_word2)]]
+        vector3 <- use_model[[tolower(input$advanced_word3)]]
+        # When the first operator is +
         if (input$advanced_math == "+" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 + vector2 + vector3), 150)
         }
         if (input$advanced_math == "+" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 + vector2 - vector3), 150)
         }
         if (input$advanced_math == "+" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 + vector2 * vector3), 150)
         }
         if (input$advanced_math == "+" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 + vector2 / vector3), 150)
         }
-
+        # When the first operator is -
         if (input$advanced_math == "-" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 - vector2 + vector3), 150)
         }
         if (input$advanced_math == "-" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 - vector2 - vector3), 150)
         }
         if (input$advanced_math == "-" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 - vector2 * vector3), 150)
         }
         if (input$advanced_math == "-" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 - vector2 / vector3), 150)
         }
-
+        # When the first operator is *
         if (input$advanced_math == "*" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 * vector2 + vector3), 150)
         }
         if (input$advanced_math == "*" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 * vector2 - vector3), 150)
         }
         if (input$advanced_math == "*" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 * vector2 * vector3), 150)
         }
         if (input$advanced_math == "*" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 * vector2 / vector3), 150)
         }
-
+        # When the first operator is /
         if (input$advanced_math == "/" && input$advanced_math2 == "+") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] + list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 / vector2 + vector3), 150)
         }
         if (input$advanced_math == "/" && input$advanced_math2 == "-") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] - list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 / vector2 - vector3), 150)
         }
         if (input$advanced_math == "/" && input$advanced_math2 == "*") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] * list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 / vector2 * vector3), 150)
         }
         if (input$advanced_math == "/" && input$advanced_math2 == "/") {
-          data <- list_models[[input$modelSelect_analogies_tabs[[1]]]] %>% closest_to(list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word1),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word2),] / list_models[[input$modelSelect_analogies_tabs[[1]]]][rownames(list_models[[input$modelSelect_analogies_tabs[[1]]]])==tolower(input$advanced_word3),], 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+          data <- use_model %>% 
+            closest_to(as.VectorSpaceModel(vector1 / vector2 / vector3), 150)
         }
-
+        data <- data %>%
+          mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
       }
       data
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"),  options = list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)))
+    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = tableSimpleOpts))
 
+    # Generate table for the Home tab
     output$basic_table <- DT::renderDataTable(DT::datatable({
-      # list_models[[input$modelSelect[[1]]]]
-      data <- list_models[[input$modelSelect[[1]]]] %>% closest_to(tolower(input$basic_word1), 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+      data <- list_models[[input$modelSelect[[1]]]] %>% 
+        closest_to(tolower(input$basic_word1), 150) %>% 
+        mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
+        .[c(3,2)]
+    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
+    options = tableSidebarOpts(input$max_words_home)))
 
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
-
-
+    # Generate 1st table for Compare tab
     output$basic_table_c1 <- DT::renderDataTable(DT::datatable({
-      # list_models[[input$modelSelect[[1]]]]
-      data <- list_models[[input$modelSelectc1[[1]]]] %>% closest_to(tolower(input$basic_word_c), 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+      data <- list_models[[input$modelSelectc1[[1]]]] %>% 
+        closest_to(tolower(input$basic_word_c), 150) %>% 
+        mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
+        .[c(3,2)]
+    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
+    options = tableSidebarOpts(input$max_words)))
 
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(dom = 't', pageLength = input$max_words, searching = FALSE)))
-
-
+    # Generate 2nd table for Compare tab
     output$basic_table_c2 <- DT::renderDataTable(DT::datatable({
-      # list_models[[input$modelSelect[[1]]]]
-      data <- list_models[[input$modelSelectc2[[1]]]] %>% closest_to(tolower(input$basic_word_c), 150) %>% mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
-
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = list(dom = 't', pageLength = input$max_words, searching = FALSE)))
+      data <- list_models[[input$modelSelectc2[[1]]]] %>% 
+        closest_to(tolower(input$basic_word_c), 150) %>% 
+        mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
+        .[c(3,2)]
+    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
+    options = tableSidebarOpts(input$max_words)))
 
 
     output$tbl <- DT::renderDataTable(DT::datatable({
       data <- sapply(sample(1:150,4),function(n) {
         cword <- names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
         linkToWWO(keyword = cword, session = session)
-      }) %>% as_data_frame()
+      }) %>% as_tibble(.name_repair = "minimal")
     }, escape = FALSE, colnames=c(paste0("cluster_",1:4)), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
 
-
+    # Handle resetting clusters in the Home tab.
+    # TODO: reduce duplication, create function to generate and render table of clusters
     observeEvent(input$clustering_reset_input, {
       output$tbl <- DT::renderDataTable(DT::datatable({
         data <- sapply(sample(1:150,4),function(n) {
           cword <- names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
           linkToWWO(keyword = cword, session = session)
-        }) %>% as_data_frame()
+        }) %>% as_tibble(.name_repair = "minimal")
       }, escape = FALSE, colnames=c(paste0("cluster_",1:4)),options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
     })
 
-
+    # Generate and render clusters.
     output$clusters_full <- DT::renderDataTable(DT::datatable({
       data <- sapply(sample(1:150,10),function(n) {
         ls_download_cluster <<- c(ls_download_cluster,n)
         cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
         linkToWWO(keyword = cword, session = session)
-      }) %>% as_data_frame()
+      }) %>% as_tibble(.name_repair = "minimal")
 
     }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
 
 
-
+    # Handle resetting clusters from tab content.
     observeEvent(input$clustering_reset_input_fullcluster, {
       ls_download_cluster <<- c()
       output$clusters_full <- DT::renderDataTable(DT::datatable({
@@ -921,11 +1025,12 @@ shinyApp(
           ls_download_cluster <<- c(ls_download_cluster,n)
           cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
           linkToWWO(keyword = cword, session = session)
-        }) %>% as_data_frame()
+        }) %>% as_tibble(.name_repair = "minimal")
       }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
     })
 
-
+    # Handle resetting clusters from sidebar.
+    # TODO: reduce duplication
     observeEvent(input$clustering_reset_input_fullcluster1, {
       ls_download_cluster <<- c()
       output$clusters_full <- DT::renderDataTable(DT::datatable({
@@ -933,10 +1038,9 @@ shinyApp(
           ls_download_cluster <<- c(ls_download_cluster,n)
           cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
           linkToWWO(keyword = cword, session = session)
-        }) %>% as_data_frame()
+        }) %>% as_tibble(.name_repair = "minimal")
       }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
     })
-
 
   },
   options = list(port = 3939)
