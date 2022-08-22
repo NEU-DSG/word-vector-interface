@@ -28,9 +28,9 @@
             <h3>WWO Body Content</h3>
             <p>A subset of the Women Writers Online corpus that includes the body of each text, without front or back matter. This corpus contains 10,669,922 words in 405 texts. This model was trained in June, 2019.</h3>
             <h3>WWO Verse</h3>
-            <p>A subset of the Women Writers Online corpus that includes all text marked as appearing in a verse line group (<lg>). Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 4,973,946 words in 290 texts. This model was trained in June, 2019.</p>
+            <p>A subset of the Women Writers Online corpus that includes all text marked as appearing in a verse line group. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 4,973,946 words in 290 texts. This model was trained in June, 2019.</p>
   <h3>WWO Prose</h3>
-  <p>A subset of the Women Writers Online corpus that includes all text marked as appearing in a paragraph (<p>). This corpus contains 8,433,255 words in 406 texts. This model was trained in June, 2019.</p>
+  <p>A subset of the Women Writers Online corpus that includes all text marked as appearing in a paragraph. This corpus contains 8,433,255 words in 406 texts. This model was trained in June, 2019.</p>
   <h3>Text Creation Partnership 1</h3>
   <p>A subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,329,588 words in 205 texts. This model was trained in June, 2019.</p>
   <h3>Text Creation Partnership 2</h3>
