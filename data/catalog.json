@@ -15,7 +15,7 @@
 	"shortDescription" : "All texts from WWO, regularized",
 	"public" : "true",
 	"date":"February, 2020",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, regularized with routines developed by the Visualizing English Print project. This corpus contains 11,279,989 words in 421 texts. This model was trained in February, 2020. "
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, regularized with routines developed by the Visualizing English Print project. This corpus contains 11,279,989 words in 421 texts. This model was trained in February, 2020."
   },
 
   
@@ -25,7 +25,7 @@
 	"shortDescription" : "Mary Moody Emerson Almanacks and Women Writers Online Combined Corpus",
 	"public" : "true",
 	"date":"February, 2020",
-    "description": "Currently displayed: a corpus with the full Women Writers Online collection, including the Almanacks of Mary Moody Emerson. This corpus contains 11,301,160 words in 439 texts. This model was trained in February, 2020"
+    "description": "Currently displayed: a corpus with the full Women Writers Online collection, including the Almanacks of Mary Moody Emerson. This corpus contains 11,301,160 words in 439 texts. This model was trained in February, 2020."
   },
   "VWWP": {
     "shortName": "VWWP Full Corpus",
@@ -90,7 +90,7 @@
     "location": "data/wwo-19.bin",
 	"shortDescription" : "WWO texts from the 19th century",
 	"public" : "true",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 19th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,559,440 words in 96 texts. This model was trained in June, 2019"
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 19th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,559,440 words in 96 texts. This model was trained in June, 2019."
   },
 
   
