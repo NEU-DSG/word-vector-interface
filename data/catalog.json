@@ -6,6 +6,7 @@
 	"shortDescription" : "All texts from WWO",
 	"public" : "true",
 	"date":"June, 2019",
+	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo.bin",
     "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850. This corpus contains 10,978,553 words in 415 texts. This model was trained in June, 2019."
   },
   
@@ -15,6 +16,7 @@
 	"shortDescription" : "All texts from WWO, regularized",
 	"public" : "true",
 	"date":"February, 2020",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-regularized.bin",
     "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, regularized with routines developed by the Visualizing English Print project. This corpus contains 11,279,989 words in 421 texts. This model was trained in February, 2020."
   },
 
@@ -25,6 +27,7 @@
 	"shortDescription" : "Mary Moody Emerson Almanacks and Women Writers Online Combined Corpus",
 	"public" : "true",
 	"date":"February, 2020",
+	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-emerson.bin",
     "description": "Currently displayed: a corpus with the full Women Writers Online collection, including the Almanacks of Mary Moody Emerson. This corpus contains 11,301,160 words in 439 texts. This model was trained in February, 2020."
   },
   "VWWP": {
@@ -33,6 +36,7 @@
 	"shortDescription" : "The Victorian Women Writers Project Corpus",
 	"public" : "true",
 	"date":"December, 2020",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/vwwp_xquery_nonreg.bin",
     "description": "Currently displayed: the entire Victorian Women Writers Project corpus of women’s writing from 1830 to 1929. This corpus contains 8,065,805 words in 199 texts. This model was trained in December, 2020."
   },
 
@@ -42,6 +46,7 @@
 	"shortDescription" : "The Victorian Women Writers Project and Women Writers Online Combined Corpus",
 	"public" : "true",
 	"date":"June, 2019",
+	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-vwwp.bin",
     "description": "Currently displayed: a combined corpus that includes all texts from both the Victorian Women Writers Project and Women Writers Online. This corpus contains 19,044,358 words in 614 texts. This model was trained in June, 2019."
   },
  
@@ -52,6 +57,7 @@
 	"shortDescription" : "All texts from WWO, restricted to those by the authors",
 	"public" : "true",
 	"date":"February, 2020",
+	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-authorial.bin",
     "description": "Currently displayed: a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, restricted to those contents written by the texts’ authors. This corpus contains 10,965,568 words in 421 texts. This model was trained in February, 2020."
   },
   
@@ -61,6 +67,7 @@
 	"shortDescription" : "All texts from WWO, restricted to those by the authors and regularized",
 	"public" : "true",
 	"date":"February, 2020",
+	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-authorial-regularized.bin",
     "description": "Currently displayed: a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, restricted to those contents written by the texts’ authors and regularized with routines developed by the Visualizing English Print project. This corpus contains 10,983,868 words in 421 texts. This model was trained in February, 2020."
   },
   
@@ -73,6 +80,7 @@
 	"shortDescription" : "WWO texts from the 17th century",
 	"public" : "true",
 	"date":"June, 2019",
+	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-16-17.bin",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 16th and 17th centuries. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,886,257 words in 201 texts. This model was trained in June, 2019."
   },
 
@@ -82,6 +90,7 @@
 	"shortDescription" : "WWO texts from the 18th century",
 	"public" : "true",
 	"date":"June, 2019",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-18.bin",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 18th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,408,243 words in 119 texts. This model was trained in June, 2019."
   },
 
@@ -90,6 +99,7 @@
     "location": "data/wwo-19.bin",
 	"shortDescription" : "WWO texts from the 19th century",
 	"public" : "true",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-19.bin",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 19th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,559,440 words in 96 texts. This model was trained in June, 2019."
   },
 
@@ -99,6 +109,8 @@
     "location": "data/wwo-19-vwwp.bin",
 	"shortDescription" : "The Victorian Women Writers Project and 19thC Women Writers Online Combined Corpus",
 	"public" : "true",
+	"date": "June, 2019",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-19-vwwp.bin",
     "description": "Currently displayed: a combined corpus that includes the full set of Victorian Women Writers Projects texts and the subset of the Women Writers Online corpus that was published in the 19th century. This corpus contains 11,625,245 words in 295 texts. This model was trained in June, 2019."
   },
   
@@ -108,6 +120,7 @@
 	"shortDescription" : "WWO corpus with tokenized content for <placeName> element",
 	"public" : "true",
 	"date":"December, 2020",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/all-wwo_placeName-tokenized.bin",
     "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place names. This corpus contains 11,488,313 words in 427 texts. The text has been regularized. This model was trained in December, 2020."
   },
 
@@ -126,6 +139,7 @@
 	"shortDescription" : "WWO corpus with tokenized content for <persName> and <placeName> elements",
 	"public" : "true",
 	"date":"December, 2020",
+	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-wwo_entity-tokenized.bin&quot;",
     "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place and person names. This corpus contains 11,420,187 words in 427 texts. The text has been regularized. This model was trained in December, 2020."
   },
 
@@ -135,6 +149,7 @@
 	"shortDescription" : "Text content extracted from the <body> element in the WWO, excludes front and back matter",
 	"public" : "true",
 	"date":"June, 2019",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-wwo_entity-tokenized.bin&quot;",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes the body of each text, without front or back matter. This corpus contains 10,669,922 words in 405 texts. This model was trained in June, 2019."
   },
 
@@ -144,6 +159,7 @@
 	"shortDescription" : "Poetry and verse subset of the WWO",
 	"public" : "true",
 	"date": "June, 2019",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-wwo_entity-tokenized.bin&quot;",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a verse line group (<lg>). Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 4,973,946 words in 290 texts. This model was trained in June, 2019."
   },
 
@@ -153,6 +169,7 @@
 	"shortDescription" : "Prose only subset of the WWO",
 	"public" : "true",
 	"date":"June, 2019",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-wwo_entity-tokenized.bin&quot;",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a paragraph (<p>). This corpus contains 8,433,255 words in 406 texts. This model was trained in June, 2019."
   },
 
