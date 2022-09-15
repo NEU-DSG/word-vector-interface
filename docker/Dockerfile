@@ -9,9 +9,10 @@ RUN apt-get update && apt-get install -y \
     git-core \
     libxml2-dev \
     nano
-# NOTE: nano is there for looking at logs
 
 # Install necessary R packages
+# NOTE: By using the "repos" parameter option, the R packages are version-locked to 
+#   those available on a certain date.
 RUN R -e 'install.packages(c(\
         "shiny", \
         "shinydashboard", \
