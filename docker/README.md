@@ -42,7 +42,13 @@ Once the build process is complete, you can start up a Docker container by runni
 docker run -p 3838:3838 wvi
 ```
 
-When you see a line that reads “[INFO] shiny-server - Starting listener on http://[::]:3838”, you can visit <localhost:3838> to start the process of initializing the Shiny app.
+When you see a line that looks like this: 
+
+```
+[INFO] shiny-server - Starting listener on http://[::]:3838
+```
+
+...you can visit [localhost:3838](http://localhost:3838). The page will fail to load, but you’ll have told the Shiny Server to start loading the Word Vector Interface and the word2vec models.
 
 As mentioned earlier, the process of loading all the models takes a very long time, much longer than the app takes when run through RStudio. Unfortunately, there’s no easy way to tell how far along the process is. You can check for progress by refreshing the page, or [use Docker to enter the container's command line interface](https://docs.docker.com/desktop/use-desktop/container/#integrated-terminal) and view the logs.
 
