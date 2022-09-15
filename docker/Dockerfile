@@ -1,5 +1,4 @@
 # Start from a Shiny Server container from the Rocker Project
-# https://rocker-project.org/
 FROM rocker/shiny:4.2.0
 
 # Install necessary Ubuntu software packages
