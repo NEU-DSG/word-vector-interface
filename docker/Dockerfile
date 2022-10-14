@@ -30,7 +30,7 @@ RUN R -e 'install.packages(c(\
     devtools::install_github("bmschmidt/wordVectors")'
 
 # Copy application into Docker image
-COPY ./ /srv/shiny-server/wvi/
+COPY --chown=shiny ./ /srv/shiny-server/wvi/
 
 # Use a modified Shiny Server configuration
 COPY ./docker/shiny-server.conf /etc/shiny-server/
