@@ -39,8 +39,10 @@ Building the image will take some time, but once you have the image, you probabl
 Once the build process is complete, you can start up a Docker container by running this command:
 
 ```
-docker run -p 3838:3838 wvi
+docker run -p 3838:3838 --name=shiny-app wvi
 ```
+
+This command tells Docker to use the "wvi" image to generate and run a container named "shiny-app". Docker will map the container's port 3838 to your computer's port 3838, letting you visit the application in the browser.
 
 When you see a line that looks like this: 
 
@@ -52,12 +54,41 @@ When you see a line that looks like this:
 
 As mentioned earlier, the process of loading all the models takes a very long time, much longer than the app takes when run through RStudio. Unfortunately, there’s no easy way to tell how far along the process is. You can check for progress by refreshing the page, or [use Docker to enter the container's command line interface](https://docs.docker.com/desktop/use-desktop/container/#integrated-terminal) and view the logs.
 
+To stop the application, hit the <kbd>Control</kbd> and <kbd>c</kbd> keys while inside the Terminal window where the Docker container is running.
+
 
 ### Inside the Docker container
 
-Here are the main points of interest within the Docker container environment:
+Here's how to enter the Docker container command line interface through the Terminal:
+
+```
+docker exec -it shiny-app /bin/sh
+```
+
+The main points of interest within the Docker container environment are:
 
 * Shiny Server config: `/etc/shiny-server/shiny-server.conf`
 * Log files: `/var/log/shiny-server/`
 * Apps directory: `/srv/shiny-server/`
   * Word Vector Interface: `/srv/shiny-server/wvi/`
+
+The Docker container has the `nano` editor installed for reading and editing files via the command line.
+
+
+## Troubleshooting
+
+### Memory problems
+
+If you see this line soon after starting the Docker container:
+
+```
+[INFO] shiny-server - Error getting worker: Error: The application exited during initialization.
+```
+
+...the Shiny app may have run out of memory as it tried to load all the "public" word vector models. If it's not possible to switch to a computer with more RAM available, you can find out how much memory is available by running this command:
+
+```
+docker info
+```
+
+You can probably still run the application, but you should [edit the catalog](../components.md#word-embedding-models) so that fewer models need to be loaded.
