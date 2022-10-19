@@ -31,7 +31,7 @@ As part of this process, Docker follows the instructions given in [the WVI Docke
 * copies the code into the right place;
 * and sets up a [custom Shiny Server configuration file](./shiny-server.conf).
 
-Building the image will take some time, but once you have the image, you probably won't need to rebuild it very often. If you make changes to the R code, Dockerfile, or models, just rerun the steps above.
+Building the image will take some time, but once you have the image, you probably won't need to rebuild it very often. If you make changes to the R code, Dockerfile, or models, see the section on [updating the Docker image](#updating-the-docker-image).
 
 
 ## Start the application
@@ -56,6 +56,12 @@ As mentioned earlier, the process of loading all the models takes a very long ti
 
 To stop the application, hit the <kbd>Control</kbd> and <kbd>c</kbd> keys while inside the Terminal window where the Docker container is running.
 
+To restart the "shiny-app" Docker container, you can run this command:
+
+```
+docker restart shiny-app
+```
+
 
 ### Inside the Docker container
 
@@ -70,9 +76,25 @@ The main points of interest within the Docker container environment are:
 * Shiny Server config: `/etc/shiny-server/shiny-server.conf`
 * Log files: `/var/log/shiny-server/`
 * Apps directory: `/srv/shiny-server/`
-  * Word Vector Interface: `/srv/shiny-server/wvi/`
+  * Word Vector Interface code: `/srv/shiny-server/wvi/`
 
-The Docker container has the `nano` editor installed for reading and editing files via the command line.
+To read or edit files inside the Docker container, use the `nano` editor.
+
+
+## Updating the Docker image
+
+Once you’ve made changes to the R Shiny code, catalog file, or models, you’ll need to rebuild the "wvi" Docker image so that your changes are reflected. As before, navigate to the `word-vector-interface` folder and run this command:
+
+```
+docker build --file docker/Dockerfile --tag wvi .
+```
+
+To run the Shiny app Docker container, you’ll first have to delete the old one, then tell Docker to start up a new container with the same name:
+
+```
+docker rm shiny-app
+docker run -p 3838:3838 --name=shiny-app wvi
+```
 
 
 ## Troubleshooting
