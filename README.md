@@ -67,6 +67,13 @@ With the required libraries present, you can simply open `app.R`, and select the
 *I haven’t done this part myself, but [the instructions](http://shiny.rstudio.com/articles/shinyapps.html) seem pretty straightforward.*-->
 
 
+### Running a local copy with Docker
+
+The Word Vector Interface can be run in a self-contained Docker environment. We recommend against using this option locally—the RStudio method is easier to customize and often quicker to set up.
+
+However, Docker environments have the benefit of being easily reproducible. You might have to wait longer for the Word Vector Interface to start up, but it *should* start, with all prerequisites taken care of for you. If you’re struggling with running the app in RStudio, try the [instructions for running the app with Docker](./docker/README.md).
+
+
 ## Customizing the application
 
 When run, the Word Vector Interface will read in models from the “data” folder, and make them available for querying. Models are only published, however, if (1) they have a corresponding entry in the catalog [“data/catalog.json”](https://github.com/NEU-DSG/word-vector-interface/blob/main/data/catalog.json), and (2) that entry is marked “public”.
