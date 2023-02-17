@@ -5,7 +5,9 @@
     "location": "data/wwo.bin",
 	"shortDescription" : "All texts from WWO",
 	"public" : "true",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850. This corpus contains 10,978,553 words in 415 texts."
+	"date":"June, 2019",
+	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo.bin",
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850. This corpus contains 10,978,553 words in 415 texts. This model was trained in June, 2019."
   },
   
     "WWO Regularized Corpus": {
@@ -13,7 +15,9 @@
     "location": "data/wwo-regularized.bin",
 	"shortDescription" : "All texts from WWO, regularized",
 	"public" : "true",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, regularized with routines developed by the Visualizing English Print project. This corpus contains 11,279,989 words in 421 texts."
+	"date":"February, 2020",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-regularized.bin",
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, regularized with routines developed by the Visualizing English Print project. This corpus contains 11,279,989 words in 421 texts. This model was trained in February, 2020."
   },
 
   
@@ -22,14 +26,18 @@
     "location": "data/wwo-emerson.bin",
 	"shortDescription" : "Mary Moody Emerson Almanacks and Women Writers Online Combined Corpus",
 	"public" : "true",
-    "description": "Currently displayed: a corpus with the full Women Writers Online collection, including the Almanacks of Mary Moody Emerson. This corpus contains 11,301,160 words in 439 texts."
+	"date":"February, 2020",
+	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-emerson.bin",
+    "description": "Currently displayed: a corpus with the full Women Writers Online collection, including the Almanacks of Mary Moody Emerson. This corpus contains 11,301,160 words in 439 texts. This model was trained in February, 2020."
   },
   "VWWP": {
     "shortName": "VWWP Full Corpus",
     "location": "data/vwwp_xquery_nonreg.bin",
 	"shortDescription" : "The Victorian Women Writers Project Corpus",
 	"public" : "true",
-    "description": "Currently displayed: the entire Victorian Women Writers Project corpus of women’s writing from 1830 to 1929. This corpus contains 8,065,805 words in 199 texts."
+	"date":"December, 2020",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/vwwp_xquery_nonreg.bin",
+    "description": "Currently displayed: the entire Victorian Women Writers Project corpus of women’s writing from 1830 to 1929. This corpus contains 8,065,805 words in 199 texts. This model was trained in December, 2020."
   },
 
     "VWWP and WWO": {
@@ -37,7 +45,9 @@
     "location": "data/wwo-vwwp.bin",
 	"shortDescription" : "The Victorian Women Writers Project and Women Writers Online Combined Corpus",
 	"public" : "true",
-    "description": "Currently displayed: a combined corpus that includes all texts from both the Victorian Women Writers Project and Women Writers Online. This corpus contains 19,044,358 words in 614 texts."
+	"date":"June, 2019",
+	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-vwwp.bin",
+    "description": "Currently displayed: a combined corpus that includes all texts from both the Victorian Women Writers Project and Women Writers Online. This corpus contains 19,044,358 words in 614 texts. This model was trained in June, 2019."
   },
  
 
@@ -46,7 +56,9 @@
     "location": "data/wwo-authorial.bin",
 	"shortDescription" : "All texts from WWO, restricted to those by the authors",
 	"public" : "true",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, restricted to those contents written by the texts’ authors. This corpus contains 10,965,568 words in 421 texts."
+	"date":"February, 2020",
+	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-authorial.bin",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, restricted to those contents written by the texts’ authors. This corpus contains 10,965,568 words in 421 texts. This model was trained in February, 2020."
   },
   
     "WWO Regularized Authorial Corpus": {
@@ -54,7 +66,9 @@
     "location": "data/wwo-authorial-regularized.bin",
 	"shortDescription" : "All texts from WWO, restricted to those by the authors and regularized",
 	"public" : "true",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, restricted to those contents written by the texts’ authors and regularized with routines developed by the Visualizing English Print project. This corpus contains 10,983,868 words in 421 texts."
+	"date":"February, 2020",
+	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-authorial-regularized.bin",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, restricted to those contents written by the texts’ authors and regularized with routines developed by the Visualizing English Print project. This corpus contains 10,983,868 words in 421 texts. This model was trained in February, 2020."
   },
   
 
@@ -65,7 +79,9 @@
     "location": "data/wwo-16-17.bin",
 	"shortDescription" : "WWO texts from the 17th century",
 	"public" : "true",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 16th and 17th centuries. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,886,257 words in 201 texts."
+	"date":"June, 2019",
+	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-16-17.bin",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 16th and 17th centuries. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,886,257 words in 201 texts. This model was trained in June, 2019."
   },
 
   "WWO 18th century": {
@@ -73,7 +89,9 @@
     "location": "data/wwo-18.bin",
 	"shortDescription" : "WWO texts from the 18th century",
 	"public" : "true",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 18th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,408,243 words in 119 texts."
+	"date":"June, 2019",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-18.bin",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 18th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,408,243 words in 119 texts. This model was trained in June, 2019."
   },
 
   "WWO 19th Century": {
@@ -81,7 +99,8 @@
     "location": "data/wwo-19.bin",
 	"shortDescription" : "WWO texts from the 19th century",
 	"public" : "true",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 19th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,559,440 words in 96 texts."
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-19.bin",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 19th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,559,440 words in 96 texts. This model was trained in June, 2019."
   },
 
   
@@ -90,7 +109,9 @@
     "location": "data/wwo-19-vwwp.bin",
 	"shortDescription" : "The Victorian Women Writers Project and 19thC Women Writers Online Combined Corpus",
 	"public" : "true",
-    "description": "Currently displayed: a combined corpus that includes the full set of Victorian Women Writers Projects texts and the subset of the Women Writers Online corpus that was published in the 19th century. This corpus contains 11,625,245 words in 295 texts."
+	"date": "June, 2019",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-19-vwwp.bin",
+    "description": "Currently displayed: a combined corpus that includes the full set of Victorian Women Writers Projects texts and the subset of the Women Writers Online corpus that was published in the 19th century. This corpus contains 11,625,245 words in 295 texts. This model was trained in June, 2019."
   },
   
   "WWO Place Names Tokenized": {
@@ -98,7 +119,9 @@
     "location": "data/all-wwo_placeName-tokenized.bin",
 	"shortDescription" : "WWO corpus with tokenized content for <placeName> element",
 	"public" : "true",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place names. This corpus contains 11,488,313 words in 427 texts. The text has been regularized."
+	"date":"December, 2020",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/all-wwo_placeName-tokenized.bin",
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place names. This corpus contains 11,488,313 words in 427 texts. The text has been regularized. This model was trained in December, 2020."
   },
 
   "WWO Person Names Tokenized": {
@@ -106,7 +129,8 @@
     "location": "data/all-wwo_persName-tokenized.bin",
 	"shortDescription" : "WWO corpus with tokenized content for <persName> element",
 	"public" : "true",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for person names. This corpus contains 11,432,470 words in 427 texts. The text has been regularized."
+	"date":"December, 2020",
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for person names. This corpus contains 11,432,470 words in 427 texts. The text has been regularized. This model was trained in December, 2020."
   },
 
   "WWO Place and Person Names Tokenized": {
@@ -114,7 +138,9 @@
     "location": "data/all-wwo_entity-tokenized.bin",
 	"shortDescription" : "WWO corpus with tokenized content for <persName> and <placeName> elements",
 	"public" : "true",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place and person names. This corpus contains 11,420,187 words in 427 texts. The text has been regularized."
+	"date":"December, 2020",
+	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-wwo_entity-tokenized.bin&quot;",
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place and person names. This corpus contains 11,420,187 words in 427 texts. The text has been regularized. This model was trained in December, 2020."
   },
 
   "WWO Body Content": {
@@ -122,7 +148,9 @@
     "location": "data/wwo-body.bin",
 	"shortDescription" : "Text content extracted from the <body> element in the WWO, excludes front and back matter",
 	"public" : "true",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes the body of each text, without front or back matter. This corpus contains 10,669,922 words in 405 texts."
+	"date":"June, 2019",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-wwo_entity-tokenized.bin&quot;",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes the body of each text, without front or back matter. This corpus contains 10,669,922 words in 405 texts. This model was trained in June, 2019."
   },
 
   "WWO Verse": {
@@ -130,7 +158,9 @@
     "location": "data/wwo-lg.bin",
 	"shortDescription" : "Poetry and verse subset of the WWO",
 	"public" : "true",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a verse line group (<lg>). Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 4,973,946 words in 290 texts."
+	"date": "June, 2019",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-wwo_entity-tokenized.bin&quot;",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a verse line group (<lg>). Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 4,973,946 words in 290 texts. This model was trained in June, 2019."
   },
 
   "WWO Prose": {
@@ -138,7 +168,9 @@
     "location": "data/wwo-p.bin",
 	"shortDescription" : "Prose only subset of the WWO",
 	"public" : "true",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a paragraph (<p>). This corpus contains 8,433,255 words in 406 texts."
+	"date":"June, 2019",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-wwo_entity-tokenized.bin&quot;",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a paragraph (<p>). This corpus contains 8,433,255 words in 406 texts. This model was trained in June, 2019."
   },
 
         "TCP1": {
@@ -146,7 +178,8 @@
 		"location": "data/tcp1.bin",
 		"shortDescription" : "TCP Selected Corpus 1",
 		"public" : "true",
-		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,329,588 words in 205 texts."
+		"date":"June, 2019",
+		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,329,588 words in 205 texts. This model was trained in June, 2019."
     },
 
         "TCP2": {
@@ -154,7 +187,8 @@
 		"location": "data/tcp2.bin",
 		"shortDescription" : "TCP Selected Corpus 2",
 		"public" : "true",
-		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,002,431 words in 1,796 texts."
+		"date": "June, 2019",
+		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,002,431 words in 1,796 texts. This model was trained in June, 2019."
     },
 
         "TCP3": {
@@ -162,7 +196,8 @@
 		"location": "data/tcp3.bin",
 		"shortDescription" : "TCP Selected Corpus 3",
 		"public" : "true",
-		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 7,990,878 words in 470 texts."
+		"date": "June, 2019",
+		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 7,990,878 words in 470 texts. This model was trained in June, 2019."
     },
 
         "TCP4": {
@@ -170,7 +205,8 @@
 		"location": "data/tcp4.bin",
 		"shortDescription" : "TCP Selected Corpus 4",
 		"public" : "true",
-		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,343,987 words in 69 texts."
+		"date": "June, 2019",
+		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,343,987 words in 69 texts. This model was trained in June, 2019."
     },
 
 
@@ -182,7 +218,7 @@
 		"location": "data/eebo.bin",
 		"shortDescription" : "EEBO Selected Corpus",
 		"public" : "false",
-		"description": "This subset of texts from Early English Books Online contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is the first of several EEBO corpora that will be included in the Word Vector Interface."
+		"description": "This subset of texts from Early English Books Online contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is the first of several EEBO corpora that will be included in the Word Vector Interface. This model was trained in December, 2018."
     },
 
     "VWWP Morphadorned": {
@@ -190,7 +226,7 @@
     "location": "data/vwwp+wwo-adorned.bin",
 	"shortDescription" : "Morphadorned Victorian Women Writers Project Corpus",
 	"public" : "false",
-    "description": "We have parsed the TEI of the VWWP and extracted its body content. It has been further regularized with Morphadorner."
+    "description": "We have parsed the TEI of the VWWP and extracted its body content. It has been further regularized with Morphadorner. This model was trained in October, 2018."
   },
 
   "WWO Global Publications": {
@@ -198,15 +234,15 @@
     "location": "data/wwo_xquery-nonreg_non-us.bin",
 	"shortDescription" : "Texts published outside the U.S. in the WWO",
 	"public" : "false",
-    "description": "Texts published outside the U.S. Texts have been prepared using XSLT and XQuery processes that clean and regularize the corpus."
-  },
+    "description": "Texts published outside the U.S. Texts have been prepared using XSLT and XQuery processes that clean and regularize the corpus. This model was trained in October, 2018."
+  }, 
 
   "WWO U.S. Publications": {
     "shortName": "WWO U.S. Publications",
     "location": "data/wwo_xquery-nonreg_us.bin",
 	"shortDescription" : "U.S. publications in the WWO",
 	"public" : "false",
-    "description": "Only texts published in the United States. Texts have been prepared using XSLT and XQuery processes that clean and regularize the corpus."
+    "description": "Only texts published in the United States. Texts have been prepared using XSLT and XQuery processes that clean and regularize the corpus. This model was trained in October, 2018."
   },
 
   "eme-Morphed WWO 17th Century": {
@@ -214,7 +250,7 @@
     "location": "data/wwo_eme-morph_17C.bin",
 	"shortDescription" : "Morphadorned (eme) WWO texts from the 17th century",
 	"public" : "false",
-    "description": "This subset of the WWO corpus includes texts that appear in the 16th and 17th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
+    "description": "This subset of the WWO corpus includes texts that appear in the 16th and 17th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner. This model was trained in October, 2018."
   },
 
   "eme-Morphed WWO 18th Century": {
@@ -222,7 +258,7 @@
     "location": "data/wwo_eme-morph_18C.bin",
 	"shortDescription" : "Morphadorned (eme) WWO texts from the 18th century",
 	"public" : "false",
-    "description": "This subset of the WWO corpus includes texts that appear in the 18th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
+    "description": "This subset of the WWO corpus includes texts that appear in the 18th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner. This model was trained in October, 2018."
   },
 
   "eme-Morphed WWO 19th Century": {
@@ -230,7 +266,7 @@
     "location": "data/wwo_eme-morph_19C.bin",
 	"shortDescription" : "Morphadorned (eme) WWO texts from the 19th century",
 	"public" : "false",
-    "description": "This subset of the WWO corpus includes texts that appear in the 19th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
+    "description": "This subset of the WWO corpus includes texts that appear in the 19th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner. This model was trained in October, 2018."
   },
 
   "eme-Morphed WWO Corpus": {
@@ -238,7 +274,7 @@
     "location": "data/wwo_eme-morph_allTexts.bin",
 	"shortDescription" : "All Morphadorned (eme) texts from the WWO",
 	"public" : "false",
-    "description": "This is the entire corpus of the WWO. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
+    "description": "This is the entire corpus of the WWO. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner. This model was trained in October, 2018."
   },
 
   "eme-Morphed WWO Body Content": {
@@ -254,7 +290,7 @@
     "location": "data/wwo_eme-morph_gi-lg.bin",
 	"shortDescription" : "Morphadorned (eme) poetry and verse subset of the WWO",
 	"public" : "false",
-    "description": "Text content extracted from the <lg> element (line group) of the WWO. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
+    "description": "Text content extracted from the <lg> element (line group) of the WWO. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner. This model was trained in October, 2018."
   },
 
   "eme-Morphed WWO Prose": {
@@ -262,7 +298,7 @@
     "location": "data/wwo_eme-morph_gi-p.bin",
 	"shortDescription" : "Morphadorned (eme) prose only subset of the WWO",
 	"public" : "false",
-    "description": "Text content extracted from the <p> element (paragraph) of the WWO. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
+    "description": "Text content extracted from the <p> element (paragraph) of the WWO. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner. This model was trained in October, 2018."
   },
 
   "eme-Morphed WWO Global Publications": {
@@ -270,7 +306,7 @@
     "location": "data/wwo_eme-morph_non-us.bin",
 	"shortDescription" : "Morphadorned (eme) texts published outside the U.S. in the WWO",
 	"public" : "false",
-    "description": "Texts published outside the U.S. Texts have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
+    "description": "Texts published outside the U.S. Texts have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner. This model was trained in October, 2018."
   },
 
   "eme-Morphed WWO U.S. Publications": {
@@ -278,7 +314,7 @@
     "location": "data/wwo_eme-morph_us.bin",
 	"shortDescription" : "Morphadorned (eme) U.S. publications in the WWO",
 	"public" : "false",
-    "description": "Only texts published in the United States. Texts have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner."
+    "description": "Only texts published in the United States. Texts have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with an Early Modern English variant of Morphadorner. This model was trained in October, 2018."
   },
 
   "Morphadorned WWO 17th Century": {
@@ -286,7 +322,7 @@
     "location": "data/wwo_reg-morph_17C.bin",
 	"shortDescription" : "Morphadorned WWO texts from the 17th century",
 	"public" : "false",
-    "description": "This subset of the WWO corpus includes texts that appear in the 16th and 17th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with Morphadorner."
+    "description": "This subset of the WWO corpus includes texts that appear in the 16th and 17th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with Morphadorner. This model was trained in October, 2018."
   },
 
   "Morphadorned WWO 18th Century": {
@@ -294,7 +330,7 @@
     "location": "data/wwo_reg-morph_18C.bin",
 	"shortDescription" : "Morphadorned WWO texts from the 18th century",
 	"public" : "false",
-    "description": "This subset of the WWO corpus includes texts that appear in the 18th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with Morphadorner."
+    "description": "This subset of the WWO corpus includes texts that appear in the 18th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with Morphadorner. This model was trained in October, 2018."
   },
 
   "Morphadorned WWO 19th Century": {
@@ -302,7 +338,7 @@
     "location": "data/wwo_reg-morph_19C.bin",
 	"shortDescription" : "Morphadorned WWO texts from the 19th century",
 	"public" : "false",
-    "description": "This subset of the WWO corpus includes texts that appear in the 19th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with Morphadorner."
+    "description": "This subset of the WWO corpus includes texts that appear in the 19th century. They have been prepared using XSLT and XQuery processes that clean and regularize the corpus. They have been further regularized with Morphadorner. This model was trained in October, 2018."
   },
 
   "Morphadorned WWO Corpus": {
