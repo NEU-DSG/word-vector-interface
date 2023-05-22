@@ -1,4 +1,8 @@
-##    Word Vector Interface
+##
+##    Word Vector Interface (WVI)
+##
+
+## WVI 1. SETUP
 
 # Load libraries.
 library(shiny)
@@ -12,57 +16,52 @@ library(ggrepel)
 library(tidyverse)
 library(wordVectors)
 
-
 # Load JSON catalog of models and information about them.
-json_file <- "data/catalog.json"
-json_data <- fromJSON(file=json_file)
+catalog_filename <- "data/catalog.json"
+catalog_json <- fromJSON(file=catalog_filename)
 
 # Load models.
-fileList <- c()
+available_models <- c()
 list_clustering <- list()
 list_models <- list()
-list_Desc <- list()
+list_desc <- list()
 vectors <- list()
-# The default model is either the first public one, or "WWO Full Corpus".
-Selected_default <- 1
-Selected_compare_1 <- 1
-Selected_compare_2 <- 1
+# The default model is either the first public model in the catalog, or 
+# "WWO Full Corpus".
+selected_default <- 1
+selected_compare_1 <- 1
+selected_compare_2 <- 1
 
 ls_download_cluster <- c()
 
-i <- 1
-for(fn in json_data) {
-  if(fn$public == "true")
-  {
-    print(fn$shortName)
-    print(fn$location)
-    val <- fn$shortName
-
-    if(val == "WWO Full Corpus")
-    {
-      Selected_default <- val
-      Selected_compare_1 <-val
+# Iterate over models in the catalog, adding them to the lists of models that 
+# can be used for various features.
+# TODO: First, narrow down to the public models, so they can be counted
+for (model in catalog_json) {
+  # A model is only acted upon if it's marked as public.
+  if (model$public == "true") {
+    print(model$shortName)
+    print(model$location)
+    name <- model$shortName
+    # The WWO full corpus and WWO body content models are set as defaults if 
+    # they appear.
+    if (name == "WWO Full Corpus") {
+      selected_default <- name
+      # TODO: consider removing selected_compare_1 in favor of selected_default
+      selected_compare_1 <- name
+    } else if (name == "WWO Body Content") {
+      selected_compare_2 <- name
     }
-
-    if(val == "WWO Body Content")
-    {
-      print(i)
-      Selected_compare_2 <- val
-    }
-
-    fileList <- append(fileList, val)
-    list_models[[fn$shortName]] <- read.vectors(fn$location)
-    list_Desc[[fn$shortName]] <- fn$description
-    list_clustering [[fn$shortName]] <- kmeans( list_models[[fn$shortName]] , centers=150,iter.max = 40)
-
-    data <- as.matrix(list_models[[fn$shortName]])
-    vectors[[fn$shortName]] <-stats::predict(stats::prcomp(data))[,1:2]
-
-    i = i + 1
+    # TODO: augment the catalog object instead of splitting everything into lists?
+    available_models <- append(available_models, name)
+    list_models[[name]] <- read.vectors(model$location)
+    list_desc[[name]] <- model$description
+    list_clustering[[name]] <- kmeans(list_models[[name]], centers=150, iter.max = 40)
+    data <- as.matrix(list_models[[name]])
+    vectors[[name]] <- stats::predict(stats::prcomp(data))[,1:2]
   }
 }
-
-
+print("Done loading models")
 
 # Create a link to search WWO, optionally with a proxy URL.
 linkToWWO <- function(keyword, session) {
@@ -91,7 +90,11 @@ getDataForTable <- function(model, vector, session, opts = list()) {
   options = opts))
 }
 
-  
+## WVI 2. USER INTERFACE
+
+# TODO: Merge the Dashboard body with the UI structure, with better signposting 
+# of components.
+
 # Create the app page's body.
 body <- dashboardBody(
 
@@ -435,7 +438,6 @@ body <- dashboardBody(
                     )
                  ),
 
-
                  conditionalPanel(condition="input.visualisation_selector=='scatter'",
                       class = "visualization",
                       shinyjs::useShinyjs(),
@@ -460,6 +462,450 @@ body <- dashboardBody(
     )
 )
 
+##  WVI 3. SERVER LOGIC
+
+# Listen for user interactions and handle them.
+app_server = function(input, output, session) {
+  # The currently selected tab from the first box
+  output$tabset1Selected <- renderText({
+    input$tabset1
+  })
+  
+  set.seed(122)
+  histdata <- rnorm(500)
+  
+  output$plot1 <- renderPlot({
+    plot(mtcars$wt, mtcars$mpg)
+  })
+  
+  outputOptions(output, "plot1", suspendWhenHidden = TRUE)
+  
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste(input$modelSelect_clusters[[1]], ".csv", sep = "")
+    },
+    
+    content = function(file) {
+      data <- sapply(ls_download_cluster,function(n) {
+        paste0(names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]))
+      }) %>% as_tibble(.name_repair = "minimal")
+      
+      write.csv(data, file, row.names = FALSE)
+    })
+  
+  observeEvent(input$modelSelect, {
+    output$model_name_basic <- renderText(input$modelSelect[[1]])
+    # output$model_desc_basic <- renderText({list_desc[[input$modelSelect[[1]]]]})
+    
+    url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
+    output$model_desc_basic <- renderUI({
+      tagList(paste(list_desc[[input$modelSelect[[1]]]], "The text has been regularized."), url)
+    })
+    
+  })
+  
+  observeEvent(input$modelSelectc1, {
+    output$model_name_compare_1 <- renderText(input$modelSelectc1[[1]])
+    # output$model_desc_compare_1 <- renderText({list_desc[[input$modelSelectc1[[1]]]]})
+    
+    url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
+    output$model_desc_compare_1 <- renderUI({
+      tagList(paste(list_desc[[input$modelSelectc1[[1]]]], "The text has been regularized."), url)
+    })
+    
+  })
+  
+  observeEvent(input$modelSelectc2, {
+    output$model_name_compare_2 <- renderText(input$modelSelectc2[[1]])
+    # output$model_desc_compare_2 <- renderText({list_desc[[input$modelSelectc2[[1]]]]})
+    
+    url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
+    output$model_desc_compare_2 <- renderUI({
+      tagList(paste(list_desc[[input$modelSelectc2[[1]]]], "The text has been regularized."), url)
+    })
+    
+  })
+  
+  
+  observeEvent(input$modelSelect_clusters, {
+    output$model_name_cluster <- renderText(input$modelSelect_clusters[[1]])
+    # output$model_desc_cluster <- renderText({list_desc[[input$modelSelect_clusters[[1]]]]})
+    
+    url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
+    output$model_desc_cluster <- renderUI({
+      tagList(paste(list_desc[[input$modelSelect_clusters[[1]]]], "The text has been regularized."), url)
+    })
+    
+  })
+  
+  
+  observeEvent(input$modelSelect_analogies_tabs, {
+    output$model_name_operation <- renderText(input$modelSelect_analogies_tabs[[1]])
+    # output$model_desc_operation <- renderText({list_desc[[input$modelSelect_analogies_tabs[[1]]]]})
+    
+    url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
+    output$model_desc_operation <- renderUI({
+      tagList(paste(list_desc[[input$modelSelect_analogies_tabs[[1]]]], "The text has been regularized."), url)
+    })
+    
+  })
+  
+  
+  observeEvent(input$modelSelect_Visualisation_tabs, {
+    output$model_name_visualisation <- renderText(input$modelSelect_Visualisation_tabs[[1]])
+    # output$model_desc_visualisation <- renderText({paste(list_desc[[input$modelSelect_Visualisation_tabs[[1]]]], "The text has been regularized")})
+    
+    url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
+    output$model_desc_visualisation <- renderUI({
+      tagList(paste(list_desc[[input$modelSelect_Visualisation_tabs[[1]]]], "The text has been regularized."), url)
+    })
+    
+  })
+  
+  
+  output$word_cloud <- renderPlot({
+    validate(
+      need(tolower(input$word_cloud_word) != "", 
+           "To generate a word cloud, enter a query term in the text field above."))
+    data <- list_models[[input$modelSelect_Visualisation_tabs[[1]]]] %>% closest_to(tolower(input$word_cloud_word), 150)
+    colnames(data) <- c("words", "sims")
+    data <- mutate(data, sims = as.integer(sims * 100))
+    
+    set.seed(1234)
+    wordcloud(words = data$words, freq = data$sims,
+              min.freq = input$freq, max.words=input$max,
+              random.order=FALSE, random.color = FALSE, rot.per = 0.30, ordered.colors = FALSE,
+              colors = brewer.pal(8,"Dark2"), scale= c(input$scale,0.5),
+              use.r.layout = TRUE)
+  })
+  
+  # rv <- reactiveValues()
+  # rv$setupComplete <- FALSE
+  
+  
+  dataset <- reactive({
+    
+    times <- input$clustering_reset_input_visualisation
+    
+    df2 <- sapply(sample(1:150,10),function(n) {
+      paste0(names(list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster[list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster==n][1:150]))
+    }) %>% as_tibble(.name_repair = "minimal")
+    
+    df2
+    # rv$setupComplete <- TRUE
+    
+  })
+  
+  datascatter <- reactive({
+    
+    df2 <- dataset()
+    # print(df2)
+    
+    x <- c()
+    y <- c()
+    names <- c()
+    cluster <- c()
+    
+    vector <- vectors[[input$modelSelect_Visualisation_tabs[[1]]]]
+    for (column in colnames(df2))
+    {
+      for (word in head(df2,input$scatter_number)[column][[1]]){
+        x <- append(x, vector[word, 'PC1'])
+        y <- append(y, vector[word, 'PC2'])
+        names <- append(names,word)
+        cluster <- append(cluster,column)
+      }
+    }
+    
+    df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster), stringsAsFactors = FALSE)
+    df_new
+    
+  })
+  
+  # output$setupComplete <- reactive({
+  #   return(rv$setupComplete)
+  # })
+  
+  # outputOptions(output, 'setupComplete', suspendWhenHidden=FALSE)
+  
+  
+  output$scatter_plot <- renderPlot({
+    ggplot(datascatter(), aes(x=x, y=y, colour=cluster), height="600px", width="100%") +
+      geom_point() +
+      geom_text_repel(
+        aes(label = ifelse(cluster == input$scatter_cluster, as.character(names),'')), 
+        hjust=0.5, vjust=-0.5, max.overlaps = 12)
+  })
+  
+  outputOptions(output, "scatter_plot", suspendWhenHidden = TRUE)
+  
+  
+  dataset_closet <- reactive({
+    
+    data <- as.matrix(list_models[['WWO Full Corpus']])
+    vectors <-stats::predict(stats::prcomp(data))[,1:2]
+    
+    x <- c()
+    y <- c()
+    names <- c()
+    cluster <-c()
+    
+    closeword <- list_models[['WWO Full Corpus']] %>% closest_to(tolower(input$scatter_plot_term), 150)
+    
+    i = 0
+    for(word in closeword[[1]])
+    {
+      x <- append(x, vectors[word, 'PC1'])
+      y <- append(y, vectors[word, 'PC2'])
+      if (i <= 10 ) cluster <- append(cluster, "top 10")
+      if (i > 10 & i <= 20 ) cluster <- append(cluster, "top 20")
+      if (i > 20 & i <= 40 ) cluster <- append(cluster, "top 40")
+      if (i > 40 & i <= 60 ) cluster <- append(cluster, "top 60")
+      if (i > 60 & i <= 80 ) cluster <- append(cluster, "top 80")
+      if (i > 80 & i <= 100 ) cluster <- append(cluster, "top 100")
+      if (i > 100  ) cluster <- append(cluster, "top 150")
+      i <- i + 1
+      names <- append(names,word)
+    }
+    df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster), stringsAsFactors = FALSE)
+    df_new
+    
+  })
+  
+  output$scatter_plot_closest <- renderPlot({
+    ggplot(dataset_closet(), aes(x=x, y=y, colour=cluster)) +
+      geom_point() +
+      geom_text_repel(aes(label=ifelse(cluster == tolower(input$scatter_plot_closest_choice) ,as.character(names),'')), hjust=0.5,vjust=-0.5)
+  })
+  
+  outputOptions(output, "scatter_plot_closest", suspendWhenHidden = TRUE)
+  
+  # Generate table for Addition operation
+  output$addition_table <- DT::renderDataTable({
+    validate(need(input$addition_word1 != "" && input$addition_word2 != "", 
+                  "Enter query term into word 1 and word 2."))
+    use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
+    getDataForTable(use_model, 
+                    as.VectorSpaceModel(use_model[[tolower(input$addition_word1)]] +
+                                          use_model[[tolower(input$addition_word2)]]), 
+                    session,
+                    tableSimpleOpts)
+  })
+  
+  # Generate table for Subtraction operation
+  output$subtraction_table <- DT::renderDataTable({
+    validate(need(input$subtraction_word1 != "" && input$subtraction_word2 != "", 
+                  "Enter query term into word 1 and word 2."))
+    use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
+    getDataForTable(use_model,
+                    use_model[[tolower(input$subtraction_word1)]] -
+                      use_model[[tolower(input$subtraction_word2)]], 
+                    session,
+                    tableSimpleOpts)
+  })
+  
+  # Generate table for Analogies operation
+  output$analogies_table <- DT::renderDataTable({
+    validate(need(input$analogies_word1 != "" && input$analogies_word2 != "" && input$analogies_word3 != "", "Enter query term into Word 1, Word 2, and Word 3."))
+    use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
+    getDataForTable(use_model, as.VectorSpaceModel(
+      use_model[[tolower(input$analogies_word1)]] -
+        use_model[[tolower(input$analogies_word2)]] + 
+        use_model[[tolower(input$analogies_word3)]]),
+      session,
+      tableSimpleOpts)
+  })
+  
+  # Generate table for Advanced math operation
+  output$advanced_table <- DT::renderDataTable(DT::datatable({
+    validate(need(input$advanced_word1 != "", "Enter query term into Word 1."))
+    use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
+    vector1 <- use_model[[tolower(input$advanced_word1)]]
+    # If there's only 1 word, no math needs to be done.
+    if (input$advanced_word2 == "" && input$advanced_word3 == "") {
+      data <- use_model %>% closest_to(vector1) %>%
+        mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+      # If the 1st and 2nd words were provided...
+    } else if (input$advanced_word2 != "" && input$advanced_word3 == "") {
+      vector2 <- use_model[[tolower(input$advanced_word2)]]
+      if (input$advanced_math == "+") {
+        # We have to coerce the result of vector addition into VectorSpaceModel format
+        data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 + vector2), 150)
+      } else if (input$advanced_math == "-") {
+        data <- use_model %>% closest_to(vector1 - vector2, 150)
+      } else if (input$advanced_math == "*") {
+        # We have to coerce the result of vector multiplication into VectorSpaceModel format
+        data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 * vector2), 150)
+      } else if (input$advanced_math == "/") {
+        # We have to coerce the result of vector division into VectorSpaceModel format
+        data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 / vector2), 150)
+      }
+      data <- data %>%
+        mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+      # If all 3 words have been provided...
+    } else if (input$advanced_word2 != "" && input$advanced_word3 != "") {
+      vector2 <- use_model[[tolower(input$advanced_word2)]]
+      vector3 <- use_model[[tolower(input$advanced_word3)]]
+      # When the first operator is +
+      if (input$advanced_math == "+" && input$advanced_math2 == "+") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 + vector2 + vector3), 150)
+      }
+      if (input$advanced_math == "+" && input$advanced_math2 == "-") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 + vector2 - vector3), 150)
+      }
+      if (input$advanced_math == "+" && input$advanced_math2 == "*") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 + vector2 * vector3), 150)
+      }
+      if (input$advanced_math == "+" && input$advanced_math2 == "/") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 + vector2 / vector3), 150)
+      }
+      # When the first operator is -
+      if (input$advanced_math == "-" && input$advanced_math2 == "+") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 - vector2 + vector3), 150)
+      }
+      if (input$advanced_math == "-" && input$advanced_math2 == "-") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 - vector2 - vector3), 150)
+      }
+      if (input$advanced_math == "-" && input$advanced_math2 == "*") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 - vector2 * vector3), 150)
+      }
+      if (input$advanced_math == "-" && input$advanced_math2 == "/") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 - vector2 / vector3), 150)
+      }
+      # When the first operator is *
+      if (input$advanced_math == "*" && input$advanced_math2 == "+") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 * vector2 + vector3), 150)
+      }
+      if (input$advanced_math == "*" && input$advanced_math2 == "-") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 * vector2 - vector3), 150)
+      }
+      if (input$advanced_math == "*" && input$advanced_math2 == "*") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 * vector2 * vector3), 150)
+      }
+      if (input$advanced_math == "*" && input$advanced_math2 == "/") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 * vector2 / vector3), 150)
+      }
+      # When the first operator is /
+      if (input$advanced_math == "/" && input$advanced_math2 == "+") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 / vector2 + vector3), 150)
+      }
+      if (input$advanced_math == "/" && input$advanced_math2 == "-") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 / vector2 - vector3), 150)
+      }
+      if (input$advanced_math == "/" && input$advanced_math2 == "*") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 / vector2 * vector3), 150)
+      }
+      if (input$advanced_math == "/" && input$advanced_math2 == "/") {
+        data <- use_model %>% 
+          closest_to(as.VectorSpaceModel(vector1 / vector2 / vector3), 150)
+      }
+      data <- data %>%
+        mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+    }
+    data
+  }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = tableSimpleOpts))
+  
+  # Generate table for the Home tab
+  output$basic_table <- DT::renderDataTable(DT::datatable({
+    data <- list_models[[input$modelSelect[[1]]]] %>% 
+      closest_to(tolower(input$basic_word1), 150) %>% 
+      mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
+      .[c(3,2)]
+  }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
+  options = tableSidebarOpts(input$max_words_home)))
+  
+  # Generate 1st table for Compare tab
+  output$basic_table_c1 <- DT::renderDataTable(DT::datatable({
+    data <- list_models[[input$modelSelectc1[[1]]]] %>% 
+      closest_to(tolower(input$basic_word_c), 150) %>% 
+      mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
+      .[c(3,2)]
+  }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
+  options = tableSidebarOpts(input$max_words)))
+  
+  # Generate 2nd table for Compare tab
+  output$basic_table_c2 <- DT::renderDataTable(DT::datatable({
+    data <- list_models[[input$modelSelectc2[[1]]]] %>% 
+      closest_to(tolower(input$basic_word_c), 150) %>% 
+      mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
+      .[c(3,2)]
+  }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
+  options = tableSidebarOpts(input$max_words)))
+  
+  
+  output$tbl <- DT::renderDataTable(DT::datatable({
+    data <- sapply(sample(1:150,4),function(n) {
+      cword <- names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
+      linkToWWO(keyword = cword, session = session)
+    }) %>% as_tibble(.name_repair = "minimal")
+  }, escape = FALSE, colnames=c(paste0("cluster_",1:4)), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
+  
+  # Handle resetting clusters in the Home tab.
+  # TODO: reduce duplication, create function to generate and render table of clusters
+  observeEvent(input$clustering_reset_input, {
+    output$tbl <- DT::renderDataTable(DT::datatable({
+      data <- sapply(sample(1:150,4),function(n) {
+        cword <- names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
+        linkToWWO(keyword = cword, session = session)
+      }) %>% as_tibble(.name_repair = "minimal")
+    }, escape = FALSE, colnames=c(paste0("cluster_",1:4)),options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
+  })
+  
+  # Generate and render clusters.
+  output$clusters_full <- DT::renderDataTable(DT::datatable({
+    data <- sapply(sample(1:150,10),function(n) {
+      ls_download_cluster <<- c(ls_download_cluster,n)
+      cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
+      linkToWWO(keyword = cword, session = session)
+    }) %>% as_tibble(.name_repair = "minimal")
+    
+  }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
+  
+  
+  # Handle resetting clusters from tab content.
+  observeEvent(input$clustering_reset_input_fullcluster, {
+    ls_download_cluster <<- c()
+    output$clusters_full <- DT::renderDataTable(DT::datatable({
+      data <- sapply(sample(1:150,10),function(n) {
+        ls_download_cluster <<- c(ls_download_cluster,n)
+        cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
+        linkToWWO(keyword = cword, session = session)
+      }) %>% as_tibble(.name_repair = "minimal")
+    }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
+  })
+  
+  # Handle resetting clusters from sidebar.
+  # TODO: reduce duplication
+  observeEvent(input$clustering_reset_input_fullcluster1, {
+    ls_download_cluster <<- c()
+    output$clusters_full <- DT::renderDataTable(DT::datatable({
+      data <- sapply(sample(1:150,10),function(n) {
+        ls_download_cluster <<- c(ls_download_cluster,n)
+        cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
+        linkToWWO(keyword = cword, session = session)
+      }) %>% as_tibble(.name_repair = "minimal")
+    }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
+  })
+  
+}
+
+##  WVI 4. GENERATE THE SHINY APP
+
 # Create an HTML wrapper around the Shiny app content.
 shinyApp(
   ui = dashboardPage(
@@ -480,8 +926,8 @@ shinyApp(
       # Create sidebar content for "Home" tab.
       conditionalPanel(condition="input.tabset1==1",
                        selectInput("modelSelect", "Model",
-                                   choices = fileList,
-                                   selected = Selected_default),
+                                   choices = available_models,
+                                   selected = selected_default),
                        br(),
                        sliderInput("max_words_home",
                                    "Number of Words:",
@@ -494,11 +940,11 @@ shinyApp(
       # Create sidebar content for "Compare" tab.
       conditionalPanel(condition="input.tabset1==2",
                        selectInput("modelSelectc1", "Model 1",
-                                   choices = fileList,
-                                   selected = Selected_compare_1),
+                                   choices = available_models,
+                                   selected = selected_compare_1),
                        selectInput("modelSelectc2", "Model 2",
-                                   choices = fileList,
-                                   selected = Selected_compare_2),
+                                   choices = available_models,
+                                   selected = selected_compare_2),
                        sliderInput("max_words",
                                    "Number of Words:",
                                    min = 1,  max = 150,  value = 10)
@@ -508,8 +954,8 @@ shinyApp(
       # Create sidebar content for "Clusters" tab.
       conditionalPanel(condition="input.tabset1==3",
                        selectInput("modelSelect_clusters", "Model",
-                                   choices = fileList,
-                                   selected = Selected_default),
+                                   choices = available_models,
+                                   selected = selected_default),
                        br(),
                        column(
                          id = "Download_reset_button",
@@ -528,8 +974,8 @@ shinyApp(
       # Create sidebar content for "Operations" tab.
       conditionalPanel(condition="input.tabset1==4",
                        selectInput("modelSelect_analogies_tabs", "Model",
-                                   choices = fileList,
-                                   selected = Selected_default),
+                                   choices = available_models,
+                                   selected = selected_default),
 
                        selectInput("operator_selector", "Select operator",
                                    choices = c("Addition", "Subtraction", "Analogies", "Advanced"),
@@ -539,8 +985,8 @@ shinyApp(
       # Create sidebar content for "Visualization" tab.
       conditionalPanel(condition="input.tabset1==5",
                        selectInput("modelSelect_Visualisation_tabs", "Model",
-                                   choices = fileList,
-                                   selected = Selected_default),
+                                   choices = available_models,
+                                   selected = selected_default),
 
                        selectInput("visualisation_selector","Select visualisation",
                                    choices = list(
@@ -604,444 +1050,6 @@ shinyApp(
     body = body
   ),
   
-  # Listen for user interactions and handle them.
-  server = function(input, output, session) {
-    # The currently selected tab from the first box
-    output$tabset1Selected <- renderText({
-      input$tabset1
-    })
-
-    set.seed(122)
-    histdata <- rnorm(500)
-
-    output$plot1 <- renderPlot({
-      plot(mtcars$wt, mtcars$mpg)
-    })
-
-    outputOptions(output, "plot1", suspendWhenHidden = TRUE)
-
-    output$downloadData <- downloadHandler(
-      filename = function() {
-        paste(input$modelSelect_clusters[[1]], ".csv", sep = "")
-    },
-
-    content = function(file) {
-      data <- sapply(ls_download_cluster,function(n) {
-        paste0(names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]))
-      }) %>% as_tibble(.name_repair = "minimal")
-
-      write.csv(data, file, row.names = FALSE)
-    })
-
-    observeEvent(input$modelSelect, {
-      output$model_name_basic <- renderText(input$modelSelect[[1]])
-      # output$model_desc_basic <- renderText({list_Desc[[input$modelSelect[[1]]]]})
-
-      url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
-      output$model_desc_basic <- renderUI({
-        tagList(paste(list_Desc[[input$modelSelect[[1]]]], "The text has been regularized."), url)
-      })
-
-    })
-
-    observeEvent(input$modelSelectc1, {
-      output$model_name_compare_1 <- renderText(input$modelSelectc1[[1]])
-      # output$model_desc_compare_1 <- renderText({list_Desc[[input$modelSelectc1[[1]]]]})
-
-      url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
-      output$model_desc_compare_1 <- renderUI({
-        tagList(paste(list_Desc[[input$modelSelectc1[[1]]]], "The text has been regularized."), url)
-      })
-
-    })
-
-    observeEvent(input$modelSelectc2, {
-      output$model_name_compare_2 <- renderText(input$modelSelectc2[[1]])
-      # output$model_desc_compare_2 <- renderText({list_Desc[[input$modelSelectc2[[1]]]]})
-
-      url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
-      output$model_desc_compare_2 <- renderUI({
-        tagList(paste(list_Desc[[input$modelSelectc2[[1]]]], "The text has been regularized."), url)
-      })
-
-    })
-
-
-    observeEvent(input$modelSelect_clusters, {
-      output$model_name_cluster <- renderText(input$modelSelect_clusters[[1]])
-      # output$model_desc_cluster <- renderText({list_Desc[[input$modelSelect_clusters[[1]]]]})
-
-      url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
-      output$model_desc_cluster <- renderUI({
-        tagList(paste(list_Desc[[input$modelSelect_clusters[[1]]]], "The text has been regularized."), url)
-      })
-
-    })
-
-
-    observeEvent(input$modelSelect_analogies_tabs, {
-      output$model_name_operation <- renderText(input$modelSelect_analogies_tabs[[1]])
-      # output$model_desc_operation <- renderText({list_Desc[[input$modelSelect_analogies_tabs[[1]]]]})
-
-      url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
-      output$model_desc_operation <- renderUI({
-        tagList(paste(list_Desc[[input$modelSelect_analogies_tabs[[1]]]], "The text has been regularized."), url)
-      })
-
-    })
-
-
-    observeEvent(input$modelSelect_Visualisation_tabs, {
-      output$model_name_visualisation <- renderText(input$modelSelect_Visualisation_tabs[[1]])
-      # output$model_desc_visualisation <- renderText({paste(list_Desc[[input$modelSelect_Visualisation_tabs[[1]]]], "The text has been regularized")})
-
-      url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
-      output$model_desc_visualisation <- renderUI({
-        tagList(paste(list_Desc[[input$modelSelect_Visualisation_tabs[[1]]]], "The text has been regularized."), url)
-      })
-
-    })
-
-
-    output$word_cloud <- renderPlot({
-        validate(
-          need(tolower(input$word_cloud_word) != "", 
-               "To generate a word cloud, enter a query term in the text field above."))
-        data <- list_models[[input$modelSelect_Visualisation_tabs[[1]]]] %>% closest_to(tolower(input$word_cloud_word), 150)
-        colnames(data) <- c("words", "sims")
-        data <- mutate(data, sims = as.integer(sims * 100))
-
-        set.seed(1234)
-        wordcloud(words = data$words, freq = data$sims,
-                  min.freq = input$freq, max.words=input$max,
-                  random.order=FALSE, random.color = FALSE, rot.per = 0.30, ordered.colors = FALSE,
-                  colors = brewer.pal(8,"Dark2"), scale= c(input$scale,0.5),
-                  use.r.layout = TRUE)
-    })
-
-    # rv <- reactiveValues()
-    # rv$setupComplete <- FALSE
-
-
-    dataset <- reactive({
-
-      times <- input$clustering_reset_input_visualisation
-
-      df2 <- sapply(sample(1:150,10),function(n) {
-        paste0(names(list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster[list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster==n][1:150]))
-      }) %>% as_tibble(.name_repair = "minimal")
-
-      df2
-      # rv$setupComplete <- TRUE
-
-    })
-
-    datascatter <- reactive({
-
-      df2 <- dataset()
-      # print(df2)
-
-      x <- c()
-      y <- c()
-      names <- c()
-      cluster <- c()
-
-      vector <- vectors[[input$modelSelect_Visualisation_tabs[[1]]]]
-      for (column in colnames(df2))
-      {
-        for (word in head(df2,input$scatter_number)[column][[1]]){
-          x <- append(x, vector[word, 'PC1'])
-          y <- append(y, vector[word, 'PC2'])
-          names <- append(names,word)
-          cluster <- append(cluster,column)
-        }
-      }
-
-      df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster), stringsAsFactors = FALSE)
-      df_new
-
-    })
-
-    # output$setupComplete <- reactive({
-    #   return(rv$setupComplete)
-    # })
-
-    # outputOptions(output, 'setupComplete', suspendWhenHidden=FALSE)
-
-
-    output$scatter_plot <- renderPlot({
-      ggplot(datascatter(), aes(x=x, y=y, colour=cluster), height="600px", width="100%") +
-        geom_point() +
-        geom_text_repel(
-          aes(label = ifelse(cluster == input$scatter_cluster, as.character(names),'')), 
-          hjust=0.5, vjust=-0.5, max.overlaps = 12)
-    })
-
-    outputOptions(output, "scatter_plot", suspendWhenHidden = TRUE)
-
-
-    dataset_closet <- reactive({
-
-      data <- as.matrix(list_models[['WWO Full Corpus']])
-      vectors <-stats::predict(stats::prcomp(data))[,1:2]
-
-      x <- c()
-      y <- c()
-      names <- c()
-      cluster <-c()
-
-      closeword <- list_models[['WWO Full Corpus']] %>% closest_to(tolower(input$scatter_plot_term), 150)
-
-      i = 0
-      for(word in closeword[[1]])
-      {
-        x <- append(x, vectors[word, 'PC1'])
-        y <- append(y, vectors[word, 'PC2'])
-        if (i <= 10 ) cluster <- append(cluster, "top 10")
-        if (i > 10 & i <= 20 ) cluster <- append(cluster, "top 20")
-        if (i > 20 & i <= 40 ) cluster <- append(cluster, "top 40")
-        if (i > 40 & i <= 60 ) cluster <- append(cluster, "top 60")
-        if (i > 60 & i <= 80 ) cluster <- append(cluster, "top 80")
-        if (i > 80 & i <= 100 ) cluster <- append(cluster, "top 100")
-        if (i > 100  ) cluster <- append(cluster, "top 150")
-        i <- i + 1
-        names <- append(names,word)
-      }
-      df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster), stringsAsFactors = FALSE)
-      df_new
-
-    })
-
-    output$scatter_plot_closest <- renderPlot({
-      ggplot(dataset_closet(), aes(x=x, y=y, colour=cluster)) +
-        geom_point() +
-        geom_text_repel(aes(label=ifelse(cluster == tolower(input$scatter_plot_closest_choice) ,as.character(names),'')), hjust=0.5,vjust=-0.5)
-    })
-
-    outputOptions(output, "scatter_plot_closest", suspendWhenHidden = TRUE)
-
-    # Generate table for Addition operation
-    output$addition_table <- DT::renderDataTable({
-      validate(need(input$addition_word1 != "" && input$addition_word2 != "", 
-                    "Enter query term into word 1 and word 2."))
-      use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
-      getDataForTable(use_model, 
-                      as.VectorSpaceModel(use_model[[tolower(input$addition_word1)]] +
-                                            use_model[[tolower(input$addition_word2)]]), 
-                      session,
-                      tableSimpleOpts)
-    })
-
-    # Generate table for Subtraction operation
-    output$subtraction_table <- DT::renderDataTable({
-      validate(need(input$subtraction_word1 != "" && input$subtraction_word2 != "", 
-                    "Enter query term into word 1 and word 2."))
-      use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
-      getDataForTable(use_model,
-                      use_model[[tolower(input$subtraction_word1)]] -
-                        use_model[[tolower(input$subtraction_word2)]], 
-                      session,
-                      tableSimpleOpts)
-    })
-
-    # Generate table for Analogies operation
-    output$analogies_table <- DT::renderDataTable({
-      validate(need(input$analogies_word1 != "" && input$analogies_word2 != "" && input$analogies_word3 != "", "Enter query term into Word 1, Word 2, and Word 3."))
-      use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
-      getDataForTable(use_model, as.VectorSpaceModel(
-        use_model[[tolower(input$analogies_word1)]] -
-          use_model[[tolower(input$analogies_word2)]] + 
-          use_model[[tolower(input$analogies_word3)]]),
-        session,
-        tableSimpleOpts)
-    })
-
-    # Generate table for Advanced math operation
-    output$advanced_table <- DT::renderDataTable(DT::datatable({
-      validate(need(input$advanced_word1 != "", "Enter query term into Word 1."))
-      use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
-      vector1 <- use_model[[tolower(input$advanced_word1)]]
-      # If there's only 1 word, no math needs to be done.
-      if (input$advanced_word2 == "" && input$advanced_word3 == "") {
-        data <- use_model %>% closest_to(vector1) %>%
-          mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
-      # If the 1st and 2nd words were provided...
-      } else if (input$advanced_word2 != "" && input$advanced_word3 == "") {
-        vector2 <- use_model[[tolower(input$advanced_word2)]]
-        if (input$advanced_math == "+") {
-          # We have to coerce the result of vector addition into VectorSpaceModel format
-          data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 + vector2), 150)
-        } else if (input$advanced_math == "-") {
-          data <- use_model %>% closest_to(vector1 - vector2, 150)
-        } else if (input$advanced_math == "*") {
-          # We have to coerce the result of vector multiplication into VectorSpaceModel format
-          data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 * vector2), 150)
-        } else if (input$advanced_math == "/") {
-          # We have to coerce the result of vector division into VectorSpaceModel format
-          data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 / vector2), 150)
-        }
-        data <- data %>%
-          mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
-      # If all 3 words have been provided...
-      } else if (input$advanced_word2 != "" && input$advanced_word3 != "") {
-        vector2 <- use_model[[tolower(input$advanced_word2)]]
-        vector3 <- use_model[[tolower(input$advanced_word3)]]
-        # When the first operator is +
-        if (input$advanced_math == "+" && input$advanced_math2 == "+") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 + vector2 + vector3), 150)
-        }
-        if (input$advanced_math == "+" && input$advanced_math2 == "-") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 + vector2 - vector3), 150)
-        }
-        if (input$advanced_math == "+" && input$advanced_math2 == "*") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 + vector2 * vector3), 150)
-        }
-        if (input$advanced_math == "+" && input$advanced_math2 == "/") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 + vector2 / vector3), 150)
-        }
-        # When the first operator is -
-        if (input$advanced_math == "-" && input$advanced_math2 == "+") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 - vector2 + vector3), 150)
-        }
-        if (input$advanced_math == "-" && input$advanced_math2 == "-") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 - vector2 - vector3), 150)
-        }
-        if (input$advanced_math == "-" && input$advanced_math2 == "*") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 - vector2 * vector3), 150)
-        }
-        if (input$advanced_math == "-" && input$advanced_math2 == "/") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 - vector2 / vector3), 150)
-        }
-        # When the first operator is *
-        if (input$advanced_math == "*" && input$advanced_math2 == "+") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 * vector2 + vector3), 150)
-        }
-        if (input$advanced_math == "*" && input$advanced_math2 == "-") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 * vector2 - vector3), 150)
-        }
-        if (input$advanced_math == "*" && input$advanced_math2 == "*") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 * vector2 * vector3), 150)
-        }
-        if (input$advanced_math == "*" && input$advanced_math2 == "/") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 * vector2 / vector3), 150)
-        }
-        # When the first operator is /
-        if (input$advanced_math == "/" && input$advanced_math2 == "+") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 / vector2 + vector3), 150)
-        }
-        if (input$advanced_math == "/" && input$advanced_math2 == "-") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 / vector2 - vector3), 150)
-        }
-        if (input$advanced_math == "/" && input$advanced_math2 == "*") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 / vector2 * vector3), 150)
-        }
-        if (input$advanced_math == "/" && input$advanced_math2 == "/") {
-          data <- use_model %>% 
-            closest_to(as.VectorSpaceModel(vector1 / vector2 / vector3), 150)
-        }
-        data <- data %>%
-          mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
-      }
-      data
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = tableSimpleOpts))
-
-    # Generate table for the Home tab
-    output$basic_table <- DT::renderDataTable(DT::datatable({
-      data <- list_models[[input$modelSelect[[1]]]] %>% 
-        closest_to(tolower(input$basic_word1), 150) %>% 
-        mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
-        .[c(3,2)]
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
-    options = tableSidebarOpts(input$max_words_home)))
-
-    # Generate 1st table for Compare tab
-    output$basic_table_c1 <- DT::renderDataTable(DT::datatable({
-      data <- list_models[[input$modelSelectc1[[1]]]] %>% 
-        closest_to(tolower(input$basic_word_c), 150) %>% 
-        mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
-        .[c(3,2)]
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
-    options = tableSidebarOpts(input$max_words)))
-
-    # Generate 2nd table for Compare tab
-    output$basic_table_c2 <- DT::renderDataTable(DT::datatable({
-      data <- list_models[[input$modelSelectc2[[1]]]] %>% 
-        closest_to(tolower(input$basic_word_c), 150) %>% 
-        mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
-        .[c(3,2)]
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
-    options = tableSidebarOpts(input$max_words)))
-
-
-    output$tbl <- DT::renderDataTable(DT::datatable({
-      data <- sapply(sample(1:150,4),function(n) {
-        cword <- names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
-        linkToWWO(keyword = cword, session = session)
-      }) %>% as_tibble(.name_repair = "minimal")
-    }, escape = FALSE, colnames=c(paste0("cluster_",1:4)), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
-
-    # Handle resetting clusters in the Home tab.
-    # TODO: reduce duplication, create function to generate and render table of clusters
-    observeEvent(input$clustering_reset_input, {
-      output$tbl <- DT::renderDataTable(DT::datatable({
-        data <- sapply(sample(1:150,4),function(n) {
-          cword <- names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
-          linkToWWO(keyword = cword, session = session)
-        }) %>% as_tibble(.name_repair = "minimal")
-      }, escape = FALSE, colnames=c(paste0("cluster_",1:4)),options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
-    })
-
-    # Generate and render clusters.
-    output$clusters_full <- DT::renderDataTable(DT::datatable({
-      data <- sapply(sample(1:150,10),function(n) {
-        ls_download_cluster <<- c(ls_download_cluster,n)
-        cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
-        linkToWWO(keyword = cword, session = session)
-      }) %>% as_tibble(.name_repair = "minimal")
-
-    }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
-
-
-    # Handle resetting clusters from tab content.
-    observeEvent(input$clustering_reset_input_fullcluster, {
-      ls_download_cluster <<- c()
-      output$clusters_full <- DT::renderDataTable(DT::datatable({
-        data <- sapply(sample(1:150,10),function(n) {
-          ls_download_cluster <<- c(ls_download_cluster,n)
-          cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
-          linkToWWO(keyword = cword, session = session)
-        }) %>% as_tibble(.name_repair = "minimal")
-      }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
-    })
-
-    # Handle resetting clusters from sidebar.
-    # TODO: reduce duplication
-    observeEvent(input$clustering_reset_input_fullcluster1, {
-      ls_download_cluster <<- c()
-      output$clusters_full <- DT::renderDataTable(DT::datatable({
-        data <- sapply(sample(1:150,10),function(n) {
-          ls_download_cluster <<- c(ls_download_cluster,n)
-          cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
-          linkToWWO(keyword = cword, session = session)
-        }) %>% as_tibble(.name_repair = "minimal")
-      }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
-    })
-
-  },
+  server = app_server,
   options = list(port = 3939)
 )
