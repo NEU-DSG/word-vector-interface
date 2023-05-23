@@ -90,9 +90,9 @@ getDataForTable <- function(model, vector, session, opts = list()) {
   options = opts))
 }
 
-## WVI 2. USER INTERFACE
+## WVI 2. USER INTERFACE (UI)
 
-##  WVI 2a. "HOME"
+##  WVI 2a. "HOME" UI
 
 # Create sidebar content for "Home" tab.
 home_sidebar <- conditionalPanel(condition="input.tabset1==1",
@@ -113,7 +113,7 @@ home_content <- tabPanel("Home", value=1,
     results = DT::dataTableOutput("basic_table"))
 )
 
-##  WVI 2b. "COMPARE"
+##  WVI 2b. "COMPARE" UI
 
 # Create sidebar content for "Compare" tab.
 compare_sidebar <- conditionalPanel(condition="input.tabset1==2",
@@ -140,7 +140,7 @@ compare_content <- tabPanel("Compare", value=2,
     model_2_results = DT::dataTableOutput("basic_table_c2"))
 )
 
-##  WVI 2c.  "CLUSTERS"
+##  WVI 2c.  "CLUSTERS" UI
 
 # Create sidebar content for "Clusters" tab.
 clusters_sidebar <- conditionalPanel(condition="input.tabset1==3",
@@ -172,7 +172,7 @@ clusters_content <- tabPanel("Clusters", value=3,
     results = DTOutput('clusters_full'))
 )
 
-##  WVI 2d. "OPERATIONS"
+##  WVI 2d. "OPERATIONS" UI
 
 # Create sidebar content for "Operations" tab.
 operations_sidebar <- conditionalPanel(condition="input.tabset1==4",
@@ -237,7 +237,7 @@ operations_content <- tabPanel("Operations", value=4,
     advanced = controlsAdvanced)
 )
 
-##  WVI 2e. "VISUALIZATION"
+##  WVI 2e. "VISUALIZATION" UI
 
 # Create sidebar content for "Visualization" tab.
 viz_sidebar <- conditionalPanel(condition="input.tabset1==5",
@@ -366,7 +366,7 @@ viz_content <- tabPanel("Visualization", value=5,
   )
 )
 
-##  WVI 2f. FULL APPLICATION INTERFACE
+##  WVI 2f. FULL APPLICATION UI
 
 # Put together all the pieces of the user interface.
 app_ui = dashboardPage(
@@ -394,7 +394,6 @@ app_ui = dashboardPage(
     )
   )
 )
-
 
 ##  WVI 3. SERVER LOGIC
 
@@ -430,7 +429,6 @@ app_server <- function(input, output, session) {
   observeEvent(input$modelSelect, {
     output$model_name_basic <- renderText(input$modelSelect[[1]])
     # output$model_desc_basic <- renderText({list_desc[[input$modelSelect[[1]]]]})
-    
     url <- a("[read more]", href="https://wwp.northeastern.edu/lab/wwvt/methodology/")
     output$model_desc_basic <- renderUI({
       tagList(paste(list_desc[[input$modelSelect[[1]]]], "The text has been regularized."), url)
