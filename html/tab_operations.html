@@ -1,0 +1,60 @@
+<div>
+  <!-- Contents of the "Operations" tab in the Word Vector Interface -->
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="box">
+        <div class="box-body">
+          <div class="home_desc">
+            <p>Using the sidebar on the left, you can select from several different 
+              operations and choose which model you would like to query.</p>
+          </div>
+          <h1>
+            {{ model_name }}
+          </h1>
+          <div class="model_desc">
+            {{ model_desc }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-7">
+      <div class="box">
+        <div class="box-body">
+          {{ addition }}
+          {{ subtraction }}
+          {{ analogies }}
+          {{ advanced }}
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-5">
+      <div class="box">
+        <div class="box-body">
+          <p>Addition allows you to add the contexts associated with two terms to 
+            each other, while subtraction allows you to subtract the contexts 
+            associated with one word from another. To see how these work, try 
+            “orange” + “red” and “orange” - “red” and compare the results.</p>
+          <p>The analogies operation allows you to subtract the contexts associated 
+            with one term from another, and then add the contexts associated with a 
+            third term. For example, you might subtract “man” from “woman” to get a 
+            vector associated with the contexts of “woman” as distinct from “man”; 
+            then, adding the vector for “king” will bring in its contexts to give 
+            you words associated with the distinction between woman and man 
+            <strong>and</strong> with royalty; in many models, this will be “queen.” 
+            Or, put more simply: woman - man + king = queen; woman is to man as 
+            queen is to king.</p>
+          <p>The advanced option allows you to create a query of your own using 
+            multiple operations.</p>
+          <p>If you click on any individual term, a new page will take you to the 
+            Women Writers Online interface (subscription required; see 
+            <a href="https://wwp.northeastern.edu/wwo/license/" target="_blank">this 
+            page</a> for information on subscribing and setting up a free trial) to 
+            search for your term in the WWO collection.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
