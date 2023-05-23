@@ -92,282 +92,232 @@ getDataForTable <- function(model, vector, session, opts = list()) {
 
 ## WVI 2. USER INTERFACE
 
-# TODO: Merge the Dashboard body with the UI structure, with better signposting 
-# of components.
+##  WVI 2a. "HOME"
 
-## WVI 2a. WEB PAGE COMPONENTS
+# Create sidebar content for "Home" tab.
+home_sidebar <- conditionalPanel(condition="input.tabset1==1",
+  selectInput("modelSelect", "Model",
+    choices = available_models,
+    selected = selected_default),
+  br(),
+  sliderInput("max_words_home",
+    "Number of Words:",
+    min = 1,  max = 150,  value = 10)
+)
+# Create main content for "Home" tab.
+home_content <- tabPanel("Home", value=1,
+  htmlTemplate("html/home_tab_content.html", 
+    model_name = textOutput("model_name_basic"),
+    model_desc = uiOutput("model_desc_basic"),
+    controls = textInput("basic_word1", "Query term:", width="500px"),
+    results = DT::dataTableOutput("basic_table"))
+)
 
+##  WVI 2b. "COMPARE"
+
+# Create sidebar content for "Compare" tab.
+compare_sidebar <- conditionalPanel(condition="input.tabset1==2",
+  selectInput("modelSelectc1", "Model 1",
+    choices = available_models,
+    selected = selected_compare_1),
+  selectInput("modelSelectc2", "Model 2",
+    choices = available_models,
+    selected = selected_compare_2),
+  sliderInput("max_words",
+    "Number of Words:",
+    min = 1,  max = 150,  value = 10)
+)
+# Create main content for the "Compare" tab.
+compare_content <- tabPanel("Compare", value=2,
+  id = "compareTab-Id",
+  htmlTemplate("html/compare_tab_content.html",
+    controls = textInput("basic_word_c", "Query term:", width="500px"),
+    model_1_name = textOutput("model_name_compare_1"),
+    model_1_desc = uiOutput("model_desc_compare_1"),
+    model_1_results = DT::dataTableOutput("basic_table_c1"),
+    model_2_name = textOutput("model_name_compare_2"),
+    model_2_desc = uiOutput("model_desc_compare_2"),
+    model_2_results = DT::dataTableOutput("basic_table_c2"))
+)
+
+##  WVI 2c.  "CLUSTERS"
+
+# Create sidebar content for "Clusters" tab.
+clusters_sidebar <- conditionalPanel(condition="input.tabset1==3",
+  selectInput("modelSelect_clusters", "Model",
+    choices = available_models,
+    selected = selected_default),
+  br(),
+  column(
+    id = "Download_reset_button",
+    width = 12,
+    actionButton("clustering_reset_input_fullcluster", "Reset clusters", 
+      class="clustering-reset-full"),
+    downloadButton("downloadData", "Download")
+  ),
+  br(),
+  br(),
+  sliderInput("max_words_cluster",
+    "Number of Words:",
+    min = 1,  max = 150,  value = 10)
+)
+# Create main content for the "Clusters" tab.
+clusters_content <- tabPanel("Clusters", value=3,
+  htmlTemplate("html/clusters_tab_content.html",
+    controls = actionButton("clustering_reset_input_fullcluster1", 
+      "Reset clusters", 
+      class="clustering-reset-full"),
+    model_name = textOutput("model_name_cluster"),
+    model_desc = uiOutput("model_desc_cluster"),
+    results = DTOutput('clusters_full'))
+)
+
+##  WVI 2d. "OPERATIONS"
+
+# Create sidebar content for "Operations" tab.
+operations_sidebar <- conditionalPanel(condition="input.tabset1==4",
+  selectInput("modelSelect_analogies_tabs", "Model",
+    choices = available_models,
+    selected = selected_default),
+  selectInput("operator_selector", "Select operator",
+    choices = c("Addition", "Subtraction", "Analogies", "Advanced"),
+    selected = 1)
+)
+# Create the contents of the "Addition" operation tab.
 controlsPlus <- conditionalPanel(condition="input.operator_selector=='Addition'",
-                   htmlTemplate("html/addition_controls.html",
-                                word1 = textInput("addition_word1", "Word 1"),
-                                operator = icon("plus"),
-                                word2 = textInput("addition_word2", "Word 2"),
-                                results = DT::dataTableOutput("addition_table")),
-                   width = 12)
+  htmlTemplate("html/operations_addition.html",
+    word1 = textInput("addition_word1", "Word 1"),
+    operator = icon("plus"),
+    word2 = textInput("addition_word2", "Word 2"),
+    results = DT::dataTableOutput("addition_table")),
+  width = 12)
+# Create the contents of the "Subtraction" operation tab.
 controlsMinus <- conditionalPanel(condition="input.operator_selector=='Subtraction'",
-                   htmlTemplate("html/addition_controls.html",
-                                word1 = textInput("subtraction_word1", "Word 1"),
-                                operator = icon("minus"),
-                                word2 = textInput("subtraction_word2", "Word 2"),
-                                results = DT::dataTableOutput("subtraction_table")),
-                   width = 12)
+  htmlTemplate("html/operations_addition.html",
+    word1 = textInput("subtraction_word1", "Word 1"),
+    operator = icon("minus"),
+    word2 = textInput("subtraction_word2", "Word 2"),
+    results = DT::dataTableOutput("subtraction_table")),
+  width = 12)
+# Create the contents of the "Analogies" operation tab.
 controlsAnalogy <- conditionalPanel(condition="input.operator_selector=='Analogies'",
-                   htmlTemplate("html/analogies_controls.html",
-                                word1 = textInput("analogies_word1", "Word 1"),
-                                operator = icon("minus"),
-                                word2 = textInput("analogies_word2", "Word 2"),
-                                operator2 = icon("plus"),
-                                word3 = textInput("analogies_word3", "Word 3"),
-                                results = DT::dataTableOutput("analogies_table")),
-                   width = 12)
-operatorsList <- list("+" = "+", 
-                     "-" = "-", 
-                     "*" = "*", 
-                     "/" = "/")
-controlsAdvanced = conditionalPanel(condition="input.operator_selector=='Advanced'",
-                                    box(solidHeader = TRUE,
-                                        id = "advanced_panel",
-                                        column(10,
-                                               class = "col-md-8",
-                                               textInput("advanced_word1", "Word 1")),
-                                        column(2,
-                                               class = "col-md-4 mathCol",
-                                               selectInput("advanced_math", "Math",
-                                                           choices = operatorsList,
-                                                           selected = 1)),
-                                        column(10,
-                                               class = "col-md-8",
-                                               textInput("advanced_word2", "Word 2")),
-                                        column(2,
-                                               class = "col-md-4 mathCol",
-                                               selectInput("advanced_math2", "Math",
-                                                           choices = operatorsList,
-                                                           selected = 1)),
-                                        column(10,
-                                               class = "col-md-8",
-                                               textInput("advanced_word3", "Word 3")),
-                                        width = 12
-                                    ),
-                                    box(
-                                      DT::dataTableOutput("advanced_table"),
-                                      width = 12
-                                    ),
-                                    width = 12)
+  htmlTemplate("html/operations_analogy.html",
+    word1 = textInput("analogies_word1", "Word 1"),
+    operator = icon("minus"),
+    word2 = textInput("analogies_word2", "Word 2"),
+    operator2 = icon("plus"),
+    word3 = textInput("analogies_word3", "Word 3"),
+    results = DT::dataTableOutput("analogies_table")),
+  width = 12)
+# Create the contents of the "Advanced" operation tab.
+operatorsList <- 
+  list( "+" = "+", 
+        "-" = "-", 
+        "*" = "*", 
+        "/" = "/")
+controlsAdvanced <- conditionalPanel(condition="input.operator_selector=='Advanced'",
+  htmlTemplate("html/operations_advanced.html",
+    word1 = textInput("advanced_word1", "Word 1"),
+    operator1 = selectInput("advanced_math", "Math", choices = operatorsList, 
+      selected = 1),
+    word2 = textInput("advanced_word2", "Word 2"),
+    operator2 = selectInput("advanced_math2", "Math", choices = operatorsList,
+      selected = 1),
+    word3 = textInput("advanced_word3", "Word 3"),
+    results = DT::dataTableOutput("advanced_table")),
+  width=12)
+# Create main content for the "Operations" tab.
+operations_content <- tabPanel("Operations", value=4,
+  htmlTemplate("html/operations_tab_content.html",
+    model_name = textOutput("model_name_operation"),
+    model_desc = uiOutput("model_desc_operation"),
+    addition = controlsPlus,
+    subtraction = controlsMinus,
+    analogies = controlsAnalogy,
+    advanced = controlsAdvanced)
+)
 
-sidebar = dashboardSidebar(
-  
-  # Create sidebar content for "Home" tab.
-  conditionalPanel(condition="input.tabset1==1",
-                   selectInput("modelSelect", "Model",
-                               choices = available_models,
-                               selected = selected_default),
-                   br(),
-                   sliderInput("max_words_home",
-                               "Number of Words:",
-                               min = 1,  max = 150,  value = 10),
-                   br(),
-                   actionButton("clustering_reset_input", "Reset clusters")
-                   
+##  WVI 2e. "VISUALIZATION"
+
+# Create sidebar content for "Visualization" tab.
+viz_sidebar <- conditionalPanel(condition="input.tabset1==5",
+  selectInput("modelSelect_Visualisation_tabs", "Model",
+    choices = available_models,
+    selected = selected_default),
+  selectInput("visualisation_selector","Select visualisation",
+    choices = list(
+      "Word Cloud" = "wc",
+      "Query Term Scatterplot" = "scatter_closest",
+      "Cluster Scatterplot" = "scatter"),
+    selected = 1),
+  # Create sidebar content for word cloud visualization.
+  conditionalPanel(condition="input.visualisation_selector=='wc'",
+    sliderInput("freq",
+      "Similarity",
+      step = 5,
+      ticks = TRUE,
+      min = 0,  max = 100, value = 15),
+    sliderInput("max",
+      "Maximum Number of Words:",
+      min = 0,  max = 150,  value = 100),
+    sliderInput("scale",
+      "Size of plot:",
+      min = 0,  max = 5,  value = 3)
   ),
-  
-  # Create sidebar content for "Compare" tab.
-  conditionalPanel(condition="input.tabset1==2",
-                   selectInput("modelSelectc1", "Model 1",
-                               choices = available_models,
-                               selected = selected_compare_1),
-                   selectInput("modelSelectc2", "Model 2",
-                               choices = available_models,
-                               selected = selected_compare_2),
-                   sliderInput("max_words",
-                               "Number of Words:",
-                               min = 1,  max = 150,  value = 10)
-                   
+  # Create sidebar content for query term scatterplot.
+  conditionalPanel(condition="input.visualisation_selector=='scatter'",
+    selectInput("scatter_cluster", "Cluster",
+      choices = list("Cluster 1" = "V1",
+        "Cluster 2" = "V2",
+        "Cluster 3" = "V3",
+        "Cluster 4" = "V4",
+        "Cluster 5" = "V5",
+        "Cluster 6" = "V6",
+        "Cluster 7" = "V7",
+        "Cluster 8" = "V8",
+        "Cluster 9" = "V9",
+        "Cluster 10" = "V10" ),
+      selected = 1),
+    sliderInput("scatter_number",
+      "Number of Words:",
+      min = 5,  max = 30,  value = 10),
+    actionButton("clustering_reset_input_visualisation", "Reset clusters")
   ),
-  
-  # Create sidebar content for "Clusters" tab.
-  conditionalPanel(condition="input.tabset1==3",
-                   selectInput("modelSelect_clusters", "Model",
-                               choices = available_models,
-                               selected = selected_default),
-                   br(),
-                   column(
-                     id = "Download_reset_button",
-                     width = 12,
-                     actionButton("clustering_reset_input_fullcluster", "Reset clusters", class="clustering-reset-full"),
-                     downloadButton("downloadData", "Download")
-                   ),
-                   br(),
-                   br(),
-                   sliderInput("max_words_cluster",
-                               "Number of Words:",
-                               min = 1,  max = 150,  value = 10)
-                   
-  ),
-  
-  # Create sidebar content for "Operations" tab.
-  conditionalPanel(condition="input.tabset1==4",
-                   selectInput("modelSelect_analogies_tabs", "Model",
-                               choices = available_models,
-                               selected = selected_default),
-                   
-                   selectInput("operator_selector", "Select operator",
-                               choices = c("Addition", "Subtraction", "Analogies", "Advanced"),
-                               selected = 1)
-  ),
-  
-  # Create sidebar content for "Visualization" tab.
-  conditionalPanel(condition="input.tabset1==5",
-                   selectInput("modelSelect_Visualisation_tabs", "Model",
-                               choices = available_models,
-                               selected = selected_default),
-                   
-                   selectInput("visualisation_selector","Select visualisation",
-                               choices = list(
-                                 "Word Cloud" = "wc",
-                                 "Query Term Scatterplot" = "scatter_closest",
-                                 "Cluster Scatterplot" = "scatter"),
-                               selected = 1),
-                   
-                   # Create sidebar content for word cloud visualization.
-                   conditionalPanel(condition="input.visualisation_selector=='wc'",
-                                    sliderInput("freq",
-                                                "Similarity",
-                                                step = 5,
-                                                ticks = TRUE,
-                                                min = 0,  max = 100, value = 15),
-                                    sliderInput("max",
-                                                "Maximum Number of Words:",
-                                                min = 0,  max = 150,  value = 100),
-                                    sliderInput("scale",
-                                                "Size of plot:",
-                                                min = 0,  max = 5,  value = 3)
-                   ),
-                   
-                   # Create sidebar content for query term scatterplot.
-                   conditionalPanel(condition="input.visualisation_selector=='scatter'",
-                                    selectInput("scatter_cluster", "Cluster",
-                                                choices = list("Cluster 1" = "V1",
-                                                               "Cluster 2" = "V2",
-                                                               "Cluster 3" = "V3",
-                                                               "Cluster 4" = "V4",
-                                                               "Cluster 5" = "V5",
-                                                               "Cluster 6" = "V6",
-                                                               "Cluster 7" = "V7",
-                                                               "Cluster 8" = "V8",
-                                                               "Cluster 9" = "V9",
-                                                               "Cluster 10" = "V10" ),
-                                                selected = 1),
-                                    sliderInput("scatter_number",
-                                                "Number of Words:",
-                                                min = 5,  max = 30,  value = 10),
-                                    actionButton("clustering_reset_input_visualisation", "Reset clusters")
-                                    
-                   ),
-                   
-                   # Create sidebar content for cluster scatterplot.
-                   conditionalPanel(condition="input.visualisation_selector=='scatter_closest'",
-                                    selectInput("scatter_plot_closest_choice", "Cluster",
-                                                choices = list("Top 10",
-                                                               "Top 20",
-                                                               "Top 40",
-                                                               "Top 60",
-                                                               "Top 80",
-                                                               "Top 150"),
-                                                selected = 1)
-                                    
-                   )
-          )
+  # Create sidebar content for cluster scatterplot.
+  conditionalPanel(condition="input.visualisation_selector=='scatter_closest'",
+    selectInput("scatter_plot_closest_choice", "Cluster",
+      choices = list("Top 10",
+        "Top 20",
+        "Top 40",
+        "Top 60",
+        "Top 80",
+        "Top 150"),
+      selected = 1)
   )
-
-#app_ui_new = htmlTemplate("wvi.html", sidebar = sidebar, body = body)
-
-# Put together all the pieces of the user interface.
-app_ui = dashboardPage(
-  title = "Word Vector Interface | Women Writers Vector Toolkit",
-  header = tags$header(
-    class = "main-header",
-    tags$link(rel = "stylesheet", type = "text/css", 
-              href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"),
-    tags$link(rel = "stylesheet", type = "text/css", href = "styles/main.css"),
-    includeScript(path = "script.js"),
-    tags$style(type="text/css",
-               ".shiny-output-error { visibility: hidden; }",
-               ".shiny-output-error:before { visibility: hidden; }"),
-    htmlTemplate("html/navbar.html", name="header-component")
-  ),
-  # Create the sidebar and all content, which is shown or hidden depending on 
-  # the current open tab.
-  sidebar = sidebar,
-  body = dashboardBody(
-    shinyjs::useShinyjs(),
-    tabBox(
-      # The id lets us use input$tabset1 on the server to find the current tab
-      id = "tabset1", width = 12,
-      # Create the "Home" tab from a template.
-      tabPanel("Home", value=1,
-               htmlTemplate("html/tab_home.html", 
-                            model_name = textOutput("model_name_basic"),
-                            model_desc = uiOutput("model_desc_basic"),
-                            controls = textInput("basic_word1", "Query term:", width="500px"),
-                            results = DT::dataTableOutput("basic_table"))
-      ),
-      # Create the "Compare" tab from a template.
-      tabPanel("Compare", value=2,
-               id = "compareTab-Id",
-               htmlTemplate("html/tab_compare.html",
-                            controls = textInput("basic_word_c", "Query term:", width="500px"),
-                            model_1_name = textOutput("model_name_compare_1"),
-                            model_1_desc = uiOutput("model_desc_compare_1"),
-                            model_1_results = DT::dataTableOutput("basic_table_c1"),
-                            model_2_name = textOutput("model_name_compare_2"),
-                            model_2_desc = uiOutput("model_desc_compare_2"),
-                            model_2_results = DT::dataTableOutput("basic_table_c2"))
-      ),
-      # Create the "Clusters" tab from a template.
-      tabPanel("Clusters", value=3,
-               htmlTemplate("html/tab_clusters.html",
-                            controls = actionButton("clustering_reset_input_fullcluster1", 
-                                                    "Reset clusters", 
-                                                    class="clustering-reset-full"),
-                            model_name = textOutput("model_name_cluster"),
-                            model_desc = uiOutput("model_desc_cluster"),
-                            results = DTOutput('clusters_full'))
-      ),
-      # Create the contents of the "Operations" tab.
-      tabPanel("Operations", value=4,
-               htmlTemplate("html/tab_operations.html",
-                            model_name = textOutput("model_name_operation"),
-                            model_desc = uiOutput("model_desc_operation"),
-                            addition = controlsPlus,
-                            subtraction = controlsMinus,
-                            analogies = controlsAnalogy,
-                            advanced = controlsAdvanced)
-      ),
-      
-      # Create the contents of the "Visualization" tab.
-      tabPanel("Visualization", value=5,
-               fluidRow(
-                 box(
-                   tags$h1(textOutput("model_name_visualisation")),
-                   div(class = "model_desc", p(uiOutput("model_desc_visualisation"))),
-                   width=12
-                 ),
-                 conditionalPanel(condition="input.visualisation_selector=='wc'",
-                                  class = "visualization",
-                                  box( solidHeader = TRUE, 
-                                       textInput("word_cloud_word", "Query term:", width = "500px"), 
-                                       width=12),
-                                  box(
-                                    solidHeader = FALSE,
-                                    box(
-                                      solidHeader = TRUE,
-                                      plotOutput("word_cloud", height="600px"),
-                                      width = 8
-                                    ),
-                                    box(
-                                      #solidHeader = TRUE,
-                                      div(class = "model_desc", 
-                                          p("The visualizations tab allows you to create a
+)
+# Create main content for the "Visualization" tab.
+viz_content <- tabPanel("Visualization", value=5,
+  fluidRow(
+    box(
+      tags$h1(textOutput("model_name_visualisation")),
+      div(class = "model_desc", p(uiOutput("model_desc_visualisation"))),
+      width=12
+    ),
+    conditionalPanel(condition="input.visualisation_selector=='wc'",
+      class = "visualization",
+      box( solidHeader = TRUE, 
+        textInput("word_cloud_word", "Query term:", width = "500px"), 
+        width=12),
+      box(
+        solidHeader = FALSE,
+        box(
+          solidHeader = TRUE,
+          plotOutput("word_cloud", height="600px"),
+          width = 8
+        ),
+        box(
+          div(class = "model_desc", 
+            p("The visualizations tab allows you to create a
                               word cloud for the query term you would like to
                               analyze. The word cloud will produce a collage
                               of the most similar words to your query term
@@ -383,47 +333,73 @@ app_ui = dashboardPage(
                               bar will allow you to adjust the number of words you
                               would like in your word cloud, and the bottom-most
                               slider controls the size of the plot image."),
-                                          div("Similarity Color Key"),
-                                          div("Similarity % -- Color"),
-                                          div("91 – 100 -- gray"),
-                                          div("81 – 90 -- brown"),
-                                          div("71 – 80 -- orange"),
-                                          div("51 – 70 -- green"),
-                                          div("00 – 50 -- pink")
-                                      ),
-                                      width = 4
-                                    ),
-                                    width = 12
-                                  )
-                 ),
-                 
-                 conditionalPanel(condition="input.visualisation_selector=='scatter'",
-                                  class = "visualization",
-                                  box(
-                                    plotOutput("scatter_plot", height = 600),
-                                    width = 8
-                                  )
-                 ),
-                 conditionalPanel(condition="input.visualisation_selector=='scatter_closest'",
-                                  class = "visualization",
-                                  box( solidHeader = TRUE, 
-                                       textInput("scatter_plot_term", "Query term:", width = 500), 
-                                       width=12),
-                                  box(
-                                    plotOutput("scatter_plot_closest", height = 600),
-                                    width = 8
-                                  )
-                 )
-               )
+            div("Similarity Color Key"),
+            div("Similarity % -- Color"),
+            div("91 – 100 -- gray"),
+            div("81 – 90 -- brown"),
+            div("71 – 80 -- orange"),
+            div("51 – 70 -- green"),
+            div("00 – 50 -- pink")
+          ),
+          width = 4
+        ),
+        width = 12
+      )
+    ),
+    conditionalPanel(condition="input.visualisation_selector=='scatter'",
+      class = "visualization",
+      box(
+        plotOutput("scatter_plot", height = 600),
+        width = 8
+      )
+    ),
+    conditionalPanel(condition="input.visualisation_selector=='scatter_closest'",
+      class = "visualization",
+      box( solidHeader = TRUE, 
+        textInput("scatter_plot_term", "Query term:", width = 500), 
+        width=12),
+      box(
+        plotOutput("scatter_plot_closest", height = 600),
+        width = 8
       )
     )
   )
 )
 
+##  WVI 2f. FULL APPLICATION INTERFACE
+
+# Put together all the pieces of the user interface.
+app_ui = dashboardPage(
+  title = "Word Vector Interface | Women Writers Vector Toolkit",
+  header = tags$header(
+    class = "main-header",
+    tags$link(rel="stylesheet", type="text/css", 
+              href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"),
+    tags$link(rel="stylesheet", type="text/css", href="styles/main.css"),
+    includeScript(path="script.js"),
+    tags$style(type="text/css",
+               ".shiny-output-error { visibility: hidden; }",
+               ".shiny-output-error:before { visibility: hidden; }"),
+    htmlTemplate("html/navbar.html", name="header-component")
+  ),
+  # Create the sidebar and all content, which is shown or hidden depending on 
+  # the current open tab.
+  sidebar = dashboardSidebar(home_sidebar, compare_sidebar, clusters_sidebar,
+    operations_sidebar, viz_sidebar),
+  body = dashboardBody(
+    shinyjs::useShinyjs(),
+    tabBox(id = "tabset1", width = 12,
+      # The id lets us use input$tabset1 on the server to find the current tab
+      home_content, compare_content, clusters_content, operations_content, viz_content
+    )
+  )
+)
+
+
 ##  WVI 3. SERVER LOGIC
 
 # Listen for user interactions and handle them.
-app_server = function(input, output, session) {
+app_server <- function(input, output, session) {
   # The currently selected tab from the first box
   output$tabset1Selected <- renderText({
     input$tabset1
@@ -813,17 +789,6 @@ app_server = function(input, output, session) {
     }) %>% as_tibble(.name_repair = "minimal")
   }, escape = FALSE, colnames=c(paste0("cluster_",1:4)), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
   
-  # Handle resetting clusters in the Home tab.
-  # TODO: reduce duplication, create function to generate and render table of clusters
-  observeEvent(input$clustering_reset_input, {
-    output$tbl <- DT::renderDataTable(DT::datatable({
-      data <- sapply(sample(1:150,4),function(n) {
-        cword <- names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
-        linkToWWO(keyword = cword, session = session)
-      }) %>% as_tibble(.name_repair = "minimal")
-    }, escape = FALSE, colnames=c(paste0("cluster_",1:4)),options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
-  })
-  
   # Generate and render clusters.
   output$clusters_full <- DT::renderDataTable(DT::datatable({
     data <- sapply(sample(1:150,10),function(n) {
@@ -864,7 +829,7 @@ app_server = function(input, output, session) {
 
 ##  WVI 4. GENERATE THE SHINY APP
 
-# Create an HTML wrapper around the Shiny app content.
+# Spin up the Word Vector Interface application.
 shinyApp(
   ui = app_ui,
   server = app_server,
