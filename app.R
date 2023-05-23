@@ -108,43 +108,13 @@ body <- dashboardBody(
   # Create the contents of the "Home" tab.
     tabBox(
       # The id lets us use input$tabset1 on the server to find the current tab
-      id = "tabset1", width = 12, #height = "250px",
+      id = "tabset1", width = 12,
       tabPanel("Home", value=1,
-               div(
-                 fluidRow (
-                   box(
-                     p( class="home_desc welcome_desc", 
-                       "Welcome to the Women Writers Vector Toolkit (WWVT) discovery interface! This interface will allow you to query terms in word2vec models that were trained on texts from the Women Writers Online, Victorian Women Writers Project, and Early English Books Online–Text Creation Partnership collections."),
-                     tags$h1(textOutput("model_name_basic")),
-                     div(
-                       class = "model_desc", 
-                       p(uiOutput("model_desc_basic"))
-                     ),
-                     width=12
-                   )
-                 )
-               ,
-                 fluidRow(
-                   box(
-                     box(solidHeader = TRUE, textInput("basic_word1", "Query term:", width = "500px"), width=12),
-                     box(
-                       # solidHeader = TRUE,
-                       DT::dataTableOutput("basic_table"),
-                       id = "table-main-1",
-                       width=12
-                    ),
-                    width=6
-                  ),
-                  box(
-                    p("To get started, type a word in the “Query term” box. The results that appear are the words that are closest to the term that you queried in vector space—that is, words that appear in similar contexts in the corpus used to train your model."),
-                    p("On the left-hand sidebar, you can select different models to query; you can also increase the number of words in your results set. More ways to explore these models can be accessed under the “Compare,” “Clusters,” “Operations,” and “Visualization” tabs above."),
-                    p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
-                      tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
-                      " for information on subscribing and setting up a free trial) to search for your term in the WWO collection.")),
-                  width = 6
-                  )
-                )
-        ),
+               htmlTemplate("html/tab_home.html", 
+                            model_name = textOutput("model_name_basic"),
+                            model_desc = uiOutput("model_desc_basic"),
+                            controls = textInput("basic_word1", "Query term:", width="500px"),
+                            results = DT::dataTableOutput("basic_table"))),
       
       # Create the contents of the "Compare" tab.
       tabPanel("Compare", value=2,
@@ -460,6 +430,148 @@ body <- dashboardBody(
                )
       )
     )
+)
+
+sidebar = dashboardSidebar(
+  
+  # Create sidebar content for "Home" tab.
+  conditionalPanel(condition="input.tabset1==1",
+                   selectInput("modelSelect", "Model",
+                               choices = available_models,
+                               selected = selected_default),
+                   br(),
+                   sliderInput("max_words_home",
+                               "Number of Words:",
+                               min = 1,  max = 150,  value = 10),
+                   br(),
+                   actionButton("clustering_reset_input", "Reset clusters")
+                   
+  ),
+  
+  # Create sidebar content for "Compare" tab.
+  conditionalPanel(condition="input.tabset1==2",
+                   selectInput("modelSelectc1", "Model 1",
+                               choices = available_models,
+                               selected = selected_compare_1),
+                   selectInput("modelSelectc2", "Model 2",
+                               choices = available_models,
+                               selected = selected_compare_2),
+                   sliderInput("max_words",
+                               "Number of Words:",
+                               min = 1,  max = 150,  value = 10)
+                   
+  ),
+  
+  # Create sidebar content for "Clusters" tab.
+  conditionalPanel(condition="input.tabset1==3",
+                   selectInput("modelSelect_clusters", "Model",
+                               choices = available_models,
+                               selected = selected_default),
+                   br(),
+                   column(
+                     id = "Download_reset_button",
+                     width = 12,
+                     actionButton("clustering_reset_input_fullcluster", "Reset clusters", class="clustering-reset-full"),
+                     downloadButton("downloadData", "Download")
+                   ),
+                   br(),
+                   br(),
+                   sliderInput("max_words_cluster",
+                               "Number of Words:",
+                               min = 1,  max = 150,  value = 10)
+                   
+  ),
+  
+  # Create sidebar content for "Operations" tab.
+  conditionalPanel(condition="input.tabset1==4",
+                   selectInput("modelSelect_analogies_tabs", "Model",
+                               choices = available_models,
+                               selected = selected_default),
+                   
+                   selectInput("operator_selector", "Select operator",
+                               choices = c("Addition", "Subtraction", "Analogies", "Advanced"),
+                               selected = 1)
+  ),
+  
+  # Create sidebar content for "Visualization" tab.
+  conditionalPanel(condition="input.tabset1==5",
+                   selectInput("modelSelect_Visualisation_tabs", "Model",
+                               choices = available_models,
+                               selected = selected_default),
+                   
+                   selectInput("visualisation_selector","Select visualisation",
+                               choices = list(
+                                 "Word Cloud" = "wc",
+                                 "Query Term Scatterplot" = "scatter_closest",
+                                 "Cluster Scatterplot" = "scatter"),
+                               selected = 1),
+                   
+                   # Create sidebar content for word cloud visualization.
+                   conditionalPanel(condition="input.visualisation_selector=='wc'",
+                                    sliderInput("freq",
+                                                "Similarity",
+                                                step = 5,
+                                                ticks = TRUE,
+                                                min = 0,  max = 100, value = 15),
+                                    sliderInput("max",
+                                                "Maximum Number of Words:",
+                                                min = 0,  max = 150,  value = 100),
+                                    sliderInput("scale",
+                                                "Size of plot:",
+                                                min = 0,  max = 5,  value = 3)
+                   ),
+                   
+                   # Create sidebar content for query term scatterplot.
+                   conditionalPanel(condition="input.visualisation_selector=='scatter'",
+                                    selectInput("scatter_cluster", "Cluster",
+                                                choices = list("Cluster 1" = "V1",
+                                                               "Cluster 2" = "V2",
+                                                               "Cluster 3" = "V3",
+                                                               "Cluster 4" = "V4",
+                                                               "Cluster 5" = "V5",
+                                                               "Cluster 6" = "V6",
+                                                               "Cluster 7" = "V7",
+                                                               "Cluster 8" = "V8",
+                                                               "Cluster 9" = "V9",
+                                                               "Cluster 10" = "V10" ),
+                                                selected = 1),
+                                    sliderInput("scatter_number",
+                                                "Number of Words:",
+                                                min = 5,  max = 30,  value = 10),
+                                    actionButton("clustering_reset_input_visualisation", "Reset clusters")
+                                    
+                   ),
+                   
+                   # Create sidebar content for cluster scatterplot.
+                   conditionalPanel(condition="input.visualisation_selector=='scatter_closest'",
+                                    selectInput("scatter_plot_closest_choice", "Cluster",
+                                                choices = list("Top 10",
+                                                               "Top 20",
+                                                               "Top 40",
+                                                               "Top 60",
+                                                               "Top 80",
+                                                               "Top 150"),
+                                                selected = 1)
+                                    
+                   )
+          )
+  )
+
+#app_ui_new = htmlTemplate("wvi.html", sidebar = sidebar, body = body)
+
+app_ui = dashboardPage(
+  title = "Word Vector Interface | Women Writers Vector Toolkit",
+  header = tags$header(
+    class = "main-header",
+    tags$link(rel = "stylesheet", type = "text/css", 
+              href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"),
+    tags$link(rel = "stylesheet", type = "text/css", href = "styles/main.css"),
+    htmlTemplate("html/navbar.html", name = "header-component")
+  ),
+  # Create the sidebar and all content, which is shown or hidden depending on 
+  # the current open tab.
+  sidebar = sidebar,
+  body = body
 )
 
 ##  WVI 3. SERVER LOGIC
@@ -908,148 +1020,7 @@ app_server = function(input, output, session) {
 
 # Create an HTML wrapper around the Shiny app content.
 shinyApp(
-  ui = dashboardPage(
-      title = "Word Vector Interface | Women Writers Vector Toolkit",
-      header = tags$header(
-        class = "main-header",
-        tags$link(rel = "stylesheet", type = "text/css", 
-          href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"),
-        tags$link(rel = "stylesheet", type = "text/css", href = "styles/main.css"),
-        htmlTemplate("template.html", name = "header-component")
-      )
-    ,
-    
-    # Create the sidebar and all content, which is shown or hidden depending on 
-    # the current open tab.
-    sidebar = dashboardSidebar(
-
-      # Create sidebar content for "Home" tab.
-      conditionalPanel(condition="input.tabset1==1",
-                       selectInput("modelSelect", "Model",
-                                   choices = available_models,
-                                   selected = selected_default),
-                       br(),
-                       sliderInput("max_words_home",
-                                   "Number of Words:",
-                                   min = 1,  max = 150,  value = 10),
-                       br(),
-                       actionButton("clustering_reset_input", "Reset clusters")
-
-      ),
-      
-      # Create sidebar content for "Compare" tab.
-      conditionalPanel(condition="input.tabset1==2",
-                       selectInput("modelSelectc1", "Model 1",
-                                   choices = available_models,
-                                   selected = selected_compare_1),
-                       selectInput("modelSelectc2", "Model 2",
-                                   choices = available_models,
-                                   selected = selected_compare_2),
-                       sliderInput("max_words",
-                                   "Number of Words:",
-                                   min = 1,  max = 150,  value = 10)
-
-      ),
-      
-      # Create sidebar content for "Clusters" tab.
-      conditionalPanel(condition="input.tabset1==3",
-                       selectInput("modelSelect_clusters", "Model",
-                                   choices = available_models,
-                                   selected = selected_default),
-                       br(),
-                       column(
-                         id = "Download_reset_button",
-                         width = 12,
-                         actionButton("clustering_reset_input_fullcluster", "Reset clusters", class="clustering-reset-full"),
-                         downloadButton("downloadData", "Download")
-                       ),
-                       br(),
-                       br(),
-                       sliderInput("max_words_cluster",
-                                   "Number of Words:",
-                                   min = 1,  max = 150,  value = 10)
-
-      ),
-      
-      # Create sidebar content for "Operations" tab.
-      conditionalPanel(condition="input.tabset1==4",
-                       selectInput("modelSelect_analogies_tabs", "Model",
-                                   choices = available_models,
-                                   selected = selected_default),
-
-                       selectInput("operator_selector", "Select operator",
-                                   choices = c("Addition", "Subtraction", "Analogies", "Advanced"),
-                                   selected = 1)
-      ),
-      
-      # Create sidebar content for "Visualization" tab.
-      conditionalPanel(condition="input.tabset1==5",
-                       selectInput("modelSelect_Visualisation_tabs", "Model",
-                                   choices = available_models,
-                                   selected = selected_default),
-
-                       selectInput("visualisation_selector","Select visualisation",
-                                   choices = list(
-                                     "Word Cloud" = "wc",
-                                     "Query Term Scatterplot" = "scatter_closest",
-                                     "Cluster Scatterplot" = "scatter"),
-                                   selected = 1),
-
-                       # Create sidebar content for word cloud visualization.
-                       conditionalPanel(condition="input.visualisation_selector=='wc'",
-                              sliderInput("freq",
-                                          "Similarity",
-                                          step = 5,
-                                          ticks = TRUE,
-                                          min = 0,  max = 100, value = 15),
-                              sliderInput("max",
-                                          "Maximum Number of Words:",
-                                          min = 0,  max = 150,  value = 100),
-                              sliderInput("scale",
-                                          "Size of plot:",
-                                          min = 0,  max = 5,  value = 3)
-                       ),
-                       
-                       # Create sidebar content for query term scatterplot.
-                       conditionalPanel(condition="input.visualisation_selector=='scatter'",
-                            selectInput("scatter_cluster", "Cluster",
-                                        choices = list("Cluster 1" = "V1",
-                                                       "Cluster 2" = "V2",
-                                                       "Cluster 3" = "V3",
-                                                       "Cluster 4" = "V4",
-                                                       "Cluster 5" = "V5",
-                                                       "Cluster 6" = "V6",
-                                                       "Cluster 7" = "V7",
-                                                       "Cluster 8" = "V8",
-                                                       "Cluster 9" = "V9",
-                                                       "Cluster 10" = "V10" ),
-                                        selected = 1),
-                            sliderInput("scatter_number",
-                                        "Number of Words:",
-                                        min = 5,  max = 30,  value = 10),
-                            actionButton("clustering_reset_input_visualisation", "Reset clusters")
-
-                       ),
-                       
-                       # Create sidebar content for cluster scatterplot.
-                       conditionalPanel(condition="input.visualisation_selector=='scatter_closest'",
-                                        selectInput("scatter_plot_closest_choice", "Cluster",
-                                                    choices = list("Top 10",
-                                                                   "Top 20",
-                                                                   "Top 40",
-                                                                   "Top 60",
-                                                                   "Top 80",
-                                                                   "Top 150"),
-                                                    selected = 1)
-
-                       )
-      )
-
-    ),
-    
-    body = body
-  ),
-  
+  ui = app_ui,
   server = app_server,
   options = list(port = 3939)
 )
