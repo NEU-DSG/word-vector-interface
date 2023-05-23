@@ -104,98 +104,37 @@ body <- dashboardBody(
              ".shiny-output-error { visibility: hidden; }",
              ".shiny-output-error:before { visibility: hidden; }"
   ),
-
-  # Create the contents of the "Home" tab.
-    tabBox(
+    
+  tabBox(
       # The id lets us use input$tabset1 on the server to find the current tab
       id = "tabset1", width = 12,
+      # Create the "Home" tab from a template.
       tabPanel("Home", value=1,
                htmlTemplate("html/tab_home.html", 
                             model_name = textOutput("model_name_basic"),
                             model_desc = uiOutput("model_desc_basic"),
                             controls = textInput("basic_word1", "Query term:", width="500px"),
                             results = DT::dataTableOutput("basic_table"))),
-      
-      # Create the contents of the "Compare" tab.
+      # Create the "Compare" tab from a template.
       tabPanel("Compare", value=2,
                id = "compareTab-Id",
-
-               fluidRow(
-                 box( solidHeader = TRUE, textInput("basic_word_c", "Query term:", width = "500px"), width=12)
-               ),
-
-               fluidRow(
-                 box(
-
-                   box(
-                     solidHeader = TRUE,
-                     class = "model_header",
-                     tags$h1(textOutput("model_name_compare_1")),
-                     div(class = "model_desc", p(uiOutput("model_desc_compare_1"))),
-
-                     # div(class = "model_desc", p(textOutput("model_desc_compare_1"),
-                     #                               "The text has been regularized",
-                     #                               a("[read more]", href=paste("https://wwp.northeastern.edu/lab/wwvt/methodology/index.html", sep=""), target="_blank")
-                     #                             )
-                         # ),
-                     width = 12
-                   ),
-                   box(
-                     DT::dataTableOutput("basic_table_c1"),
-                     width = 12
-                   )
-                 ),
-                 box(
-                   box(
-                     solidHeader = TRUE,
-                     class = "model_header",
-                     tags$h1(textOutput("model_name_compare_2")),
-                     div(class = "model_desc", p(uiOutput("model_desc_compare_2"))),
-
-                     # div(class = "model_desc", p(textOutput("model_desc_compare_2"),
-                     #                             "The text has been regularized",
-                     #                             a("[read more]", href=paste("https://wwp.northeastern.edu/lab/wwvt/methodology/index.html", sep=""), target="_blank")
-                     #                             )
-                     #     ),
-                     width = 12
-                   ),
-                   box(
-                     DT::dataTableOutput("basic_table_c2"),
-                     width = 12
-                  )
-                 )
-               )
-          ),
-      
-      # Create the contents of the "Clusters" tab.
+               htmlTemplate("html/tab_compare.html",
+                            controls = textInput("basic_word_c", "Query term:", width="500px"),
+                            model_1_name = textOutput("model_name_compare_1"),
+                            model_1_desc = uiOutput("model_desc_compare_1"),
+                            model_1_results = DT::dataTableOutput("basic_table_c1"),
+                            model_2_name = textOutput("model_name_compare_2"),
+                            model_2_desc = uiOutput("model_desc_compare_2"),
+                            model_2_results = DT::dataTableOutput("basic_table_c2"))),
+      # Create the "Clusters" tab from a template.
       tabPanel("Clusters", value=3,
-               fluidRow(
-                 box(
-
-                   div(class="home_desc", 
-                       p("Clusters are generated based on neighboring words in vector space—words that are used in similar contexts will be clustered together. Each column represents a different cluster, randomly selected from 150 total clusters; the words in the list are those closest to the center of the cluster."),
-                       p("Use the dropdown on the left to select which model you want to view. Click the “Download” button to download the set of clusters you are viewing. You can also hit the “reset clusters” button to see a new set of clusters and use the slider to see more terms from each cluster. (Note that adjusting the number of terms per cluster will also reset the clusters.)"),
-                       p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
-                         tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
-                         " for information on subscribing and setting up a free trial) to search for your term in the WWO collection.")),
-
-                   tags$h1(textOutput("model_name_cluster")),
-                   div(class = "model_desc", p(uiOutput("model_desc_cluster"))),
-                   br(),
-                   actionButton("clustering_reset_input_fullcluster1", "Reset clusters", class="clustering-reset-full"),
-
-                   # div(class = "model_desc", p(textOutput("model_desc_cluster"),
-                   #                             "The text has been regularized",
-                   #                             a("[read more]", href=paste("https://wwp.northeastern.edu/lab/wwvt/methodology/index.html", sep=""), target="_blank")
-                   #                             )
-                   #     ),
-                   width=12
-                 ),
-                 box(
-                  # solidHeader = TRUE,
-                  DTOutput('clusters_full'), width = 12)
-               )
-      ),
+               htmlTemplate("html/tab_clusters.html",
+                            controls = actionButton("clustering_reset_input_fullcluster1", 
+                                                    "Reset clusters", 
+                                                    class="clustering-reset-full"),
+                            model_name = textOutput("model_name_cluster"),
+                            model_desc = uiOutput("model_desc_cluster"),
+                            results = DTOutput('clusters_full'))),
       
       # Create the contents of the "Operations" tab.
       tabPanel("Operations", value=4,
