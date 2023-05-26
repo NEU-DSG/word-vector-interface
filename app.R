@@ -16,6 +16,9 @@ library(ggrepel)
 library(tidyverse)
 library(wordVectors)
 
+# Maximum number of terms to display per model
+max_terms <- 150
+
 # Load JSON catalog of models and information about them.
 catalog_filename <- "data/catalog.json"
 catalog_json <- fromJSON(file=catalog_filename)
@@ -63,6 +66,9 @@ for (model in catalog_json) {
 }
 print("Done loading models")
 
+
+## WVI 2. USER INTERFACE (UI)
+
 # Create a link to search WWO, optionally with a proxy URL.
 linkToWWO <- function(keyword, session) {
   url <- paste0("https://wwo.wwp.northeastern.edu/WWO/search?keyword=",keyword)
@@ -76,21 +82,21 @@ linkToWWO <- function(keyword, session) {
   paste0("<a target='_blank' href='",url,"'>",keyword,"</a>")
 }
 
-tableSimpleOpts <- list(lengthMenu = c(10, 20, 100, 150), pageLength = 10, searching = TRUE)
+tableSimpleOpts <- list(lengthMenu = c(10, 20, 100, 150), pageLength=10, searching = TRUE)
 tableSidebarOpts <- function(page_len) {
   return(list(dom = 't', pageLength = page_len, searching = FALSE))
 }
 
-getDataForTable <- function(model, vector, session, opts = list()) {
-  return(DT::datatable({
-    data <- model %>% closest_to(vector) %>%
-      mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
-      .[c(3,2)]
-  }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
-  options = opts))
+# Generate a two-column table for a given set of vector data.
+makeTableForModel <- function(modelVector, session, opts=list()) {
+  data <- modelVector %>% 
+    mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
+    .[c(3,2)]
+  table <- DT::datatable(data, escape = FALSE,
+    colnames = c("Word", "Similarity to word(s)"), 
+    options = options)
+  return(table)
 }
-
-## WVI 2. USER INTERFACE (UI)
 
 ##  WVI 2a. "HOME" UI
 
@@ -176,7 +182,7 @@ clusters_content <- tabPanel("Clusters", value=3,
 
 # Create sidebar content for "Operations" tab.
 operations_sidebar <- conditionalPanel(condition="input.tabset1==4",
-  selectInput("modelSelect_analogies_tabs", "Model",
+  selectInput("modelSelect_operations", "Model",
     choices = available_models,
     selected = selected_default),
   selectInput("operator_selector", "Select operator",
@@ -236,6 +242,7 @@ operations_content <- tabPanel("Operations", value=4,
     analogies = controlsAnalogy,
     advanced = controlsAdvanced)
 )
+
 
 ##  WVI 2e. "VISUALIZATION" UI
 
@@ -366,6 +373,7 @@ viz_content <- tabPanel("Visualization", value=5,
   )
 )
 
+
 ##  WVI 2f. FULL APPLICATION UI
 
 # Put together all the pieces of the user interface.
@@ -395,6 +403,7 @@ app_ui = dashboardPage(
   )
 )
 
+
 ##  WVI 3. SERVER LOGIC
 
 # Listen for user interactions and handle them. This function runs once per user
@@ -410,11 +419,6 @@ app_server <- function(input, output, session) {
     renderUI({ tagList(paste(list_desc[[model]], "The text has been regularized."), url) })
   }
   
-  # The currently selected tab from the first box
-  output$tabset1Selected <- renderText({ input$tabset1 })
-  output$plot1 <- renderPlot({ plot(mtcars$wt, mtcars$mpg) })
-  outputOptions(output, "plot1", suspendWhenHidden = TRUE)
-  
   
   ## WVI 3a."HOME" REACTIVE COMPONENTS
   
@@ -424,14 +428,12 @@ app_server <- function(input, output, session) {
     output$model_desc_basic <- renderModelDesc(input$modelSelect[[1]])
   })
   
-  # Generate table for the Home tab
-  output$basic_table <- DT::renderDataTable(DT::datatable({
+  # Generate table for the Home tab.
+  output$basic_table <- DT::renderDataTable({
     data <- list_models[[input$modelSelect[[1]]]] %>% 
-      closest_to(tolower(input$basic_word1), 150) %>% 
-      mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
-      .[c(3,2)]
-  }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
-    options = tableSidebarOpts(input$max_words_home)))
+      closest_to(tolower(input$basic_word1), max_terms)
+    makeTableForModel(data, session, tableSidebarOpts(input$max_words_home))
+  })
   
   
   ## WVI 3b."COMPARE" REACTIVE COMPONENTS
@@ -446,23 +448,18 @@ app_server <- function(input, output, session) {
     output$model_desc_compare_2 <- renderModelDesc(input$modelSelectc2[[1]])
   })
   
-  # Generate 1st table for Compare tab
-  output$basic_table_c1 <- DT::renderDataTable(DT::datatable({
+  # Generate 1st table for Compare tab.
+  output$basic_table_c1 <- DT::renderDataTable({
     data <- list_models[[input$modelSelectc1[[1]]]] %>% 
-      closest_to(tolower(input$basic_word_c), 150) %>% 
-      mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
-      .[c(3,2)]
-  }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
-    options = tableSidebarOpts(input$max_words)))
-  
-  # Generate 2nd table for Compare tab
-  output$basic_table_c2 <- DT::renderDataTable(DT::datatable({
+      closest_to(tolower(input$basic_word_c), max_terms)
+    makeTableForModel(data, session, tableSidebarOpts(input$max_words))
+  })
+  # Generate 2nd table for Compare tab.
+  output$basic_table_c2 <- DT::renderDataTable({
     data <- list_models[[input$modelSelectc2[[1]]]] %>% 
-      closest_to(tolower(input$basic_word_c), 150) %>% 
-      mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
-      .[c(3,2)]
-  }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
-    options = tableSidebarOpts(input$max_words)))
+      closest_to(tolower(input$basic_word_c), max_terms)
+    makeTableForModel(data, session, tableSidebarOpts(input$max_words))
+  })
   
   
   ## WVI 3c."CLUSTERS" REACTIVE COMPONENTS
@@ -473,26 +470,20 @@ app_server <- function(input, output, session) {
     output$model_desc_cluster <- renderModelDesc(input$modelSelect_clusters[[1]])
   })
   
+  # Create a CSV file of clusters when requested.
   output$downloadData <- downloadHandler(
     filename = function() {  paste(input$modelSelect_clusters[[1]], ".csv", sep = "") },
     content = function(file) {
-      data <- sapply(ls_download_cluster,function(n) {
+      data <- sapply(ls_download_cluster, function(n) {
         paste0(names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]))
       }) %>% as_tibble(.name_repair = "minimal")
       write.csv(data, file, row.names = FALSE)
     }
   )
   
-  output$tbl <- DT::renderDataTable(DT::datatable({
-    data <- sapply(sample(1:150,4),function(n) {
-      cword <- names(list_clustering[[input$modelSelect[[1]]]]$cluster[list_clustering[[input$modelSelect[[1]]]]$cluster==n][1:150])
-      linkToWWO(keyword = cword, session = session)
-    }) %>% as_tibble(.name_repair = "minimal")
-  }, escape = FALSE, colnames=c(paste0("cluster_",1:4)), options = list(dom = 't', pageLength = input$max_words_home, searching = FALSE)))
-  
   # Generate and render clusters.
   output$clusters_full <- DT::renderDataTable(DT::datatable({
-    data <- sapply(sample(1:150,10),function(n) {
+    data <- sapply(sample(1:150, 10), function(n) {
       ls_download_cluster <<- c(ls_download_cluster,n)
       cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
       linkToWWO(keyword = cword, session = session)
@@ -503,7 +494,7 @@ app_server <- function(input, output, session) {
   observeEvent(input$clustering_reset_input_fullcluster, {
     ls_download_cluster <<- c()
     output$clusters_full <- DT::renderDataTable(DT::datatable({
-      data <- sapply(sample(1:150,10),function(n) {
+      data <- sapply(sample(1:150, 10), function(n) {
         ls_download_cluster <<- c(ls_download_cluster,n)
         cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
         linkToWWO(keyword = cword, session = session)
@@ -516,7 +507,7 @@ app_server <- function(input, output, session) {
   observeEvent(input$clustering_reset_input_fullcluster1, {
     ls_download_cluster <<- c()
     output$clusters_full <- DT::renderDataTable(DT::datatable({
-      data <- sapply(sample(1:150,10),function(n) {
+      data <- sapply(sample(1:150,10), function(n) {
         ls_download_cluster <<- c(ls_download_cluster,n)
         cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
         linkToWWO(keyword = cword, session = session)
@@ -524,153 +515,141 @@ app_server <- function(input, output, session) {
     }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
   })
   
+  
   ## WVI 3d."OPERATIONS" REACTIVE COMPONENTS
   
   # Keep the model name and description in sync with the user's choice.
-  observeEvent(input$modelSelect_analogies_tabs, {
-    output$model_name_operation <- renderText(input$modelSelect_analogies_tabs[[1]])
-    output$model_desc_operation <- renderModelDesc(input$modelSelect_analogies_tabs[[1]])
+  observeEvent(input$modelSelect_operations, {
+    output$model_name_operation <- renderText(input$modelSelect_operations[[1]])
+    output$model_desc_operation <- renderModelDesc(input$modelSelect_operations[[1]])
   })
   
-  # Generate table for Addition operation
+  # Generate table for Addition operation.
   output$addition_table <- DT::renderDataTable({
     validate(need(input$addition_word1 != "" && input$addition_word2 != "", 
       "Enter query term into word 1 and word 2."))
-    use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
-    getDataForTable(use_model, 
-      as.VectorSpaceModel(use_model[[tolower(input$addition_word1)]] +
-          use_model[[tolower(input$addition_word2)]]), 
-      session,
-      tableSimpleOpts)
+    use_model <- list_models[[input$modelSelect_operations[[1]]]]
+    op_vector <- as.VectorSpaceModel(
+      use_model[[tolower(input$addition_word1)]] +
+      use_model[[tolower(input$addition_word2)]]
+    )
+    data <- use_model %>% closest_to(op_vector)
+    makeTableForModel(data, session, tableSimpleOpts)
   })
   
-  # Generate table for Subtraction operation
+  # Generate table for Subtraction operation.
   output$subtraction_table <- DT::renderDataTable({
     validate(need(input$subtraction_word1 != "" && input$subtraction_word2 != "", 
       "Enter query term into word 1 and word 2."))
-    use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
-    getDataForTable(use_model,
+    use_model <- list_models[[input$modelSelect_operations[[1]]]]
+    op_vector <- as.VectorSpaceModel(
       use_model[[tolower(input$subtraction_word1)]] -
-        use_model[[tolower(input$subtraction_word2)]], 
-      session,
-      tableSimpleOpts)
+      use_model[[tolower(input$subtraction_word2)]]
+    )
+    data <- use_model %>% closest_to(op_vector)
+    makeTableForModel(data, session, tableSimpleOpts)
   })
   
-  # Generate table for Analogies operation
+  # Generate table for Analogies operation.
   output$analogies_table <- DT::renderDataTable({
-    validate(need(input$analogies_word1 != "" && input$analogies_word2 != "" && input$analogies_word3 != "", "Enter query term into Word 1, Word 2, and Word 3."))
-    use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
-    getDataForTable(use_model, as.VectorSpaceModel(
-      use_model[[tolower(input$analogies_word1)]] -
+    validate(need(input$analogies_word1 != "" && 
+                  input$analogies_word2 != "" && 
+                  input$analogies_word3 != "", 
+      "Enter query term into Word 1, Word 2, and Word 3."))
+    use_model <- list_models[[input$modelSelect_operations[[1]]]]
+    op_vector <- as.VectorSpaceModel(
+        use_model[[tolower(input$analogies_word1)]] -
         use_model[[tolower(input$analogies_word2)]] + 
-        use_model[[tolower(input$analogies_word3)]]),
-      session,
-      tableSimpleOpts)
+        use_model[[tolower(input$analogies_word3)]]
+      )
+    data <- use_model %>% closest_to(op_vector)
+    makeTableForModel(data, session, tableSimpleOpts)
   })
   
-  # Generate table for Advanced math operation
-  output$advanced_table <- DT::renderDataTable(DT::datatable({
+  # Generate table for Advanced math operation.
+  output$advanced_table <- DT::renderDataTable({
     validate(need(input$advanced_word1 != "", "Enter query term into Word 1."))
-    use_model <- list_models[[input$modelSelect_analogies_tabs[[1]]]]
+    use_model <- list_models[[input$modelSelect_operations[[1]]]]
     vector1 <- use_model[[tolower(input$advanced_word1)]]
     # If there's only 1 word, no math needs to be done.
     if (input$advanced_word2 == "" && input$advanced_word3 == "") {
-      data <- use_model %>% closest_to(vector1) %>%
-        mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+      data <- use_model %>% closest_to(vector1, max_terms)
       # If the 1st and 2nd words were provided...
     } else if (input$advanced_word2 != "" && input$advanced_word3 == "") {
       vector2 <- use_model[[tolower(input$advanced_word2)]]
       if (input$advanced_math == "+") {
         # We have to coerce the result of vector addition into VectorSpaceModel format
-        data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 + vector2), 150)
+        op_vector <- as.VectorSpaceModel(vector1 + vector2)
       } else if (input$advanced_math == "-") {
-        data <- use_model %>% closest_to(vector1 - vector2, 150)
+        op_vector <- vector1 - vector2
       } else if (input$advanced_math == "*") {
         # We have to coerce the result of vector multiplication into VectorSpaceModel format
-        data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 * vector2), 150)
+        op_vector <- as.VectorSpaceModel(vector1 * vector2)
       } else if (input$advanced_math == "/") {
         # We have to coerce the result of vector division into VectorSpaceModel format
-        data <- use_model %>% closest_to(as.VectorSpaceModel(vector1 / vector2), 150)
+        op_vector <- as.VectorSpaceModel(vector1 / vector2)
       }
-      data <- data %>%
-        mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+      data <- use_model %>% closest_to(op_vector, max_terms)
       # If all 3 words have been provided...
     } else if (input$advanced_word2 != "" && input$advanced_word3 != "") {
       vector2 <- use_model[[tolower(input$advanced_word2)]]
       vector3 <- use_model[[tolower(input$advanced_word3)]]
       # When the first operator is +
       if (input$advanced_math == "+" && input$advanced_math2 == "+") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 + vector2 + vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 + vector2 + vector3)
       }
       if (input$advanced_math == "+" && input$advanced_math2 == "-") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 + vector2 - vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 + vector2 - vector3)
       }
       if (input$advanced_math == "+" && input$advanced_math2 == "*") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 + vector2 * vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 + vector2 * vector3)
       }
       if (input$advanced_math == "+" && input$advanced_math2 == "/") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 + vector2 / vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 + vector2 / vector3)
       }
       # When the first operator is -
       if (input$advanced_math == "-" && input$advanced_math2 == "+") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 - vector2 + vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 - vector2 + vector3)
       }
       if (input$advanced_math == "-" && input$advanced_math2 == "-") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 - vector2 - vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 - vector2 - vector3)
       }
       if (input$advanced_math == "-" && input$advanced_math2 == "*") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 - vector2 * vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 - vector2 * vector3)
       }
       if (input$advanced_math == "-" && input$advanced_math2 == "/") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 - vector2 / vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 - vector2 / vector3)
       }
       # When the first operator is *
       if (input$advanced_math == "*" && input$advanced_math2 == "+") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 * vector2 + vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 * vector2 + vector3)
       }
       if (input$advanced_math == "*" && input$advanced_math2 == "-") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 * vector2 - vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 * vector2 - vector3)
       }
       if (input$advanced_math == "*" && input$advanced_math2 == "*") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 * vector2 * vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 * vector2 * vector3)
       }
       if (input$advanced_math == "*" && input$advanced_math2 == "/") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 * vector2 / vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 * vector2 / vector3)
       }
       # When the first operator is /
       if (input$advanced_math == "/" && input$advanced_math2 == "+") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 / vector2 + vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 / vector2 + vector3)
       }
       if (input$advanced_math == "/" && input$advanced_math2 == "-") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 / vector2 - vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 / vector2 - vector3)
       }
       if (input$advanced_math == "/" && input$advanced_math2 == "*") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 / vector2 * vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 / vector2 * vector3)
       }
       if (input$advanced_math == "/" && input$advanced_math2 == "/") {
-        data <- use_model %>% 
-          closest_to(as.VectorSpaceModel(vector1 / vector2 / vector3), 150)
+        op_vector <- as.VectorSpaceModel(vector1 / vector2 / vector3)
       }
-      data <- data %>%
-        mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% .[c(3,2)]
+      data <- use_model %>% closest_to(op_vector, max_terms)
     }
-    data
-  }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), options = tableSimpleOpts))
+    makeTableForModel(data, session, tableSimpleOpts)
+  })
   
   
   ## WVI 3e."VISUALIZATION" REACTIVE COMPONENTS
@@ -682,10 +661,9 @@ app_server <- function(input, output, session) {
   })
   
   output$word_cloud <- renderPlot({
-    validate(
-      need(tolower(input$word_cloud_word) != "", 
-           "To generate a word cloud, enter a query term in the text field above."))
-    data <- list_models[[input$modelSelect_Visualisation_tabs[[1]]]] %>% closest_to(tolower(input$word_cloud_word), 150)
+    validate(need(tolower(input$word_cloud_word) != "", 
+      "To generate a word cloud, enter a query term in the text field above."))
+    data <- list_models[[input$modelSelect_Visualisation_tabs[[1]]]] %>% closest_to(tolower(input$word_cloud_word), max_terms)
     colnames(data) <- c("words", "sims")
     data <- mutate(data, sims = as.integer(sims * 100))
     set.seed(1234)
@@ -698,7 +676,7 @@ app_server <- function(input, output, session) {
   
   dataset <- reactive({
     times <- input$clustering_reset_input_visualisation
-    df2 <- sapply(sample(1:150,10),function(n) {
+    df2 <- sapply(sample(1:150,10), function(n) {
       paste0(names(list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster[list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster==n][1:150]))
     }) %>% as_tibble(.name_repair = "minimal")
     df2
@@ -741,7 +719,7 @@ app_server <- function(input, output, session) {
     y <- c()
     names <- c()
     cluster <-c()
-    closeword <- list_models[['WWO Full Corpus']] %>% closest_to(tolower(input$scatter_plot_term), 150)
+    closeword <- list_models[['WWO Full Corpus']] %>% closest_to(tolower(input$scatter_plot_term), max_terms)
     i = 0
     for(word in closeword[[1]])
     {
