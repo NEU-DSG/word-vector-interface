@@ -470,50 +470,53 @@ app_server <- function(input, output, session) {
     output$model_desc_cluster <- renderModelDesc(input$modelSelect_clusters[[1]])
   })
   
+  # Create a table of 10 clusters.
+  generateClusters <- function(model) {
+    data <- sapply(sample(1:150, 10), function(n) {
+      ls_download_cluster <<- c(ls_download_cluster, n)
+      cword <- names(model$cluster[model$cluster==n][1:max_terms])
+      linkToWWO(keyword = cword, session = session)
+    })
+    data <- data %>% as_tibble(.name_repair = "minimal")
+    return(DT::datatable(data, escape = FALSE, 
+                         colnames=c(paste0("cluster_",1:10)), 
+                         options = list(dom='ft', 
+                                        lengthMenu = c(10, 20, 100, 150), 
+                                        pageLength = input$max_words_cluster, 
+                                        searching = TRUE))
+    )
+  }
+  
+  # Generate and render clusters.
+  output$clusters_full <- DT::renderDataTable({
+    generateClusters(list_clustering[[input$modelSelect_clusters[[1]]]])
+  })
+  # Handle resetting clusters from tab content.
+  observeEvent(input$clustering_reset_input_fullcluster, {
+    ls_download_cluster <<- c()
+    output$clusters_full <- DT::renderDataTable({
+      generateClusters(list_clustering[[input$modelSelect_clusters[[1]]]])
+    })
+  })
+  # Handle resetting clusters from sidebar.
+  observeEvent(input$clustering_reset_input_fullcluster1, {
+    ls_download_cluster <<- c()
+    output$clusters_full <- DT::renderDataTable({
+      generateClusters(list_clustering[[input$modelSelect_clusters[[1]]]])
+    })
+  })
+  
   # Create a CSV file of clusters when requested.
   output$downloadData <- downloadHandler(
-    filename = function() {  paste(input$modelSelect_clusters[[1]], ".csv", sep = "") },
+    filename = function() { paste(input$modelSelect_clusters[[1]], ".csv", sep="") },
     content = function(file) {
       data <- sapply(ls_download_cluster, function(n) {
-        paste0(names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150]))
+        use_model <- list_clustering[[input$modelSelect_clusters[[1]]]]
+        paste0(names(use_model$cluster[use_model$cluster==n][1:max_terms]))
       }) %>% as_tibble(.name_repair = "minimal")
       write.csv(data, file, row.names = FALSE)
     }
   )
-  
-  # Generate and render clusters.
-  output$clusters_full <- DT::renderDataTable(DT::datatable({
-    data <- sapply(sample(1:150, 10), function(n) {
-      ls_download_cluster <<- c(ls_download_cluster,n)
-      cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
-      linkToWWO(keyword = cword, session = session)
-    }) %>% as_tibble(.name_repair = "minimal")
-  }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
-  
-  # Handle resetting clusters from tab content.
-  observeEvent(input$clustering_reset_input_fullcluster, {
-    ls_download_cluster <<- c()
-    output$clusters_full <- DT::renderDataTable(DT::datatable({
-      data <- sapply(sample(1:150, 10), function(n) {
-        ls_download_cluster <<- c(ls_download_cluster,n)
-        cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
-        linkToWWO(keyword = cword, session = session)
-      }) %>% as_tibble(.name_repair = "minimal")
-    }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
-  })
-  
-  # Handle resetting clusters from sidebar.
-  # TODO: reduce duplication
-  observeEvent(input$clustering_reset_input_fullcluster1, {
-    ls_download_cluster <<- c()
-    output$clusters_full <- DT::renderDataTable(DT::datatable({
-      data <- sapply(sample(1:150,10), function(n) {
-        ls_download_cluster <<- c(ls_download_cluster,n)
-        cword <- names(list_clustering[[input$modelSelect_clusters[[1]]]]$cluster[list_clustering[[input$modelSelect_clusters[[1]]]]$cluster==n][1:150])
-        linkToWWO(keyword = cword, session = session)
-      }) %>% as_tibble(.name_repair = "minimal")
-    }, escape = FALSE, colnames=c(paste0("cluster_",1:10)), options = list(dom = 'ft', lengthMenu = c(10, 20, 100, 150), pageLength = input$max_words_cluster, searching = TRUE)))
-  })
   
   
   ## WVI 3d."OPERATIONS" REACTIVE COMPONENTS
@@ -594,7 +597,7 @@ app_server <- function(input, output, session) {
     } else if (input$advanced_word2 != "" && input$advanced_word3 != "") {
       vector2 <- use_model[[tolower(input$advanced_word2)]]
       vector3 <- use_model[[tolower(input$advanced_word3)]]
-      # When the first operator is +
+      # When the first operator is + :
       if (input$advanced_math == "+" && input$advanced_math2 == "+") {
         op_vector <- as.VectorSpaceModel(vector1 + vector2 + vector3)
       }
@@ -607,7 +610,7 @@ app_server <- function(input, output, session) {
       if (input$advanced_math == "+" && input$advanced_math2 == "/") {
         op_vector <- as.VectorSpaceModel(vector1 + vector2 / vector3)
       }
-      # When the first operator is -
+      # When the first operator is - :
       if (input$advanced_math == "-" && input$advanced_math2 == "+") {
         op_vector <- as.VectorSpaceModel(vector1 - vector2 + vector3)
       }
@@ -620,7 +623,7 @@ app_server <- function(input, output, session) {
       if (input$advanced_math == "-" && input$advanced_math2 == "/") {
         op_vector <- as.VectorSpaceModel(vector1 - vector2 / vector3)
       }
-      # When the first operator is *
+      # When the first operator is * :
       if (input$advanced_math == "*" && input$advanced_math2 == "+") {
         op_vector <- as.VectorSpaceModel(vector1 * vector2 + vector3)
       }
@@ -633,7 +636,7 @@ app_server <- function(input, output, session) {
       if (input$advanced_math == "*" && input$advanced_math2 == "/") {
         op_vector <- as.VectorSpaceModel(vector1 * vector2 / vector3)
       }
-      # When the first operator is /
+      # When the first operator is / :
       if (input$advanced_math == "/" && input$advanced_math2 == "+") {
         op_vector <- as.VectorSpaceModel(vector1 / vector2 + vector3)
       }
@@ -660,28 +663,34 @@ app_server <- function(input, output, session) {
     output$model_desc_visualisation <- renderModelDesc(input$modelSelect_Visualisation_tabs[[1]])
   })
   
+  # Generate word cloud.
   output$word_cloud <- renderPlot({
     validate(need(tolower(input$word_cloud_word) != "", 
       "To generate a word cloud, enter a query term in the text field above."))
-    data <- list_models[[input$modelSelect_Visualisation_tabs[[1]]]] %>% closest_to(tolower(input$word_cloud_word), max_terms)
+    data <- list_models[[input$modelSelect_Visualisation_tabs[[1]]]] %>% 
+      closest_to(tolower(input$word_cloud_word), max_terms)
     colnames(data) <- c("words", "sims")
     data <- mutate(data, sims = as.integer(sims * 100))
     set.seed(1234)
     wordcloud(words = data$words, freq = data$sims,
               min.freq = input$freq, max.words=input$max,
-              random.order=FALSE, random.color = FALSE, rot.per = 0.30, ordered.colors = FALSE,
-              colors = brewer.pal(8, "Dark2"), scale= c(input$scale,0.5),
+              random.order=FALSE, rot.per = 0.30, 
+              random.color = FALSE, ordered.colors = FALSE,
+              colors = brewer.pal(8, "Dark2"), 
+              scale = c(input$scale, 0.5),
               use.r.layout = TRUE)
   })
   
+  # Generate query term scatterplot.
   dataset <- reactive({
     times <- input$clustering_reset_input_visualisation
     df2 <- sapply(sample(1:150,10), function(n) {
-      paste0(names(list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster[list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]$cluster==n][1:150]))
-    }) %>% as_tibble(.name_repair = "minimal")
+      use_model <- list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]
+      paste0(names(use_model$cluster[use_model$cluster == n][1:150]))
+      }) %>% 
+      as_tibble(.name_repair = "minimal")
     df2
   })
-  
   datascatter <- reactive({
     df2 <- dataset()
     # print(df2)
@@ -698,31 +707,34 @@ app_server <- function(input, output, session) {
         cluster <- append(cluster,column)
       }
     }
-    df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster), stringsAsFactors = FALSE)
+    df_new <- data.frame(x = x, y = y, names = names, 
+                         cluster = as.factor(cluster), 
+                         stringsAsFactors = FALSE)
     df_new
   })
-  
   output$scatter_plot <- renderPlot({
     ggplot(datascatter(), aes(x=x, y=y, colour=cluster), height="600px", width="100%") +
-      geom_point() +
-      geom_text_repel(
-        aes(label = ifelse(cluster == input$scatter_cluster, as.character(names),'')), 
-        hjust=0.5, vjust=-0.5, max.overlaps = 12
-      )
+    geom_point() +
+    geom_text_repel(
+      aes(label = ifelse(cluster == input$scatter_cluster, as.character(names),'')), 
+      hjust=0.5, vjust=-0.5, max.overlaps = 12
+    )
   })
   outputOptions(output, "scatter_plot", suspendWhenHidden = TRUE)
   
+  # Generate cluster scatterplot.
   dataset_closet <- reactive({
-    data <- as.matrix(list_models[['WWO Full Corpus']])
+    use_model <- list_models[[input$modelSelect_Visualisation_tabs[[1]]]]
+    data <- as.matrix(use_model)
     vectors <-stats::predict(stats::prcomp(data))[,1:2]
     x <- c()
     y <- c()
     names <- c()
     cluster <-c()
-    closeword <- list_models[['WWO Full Corpus']] %>% closest_to(tolower(input$scatter_plot_term), max_terms)
+    closeword <- use_model %>% 
+      closest_to(tolower(input$scatter_plot_term), max_terms)
     i = 0
-    for(word in closeword[[1]])
-    {
+    for (word in closeword[[1]]) {
       x <- append(x, vectors[word, 'PC1'])
       y <- append(y, vectors[word, 'PC2'])
       if (i <= 10 ) cluster <- append(cluster, "top 10")
@@ -733,16 +745,20 @@ app_server <- function(input, output, session) {
       if (i > 80 & i <= 100 ) cluster <- append(cluster, "top 100")
       if (i > 100  ) cluster <- append(cluster, "top 150")
       i <- i + 1
-      names <- append(names,word)
+      names <- append(names, word)
     }
-    df_new <- data.frame(x = x, y = y, names = names, cluster = as.factor(cluster), stringsAsFactors = FALSE)
-    df_new
+    df_new <- data.frame(x = x, y = y, names = names, 
+                         cluster = as.factor(cluster), 
+                         stringsAsFactors = FALSE)
+    return(df_new)
   })
-  
   output$scatter_plot_closest <- renderPlot({
     ggplot(dataset_closet(), aes(x=x, y=y, colour=cluster)) +
       geom_point() +
-      geom_text_repel(aes(label=ifelse(cluster == tolower(input$scatter_plot_closest_choice) ,as.character(names),'')), hjust=0.5,vjust=-0.5)
+      geom_text_repel(
+        aes(label = ifelse(cluster == tolower(input$scatter_plot_closest_choice), 
+            as.character(names), '')), 
+        hjust=0.5, vjust=-0.5)
   })
   outputOptions(output, "scatter_plot_closest", suspendWhenHidden = TRUE)
 }
