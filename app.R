@@ -10,7 +10,7 @@ library(shinyjs)
 library(shinydashboard)
 library(magrittr)
 library(DT)
-library("rjson")
+library(rjson)
 library(wordcloud)
 library(ggrepel)
 library(tidyverse)
@@ -35,6 +35,8 @@ selected_default <- 1
 selected_compare_1 <- 1
 selected_compare_2 <- 1
 
+#reactive_value_obj <- reactiveValues()
+my_clusters <- c()
 ls_download_cluster <- c()
 
 # Iterate over models in the catalog, adding them to the lists of models that 
@@ -94,9 +96,10 @@ makeTableForModel <- function(modelVector, session, opts=list()) {
     .[c(3,2)]
   table <- DT::datatable(data, escape = FALSE,
     colnames = c("Word", "Similarity to word(s)"), 
-    options = options)
+    options = opts)
   return(table)
 }
+
 
 ##  WVI 2a. "HOME" UI
 
@@ -148,6 +151,27 @@ compare_content <- tabPanel("Compare", value=2,
 
 ##  WVI 2c.  "CLUSTERS" UI
 
+# Given some data, create a table of 10 clusters.
+renderClusterTable <- function(data, rows) {
+  DT::datatable(data, escape = FALSE, 
+    colnames = c(paste0("cluster_",1:10)), 
+    options = list(dom='ft', 
+      lengthMenu = c(10, 20, 100, 150), 
+      pageLength = rows, 
+      searching = TRUE))
+}
+
+# Create a new table of 10 clusters.
+generateClusters <- function(model, rows, session) {
+  data <- sapply(sample(1:150, 10), function(n) {
+    ls_download_cluster <<- c(ls_download_cluster, n)
+    cword <- names(model$cluster[model$cluster==n][1:max_terms])
+    linkToWWO(keyword = cword, session = session)
+  })
+  my_clusters <- data %>% as_tibble(.name_repair = "minimal")
+  renderClusterTable(my_clusters, rows)
+}
+
 # Create sidebar content for "Clusters" tab.
 clusters_sidebar <- conditionalPanel(condition="input.tabset1==3",
   selectInput("modelSelect_clusters", "Model",
@@ -177,6 +201,7 @@ clusters_content <- tabPanel("Clusters", value=3,
     model_desc = uiOutput("model_desc_cluster"),
     results = DTOutput('clusters_full'))
 )
+
 
 ##  WVI 2d. "OPERATIONS" UI
 
@@ -470,41 +495,37 @@ app_server <- function(input, output, session) {
     output$model_desc_cluster <- renderModelDesc(input$modelSelect_clusters[[1]])
   })
   
-  # Create a table of 10 clusters.
-  generateClusters <- function(model) {
-    data <- sapply(sample(1:150, 10), function(n) {
-      ls_download_cluster <<- c(ls_download_cluster, n)
-      cword <- names(model$cluster[model$cluster==n][1:max_terms])
-      linkToWWO(keyword = cword, session = session)
-    })
-    data <- data %>% as_tibble(.name_repair = "minimal")
-    return(DT::datatable(data, escape = FALSE, 
-                         colnames=c(paste0("cluster_",1:10)), 
-                         options = list(dom='ft', 
-                                        lengthMenu = c(10, 20, 100, 150), 
-                                        pageLength = input$max_words_cluster, 
-                                        searching = TRUE))
-    )
-  }
-  
   # Generate and render clusters.
   output$clusters_full <- DT::renderDataTable({
-    generateClusters(list_clustering[[input$modelSelect_clusters[[1]]]])
+    generateClusters(list_clustering[[input$modelSelect_clusters[[1]]]], 
+      input$max_words_cluster, session)
   })
   # Handle resetting clusters from tab content.
   observeEvent(input$clustering_reset_input_fullcluster, {
+    my_clusters <- c()
     ls_download_cluster <<- c()
     output$clusters_full <- DT::renderDataTable({
-      generateClusters(list_clustering[[input$modelSelect_clusters[[1]]]])
+      generateClusters(list_clustering[[input$modelSelect_clusters[[1]]]],
+        input$max_words_cluster, session)
     })
   })
   # Handle resetting clusters from sidebar.
   observeEvent(input$clustering_reset_input_fullcluster1, {
+    my_clusters <- c()
     ls_download_cluster <<- c()
     output$clusters_full <- DT::renderDataTable({
-      generateClusters(list_clustering[[input$modelSelect_clusters[[1]]]])
+      generateClusters(list_clustering[[input$modelSelect_clusters[[1]]]],
+        input$max_words_cluster, session)
     })
   })
+  
+  # When the user updates the number of words to show, render the table again
+  # but *without* regenerating the clusters.
+  #observeEvent(input$max_words_cluster, {
+  #  output$clusters_full <- DT::renderDataTable({
+  #    renderClusterTable(my_clusters, input$max_words_cluster)
+  #  }, server = FALSE)
+  #})
   
   # Create a CSV file of clusters when requested.
   output$downloadData <- downloadHandler(
@@ -713,10 +734,11 @@ app_server <- function(input, output, session) {
     df_new
   })
   output$scatter_plot <- renderPlot({
-    ggplot(datascatter(), aes(x=x, y=y, colour=cluster), height="600px", width="100%") +
+    ggplot(datascatter(), aes(x=x, y=y, colour=cluster), 
+      height="600px", width="100%") +
     geom_point() +
     geom_text_repel(
-      aes(label = ifelse(cluster == input$scatter_cluster, as.character(names),'')), 
+      aes(label = ifelse(cluster == input$scatter_cluster, as.character(names), '')), 
       hjust=0.5, vjust=-0.5, max.overlaps = 12
     )
   })
