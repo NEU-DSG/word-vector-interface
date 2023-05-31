@@ -35,10 +35,6 @@ selected_default <- 1
 selected_compare_1 <- 1
 selected_compare_2 <- 1
 
-#reactive_value_obj <- reactiveValues()
-my_clusters <- c()
-ls_download_cluster <- c()
-
 # Iterate over models in the catalog, adding them to the lists of models that 
 # can be used for various features.
 # TODO: First, narrow down to the public models, so they can be counted
@@ -67,6 +63,21 @@ for (model in catalog_json) {
   }
 }
 print("Done loading models")
+
+reactive_value_obj <- reactiveValues()
+generateClustersData <- function(model) {
+  data <- sapply(sample(1:150, 10), function(n) {
+    #ls_download_cluster <<- c(ls_download_cluster, n)
+    cword <- names(model$cluster[model$cluster==n][1:max_terms])
+    #linkToWWO(keyword = cword, session = session)
+  })
+  reactive_value_obj[['clusters']] <- data %>% 
+    as_tibble(.name_repair = "minimal")
+  #browser()
+}
+generateClustersData(list_clustering[[selected_default]])
+my_clusters <- c()
+ls_download_cluster <- c()
 
 
 ## WVI 2. USER INTERFACE (UI)
@@ -497,44 +508,26 @@ app_server <- function(input, output, session) {
   
   # Generate and render clusters.
   output$clusters_full <- DT::renderDataTable({
-    generateClusters(list_clustering[[input$modelSelect_clusters[[1]]]], 
-      input$max_words_cluster, session)
+    renderClusterTable(reactive_value_obj[['clusters']], input$max_words_cluster)
   })
   # Handle resetting clusters from tab content.
   observeEvent(input$clustering_reset_input_fullcluster, {
-    my_clusters <- c()
-    ls_download_cluster <<- c()
-    output$clusters_full <- DT::renderDataTable({
-      generateClusters(list_clustering[[input$modelSelect_clusters[[1]]]],
-        input$max_words_cluster, session)
-    })
+    generateClustersData(list_clustering[[input$modelSelect_clusters[[1]]]])
+    renderClusterTable(reactive_value_obj[['clusters']], input$max_words_cluster)
   })
   # Handle resetting clusters from sidebar.
   observeEvent(input$clustering_reset_input_fullcluster1, {
-    my_clusters <- c()
-    ls_download_cluster <<- c()
-    output$clusters_full <- DT::renderDataTable({
-      generateClusters(list_clustering[[input$modelSelect_clusters[[1]]]],
-        input$max_words_cluster, session)
-    })
+    generateClustersData(list_clustering[[input$modelSelect_clusters[[1]]]])
+    renderClusterTable(reactive_value_obj[['clusters']], input$max_words_cluster)
   })
-  
-  # When the user updates the number of words to show, render the table again
-  # but *without* regenerating the clusters.
-  #observeEvent(input$max_words_cluster, {
-  #  output$clusters_full <- DT::renderDataTable({
-  #    renderClusterTable(my_clusters, input$max_words_cluster)
-  #  }, server = FALSE)
-  #})
   
   # Create a CSV file of clusters when requested.
   output$downloadData <- downloadHandler(
-    filename = function() { paste(input$modelSelect_clusters[[1]], ".csv", sep="") },
+    filename = function() { 
+      paste(input$modelSelect_clusters[[1]], ".csv", sep="") 
+    },
     content = function(file) {
-      data <- sapply(ls_download_cluster, function(n) {
-        use_model <- list_clustering[[input$modelSelect_clusters[[1]]]]
-        paste0(names(use_model$cluster[use_model$cluster==n][1:max_terms]))
-      }) %>% as_tibble(.name_repair = "minimal")
+      data <- reactive_value_obj[['clusters']]
       write.csv(data, file, row.names = FALSE)
     }
   )
