@@ -170,9 +170,17 @@ compare_content <- tabPanel("Compare", value=2,
 ##  WVI 2c.  "CLUSTERS" UI
 
 # Given some data, create a table of 10 clusters.
-renderClusterTable <- function(data, rows) {
+renderClusterTable <- function(data, rows, session) {
+  # Add WWO links around words in each cluster.
+  data <- sapply(1:10, function(cluster_num) {
+      cluster <- data[[cluster_num]] %>%
+        sapply(function(word) {
+          linkToWWO(keyword = word, session = session)
+        })
+      cluster
+    }) %>% as.data.frame(row.names = c(paste0(1:max_terms)))
   DT::datatable(data, escape = FALSE, 
-    colnames = c(paste0("cluster_",1:10)), 
+    colnames = c(paste0("cluster_",1:10)),
     options = list(dom='ft', 
       lengthMenu = c(10, 20, 100, 150), 
       pageLength = rows, 
@@ -510,17 +518,20 @@ app_server <- function(input, output, session) {
   
   # Generate and render clusters.
   output$clusters_full <- DT::renderDataTable({
-    renderClusterTable(reactive_value_obj[['clusters']], input$max_words_cluster)
+    renderClusterTable(reactive_value_obj[['clusters']], input$max_words_cluster,
+      session)
   })
   # Handle resetting clusters from tab content.
   observeEvent(input$clustering_reset_input_fullcluster, {
     generateClustersData(list_clustering[[input$modelSelect_clusters[[1]]]])
-    renderClusterTable(reactive_value_obj[['clusters']], input$max_words_cluster)
+    renderClusterTable(reactive_value_obj[['clusters']], input$max_words_cluster,
+      session)
   })
   # Handle resetting clusters from sidebar.
   observeEvent(input$clustering_reset_input_fullcluster1, {
     generateClustersData(list_clustering[[input$modelSelect_clusters[[1]]]])
-    renderClusterTable(reactive_value_obj[['clusters']], input$max_words_cluster)
+    renderClusterTable(reactive_value_obj[['clusters']], input$max_words_cluster,
+      session)
   })
   
   # Create a CSV file of clusters when requested.
