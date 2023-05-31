@@ -2,7 +2,9 @@
 ##    Word Vector Interface (WVI)
 ##
 
+##
 ## WVI 1. SETUP
+##
 
 # Load libraries.
 library(shiny)
@@ -21,7 +23,7 @@ max_terms <- 150
 
 # Load JSON catalog of models and information about them.
 catalog_filename <- "data/catalog.json"
-catalog_json <- fromJSON(file=catalog_filename)
+catalog_json <- fromJSON(file = catalog_filename)
 
 # Load models.
 available_models <- c()
@@ -62,25 +64,29 @@ for (model in catalog_json) {
     vectors[[name]] <- stats::predict(stats::prcomp(data))[,1:2]
   }
 }
-print("Done loading models")
+print("Done loading models.")
 
+# Set up a reactive values object to persist clusters data.
 reactive_value_obj <- reactiveValues()
 generateClustersData <- function(model) {
   data <- sapply(sample(1:150, 10), function(n) {
-    #ls_download_cluster <<- c(ls_download_cluster, n)
     cword <- names(model$cluster[model$cluster==n][1:max_terms])
-    #linkToWWO(keyword = cword, session = session)
   })
   reactive_value_obj[['clusters']] <- data %>% 
     as_tibble(.name_repair = "minimal")
   #browser()
 }
+# Pre-generate clusters using the default model.
 generateClustersData(list_clustering[[selected_default]])
-my_clusters <- c()
-ls_download_cluster <- c()
 
 
+##
 ## WVI 2. USER INTERFACE (UI)
+##
+## Code that generates HTML goes here. For code that reacts to server
+## events, see section 3. Most UI components here have complementary
+## subsections in section 3.
+##
 
 # Create a link to search WWO, optionally with a proxy URL.
 linkToWWO <- function(keyword, session) {
@@ -133,6 +139,7 @@ home_content <- tabPanel("Home", value=1,
     results = DT::dataTableOutput("basic_table"))
 )
 
+
 ##  WVI 2b. "COMPARE" UI
 
 # Create sidebar content for "Compare" tab.
@@ -170,17 +177,6 @@ renderClusterTable <- function(data, rows) {
       lengthMenu = c(10, 20, 100, 150), 
       pageLength = rows, 
       searching = TRUE))
-}
-
-# Create a new table of 10 clusters.
-generateClusters <- function(model, rows, session) {
-  data <- sapply(sample(1:150, 10), function(n) {
-    ls_download_cluster <<- c(ls_download_cluster, n)
-    cword <- names(model$cluster[model$cluster==n][1:max_terms])
-    linkToWWO(keyword = cword, session = session)
-  })
-  my_clusters <- data %>% as_tibble(.name_repair = "minimal")
-  renderClusterTable(my_clusters, rows)
 }
 
 # Create sidebar content for "Clusters" tab.
@@ -440,7 +436,13 @@ app_ui = dashboardPage(
 )
 
 
+##
 ##  WVI 3. SERVER LOGIC
+##
+## Code that reacts to user interaction goes here. For code that sets up
+## HTML for the app, see section 2. Most server components here have 
+## complementary subsections in section 2.
+##
 
 # Listen for user interactions and handle them. This function runs once per user
 # session.
@@ -527,8 +529,7 @@ app_server <- function(input, output, session) {
       paste(input$modelSelect_clusters[[1]], ".csv", sep="") 
     },
     content = function(file) {
-      data <- reactive_value_obj[['clusters']]
-      write.csv(data, file, row.names = FALSE)
+      write.csv(reactive_value_obj[['clusters']], file, row.names = FALSE)
     }
   )
   
@@ -778,8 +779,9 @@ app_server <- function(input, output, session) {
   outputOptions(output, "scatter_plot_closest", suspendWhenHidden = TRUE)
 }
 
-
+##
 ##  WVI 4. GENERATE THE SHINY APP
+##
 
 # Spin up the Word Vector Interface application.
 shinyApp(
