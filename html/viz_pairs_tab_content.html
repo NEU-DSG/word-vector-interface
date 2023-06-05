@@ -1,0 +1,31 @@
+<div>
+  <!-- Layout for the "Pairs Plot" portion of the visualization tab. -->
+  <div class="col-sm-12">
+    <div class="box">
+      <div class="box-body">
+        <div class="col-sm-6">
+          {{ word1 }}
+        </div>
+        <div class="col-sm-6">
+          {{ word2 }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <p>This tab allows you to plot the words closest to a pair of query terms, 
+      according to cosine similarity. To see how it works, input two terms in the 
+      two boxes. You can use the slider to control the maximum number of words to 
+      plot.</p>
+    <p>For example, try plotting "happy" and "sad." You'll see that some terms are 
+      close to "happy" but far from "sad"; some terms are close to "sad" but far 
+      from "happy"; and some terms are close to both "happy" and "sad".</p>
+  </div>
+  <div class="col-sm-12">
+    <div class="box box-solid">
+      <div class="box-body">
+        {{ pairs_plot }}
+      </div>
+    </div>
+  </div>
+</div>
