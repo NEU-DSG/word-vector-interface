@@ -294,6 +294,7 @@ viz_sidebar <- conditionalPanel(condition="input.tabset1==5",
   selectInput("visualisation_selector","Select visualisation",
     choices = list(
       "Word Cloud" = "wc",
+      "Pair Plot" = "pairs",
       "Query Term Scatterplot" = "scatter_closest",
       "Cluster Scatterplot" = "scatter"),
     selected = 1),
@@ -310,6 +311,11 @@ viz_sidebar <- conditionalPanel(condition="input.tabset1==5",
     sliderInput("scale",
       "Size of plot:",
       min = 0,  max = 5,  value = 3)
+  ),
+  conditionalPanel(condition="input.visualisation_selector=='pairs'",
+    sliderInput("pairs_max",
+      "Maximum Number of Words:",
+      min = 0,  max = 150,  value = 50)
   ),
   # Create sidebar content for query term scatterplot.
   conditionalPanel(condition="input.visualisation_selector=='scatter'",
@@ -390,6 +396,26 @@ viz_content <- tabPanel("Visualization", value=5,
           ),
           width = 4
         ),
+        width = 12
+      )
+    ),
+    conditionalPanel(condition="input.visualisation_selector=='pairs'",
+      class = "visualization",
+      box( solidHeader = FALSE, 
+        box(
+          solidHeader = TRUE,
+          textInput("pairs_term1", "Word 1:", width = "500px"),
+          width = 6
+        ),
+        box(
+          solidHeader = TRUE,
+          textInput("pairs_term2", "Word 2:", width = "500px"),
+          width = 6
+        ),
+        width=12),
+      box(
+        solidHeader = TRUE,
+        plotOutput("pairs_plot", height="600px"),
         width = 12
       )
     ),
@@ -705,6 +731,23 @@ app_server <- function(input, output, session) {
               colors = brewer.pal(8, "Dark2"), 
               scale = c(input$scale, 0.5),
               use.r.layout = TRUE)
+  })
+  
+  # Generate the pairs plot.
+  output$pairs_plot <- renderPlot({
+    validate(need(tolower(input$pairs_term1) != "" && 
+                  tolower(input$pairs_term2) != "", 
+      "To generate a PAIRS PLOT, enter a query term in the text field above."))
+    use_model <- list_models[[input$modelSelect_Visualisation_tabs[[1]]]]
+    # TODO: Only generate the plot if each of the terms is in the model
+    data <- use_model[[c(tolower(input$pairs_term1), tolower(input$pairs_term2)), average=FALSE]]
+    concept_pairs <- use_model[1:3000,] %>% cosineSimilarity(data)
+    concept_pairs <- concept_pairs[
+      rank(-concept_pairs[,1]) < input$pairs_max |
+        rank(-concept_pairs[,2]) < input$pairs_max,
+    ]
+    plot(concept_pairs, type='n')
+    text(concept_pairs, labels=rownames(concept_pairs))
   })
   
   # Generate query term scatterplot.
