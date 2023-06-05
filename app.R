@@ -312,6 +312,7 @@ viz_sidebar <- conditionalPanel(condition="input.tabset1==5",
       "Size of plot:",
       min = 0,  max = 5,  value = 3)
   ),
+  # Create sidebar content for the pairs plot.
   conditionalPanel(condition="input.visualisation_selector=='pairs'",
     sliderInput("pairs_max",
       "Maximum Number of Words:",
@@ -358,45 +359,9 @@ viz_content <- tabPanel("Visualization", value=5,
     ),
     conditionalPanel(condition="input.visualisation_selector=='wc'",
       class = "visualization",
-      box( solidHeader = TRUE, 
-        textInput("word_cloud_word", "Query term:", width = "500px"), 
-        width=12),
-      box(
-        solidHeader = FALSE,
-        box(
-          solidHeader = TRUE,
-          plotOutput("word_cloud", height="600px"),
-          width = 8
-        ),
-        box(
-          div(class = "model_desc", 
-            p("The visualizations tab allows you to create a
-                              word cloud for the query term you would like to
-                              analyze. The word cloud will produce a collage
-                              of the most similar words to your query term
-                              using the WWO general corpus model. You can
-                              adjust the visualization based on the number
-                              of words you would like to see appear
-                              (top slider bar on the left of this page).
-                              These terms are based on their percentage of
-                              similarity to the query term. The similarity
-                              percentage is also represented in the visualization
-                              by the color of each word. See below for the color
-                              key. The second slider down from the similarity
-                              bar will allow you to adjust the number of words you
-                              would like in your word cloud, and the bottom-most
-                              slider controls the size of the plot image."),
-            div("Similarity Color Key"),
-            div("Similarity % -- Color"),
-            div("91 – 100 -- gray"),
-            div("81 – 90 -- brown"),
-            div("71 – 80 -- orange"),
-            div("51 – 70 -- green"),
-            div("00 – 50 -- pink")
-          ),
-          width = 4
-        ),
-        width = 12
+      htmlTemplate("html/viz_word-cloud_tab_content.html",
+        word = textInput("word_cloud_word", "Query term:", width = "500px"),
+        word_cloud = plotOutput("word_cloud", height = "600px")
       )
     ),
     conditionalPanel(condition="input.visualisation_selector=='pairs'",
@@ -404,7 +369,7 @@ viz_content <- tabPanel("Visualization", value=5,
       htmlTemplate("html/viz_pairs_tab_content.html",
         word1 = textInput("pairs_term1", "Word 1:", width = "500px"),
         word2 = textInput("pairs_term2", "Word 2:", width = "500px"),
-        pairs_plot = plotOutput("pairs_plot", height="600px")
+        pairs_plot = plotOutput("pairs_plot", height = "600px")
       )
     ),
     conditionalPanel(condition="input.visualisation_selector=='scatter'",
