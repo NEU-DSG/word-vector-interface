@@ -401,22 +401,10 @@ viz_content <- tabPanel("Visualization", value=5,
     ),
     conditionalPanel(condition="input.visualisation_selector=='pairs'",
       class = "visualization",
-      box( solidHeader = FALSE, 
-        box(
-          solidHeader = TRUE,
-          textInput("pairs_term1", "Word 1:", width = "500px"),
-          width = 6
-        ),
-        box(
-          solidHeader = TRUE,
-          textInput("pairs_term2", "Word 2:", width = "500px"),
-          width = 6
-        ),
-        width=12),
-      box(
-        solidHeader = TRUE,
-        plotOutput("pairs_plot", height="600px"),
-        width = 12
+      htmlTemplate("html/viz_pairs_tab_content.html",
+        word1 = textInput("pairs_term1", "Word 1:", width = "500px"),
+        word2 = textInput("pairs_term2", "Word 2:", width = "500px"),
+        pairs_plot = plotOutput("pairs_plot", height="600px")
       )
     ),
     conditionalPanel(condition="input.visualisation_selector=='scatter'",
