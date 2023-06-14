@@ -35,6 +35,9 @@ COPY --chown=shiny ./ /srv/shiny-server/wvi/
 # Use a modified Shiny Server configuration
 COPY ./docker/shiny-server.conf /etc/shiny-server/
 
+# Log Shiny app errors to standard error
+ENV SHINY_LOG_STDERR=1
+
 USER shiny
 
 # Run app
