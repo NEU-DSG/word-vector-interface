@@ -301,16 +301,16 @@ viz_sidebar <- conditionalPanel(condition="input.tabset1==5",
   # Create sidebar content for word cloud visualization.
   conditionalPanel(condition="input.visualisation_selector=='wc'",
     sliderInput("freq",
-      "Similarity",
-      step = 5,
+      "Minimum similarity",
+      step = 0.05,
       ticks = TRUE,
-      min = 0,  max = 100, value = 15),
+      min = 0.2,  max = 1, value = 0.5),
     sliderInput("max",
       "Maximum Number of Words:",
       min = 0,  max = 150,  value = 100),
     sliderInput("scale",
       "Size of plot:",
-      min = 0,  max = 5,  value = 3)
+      min = 1,  max = 5,  value = 1)
   ),
   # Create sidebar content for the pairs plot.
   conditionalPanel(condition="input.visualisation_selector=='pairs'",
@@ -678,10 +678,11 @@ app_server <- function(input, output, session) {
     data <- mutate(data, sims = as.integer(sims * 100))
     set.seed(1234)
     wordcloud(words = data$words, freq = data$sims,
-              min.freq = input$freq, max.words=input$max,
-              random.order=FALSE, rot.per = 0.30, 
+              min.freq = as.integer(input$freq * 100), max.words=input$max,
+              random.order = FALSE, rot.per = 0.30, 
               random.color = FALSE, ordered.colors = FALSE,
-              colors = brewer.pal(8, "Dark2"), 
+              # We're modifying ColorBrewer palette RdYlBu here:
+              colors = c("#FDAE61", "#313695","#D7191C", "#2C7BB6", "#000000"), 
               scale = c(input$scale, 0.5),
               use.r.layout = TRUE)
   })
