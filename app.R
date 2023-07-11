@@ -155,9 +155,7 @@ body <- dashboardBody(
                        p("On the left-hand sidebar, you can select different models to query; you can also increase the number of words in your results set. More ways to explore these models can be accessed under the “Compare,” “Clusters,” “Operations,” and “Visualization” tabs above."),
                        p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
                          tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
-                       " for information on subscribing and setting up a free trial) to search for your term in the WWO collection."),
-                   p("For more information on how the clusters on this tab were derived, please see our see ", 
-                     tags$a(href="https://wwp.northeastern.edu/lab/wwvt/about/navigate/index.html", target="_blank", "How to Navigate the Shiny App"), " guide.")),
+                       " for information on subscribing and setting up a free trial) to search for your term in the WWO collection.")),
                  width = 12
                ),
                ),
@@ -219,7 +217,10 @@ body <- dashboardBody(
                        p("Use the dropdown on the left to select which model you want to view. Click the “Download” button to download the set of clusters you are viewing. You can also hit the “reset clusters” button to see a new set of clusters and use the slider to see more terms from each cluster. (Note that adjusting the number of terms per cluster will also reset the clusters.)"),
                        p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
                          tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
-                         " for information on subscribing and setting up a free trial) to search for your term in the WWO collection.")),
+                         " for information on subscribing and setting up a free trial) to search for your term in the WWO collection."),
+                       
+                       p("For more information on how the clusters on this tab were derived, please see our see ", 
+                         tags$a(href="https://wwp.northeastern.edu/lab/wwvt/about/navigate/index.html", target="_blank", "How to Navigate the Shiny App"), " guide.")),
 
                    tags$h1(textOutput("model_name_cluster")),
                    div(class = "model_desc", p(uiOutput("model_desc_cluster"))),
