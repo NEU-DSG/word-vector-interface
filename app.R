@@ -167,6 +167,7 @@ compare_content <- tabPanel("Compare", value=2,
     model_2_results = DT::dataTableOutput("basic_table_c2"))
 )
 
+
 ##  WVI 2c.  "CLUSTERS" UI
 
 # Given some data, create a table of 10 clusters.
