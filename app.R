@@ -146,6 +146,21 @@ body <- dashboardBody(
       # Create the contents of the "Compare" tab.
       tabPanel("Compare", value=2,
                id = "compareTab-Id",
+               
+               fluidRow(
+                 box(
+                   
+                   div(class="home_desc", 
+                       p("To get started, type a word in the “Query term” box. The results that appear are the words that are closest to the term that you queried in vector space—that is, words that appear in similar contexts in the corpus used to train your model."),
+                       p("On the left-hand sidebar, you can select different models to query; you can also increase the number of words in your results set. More ways to explore these models can be accessed under the “Compare,” “Clusters,” “Operations,” and “Visualization” tabs above."),
+                       p("If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see ", 
+                         tags$a(href="https://wwp.northeastern.edu/wwo/license/", target="_blank", "this page"), 
+                       " for information on subscribing and setting up a free trial) to search for your term in the WWO collection."),
+                   p("For more information on how the clusters on this tab were derived, please see our see ", 
+                     tags$a(href="https://wwp.northeastern.edu/lab/wwvt/about/navigate/index.html", target="_blank", "How to Navigate the Shiny App"), " guide.")),
+                 width = 12
+               ),
+               ),
 
                fluidRow(
                  box( solidHeader = TRUE, textInput("basic_word_c", "Query term:", width = "500px"), width=12)
@@ -485,9 +500,7 @@ shinyApp(
                        br(),
                        sliderInput("max_words_home",
                                    "Number of Words:",
-                                   min = 1,  max = 150,  value = 10),
-                       br(),
-                       actionButton("clustering_reset_input", "Reset clusters")
+                                   min = 1,  max = 150,  value = 10)
 
       ),
       
@@ -966,7 +979,7 @@ shinyApp(
         closest_to(tolower(input$basic_word1), 150) %>% 
         mutate("Link" <- linkToWWO(keyword=.$word, session=session)) %>% 
         .[c(3,2)]
-    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"), 
+    }, escape = FALSE, colnames=c("Word", "Similarity to word(s)"),
     options = tableSidebarOpts(input$max_words_home)))
 
     # Generate 1st table for Compare tab
