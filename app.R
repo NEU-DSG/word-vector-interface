@@ -184,6 +184,7 @@ renderClusterTable <- function(data, rows, session) {
     colnames = c(paste0("cluster_",1:10)),
     options = list(dom='ft', 
       lengthMenu = c(10, 20, 100, 150), 
+      ordering = FALSE,
       pageLength = rows, 
       searching = TRUE))
 }
