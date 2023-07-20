@@ -20,22 +20,15 @@
         <div class="col-sm-12 col-md-4">
           <div class="box box-solid">
             <div class="box-body">
-              <p>The visualizations tab allows you to create a
-                word cloud for the query term you would like to
-                analyze. The word cloud will produce a collage
-                of the most similar words to your query term
-                using the WWO general corpus model. You can
-                adjust the visualization based on the number
-                of words you would like to see appear
-                (top slider bar on the left of this page).
-                These terms are based on their percentage of
-                similarity to the query term. The similarity
-                percentage is also represented in the visualization
-                by the color of each word. See below for the color
-                key. The second slider down from the similarity
-                bar will allow you to adjust the number of words you
-                would like in your word cloud, and the bottom-most
-                slider controls the size of the plot image.</p>
+              <p>The Visualizations tab provides some experimental visualizations for 
+                exploring query terms and their contexts. You can change models with the “Model” 
+                dropdown menu in the sidebar. The “Select visualization” dropdown menu allows you to choose different visualization options.
+              </p>
+              <p>The Word Cloud visualization offers a spatial view of the closest words to a query term. The query term you enter appears
+                in the center of the cloud, surrounded by terms whose proximity is based on cosine similarity to the input term. 
+                Terms with higher cosine similarities are closer to the center. The terms are also color-coded to show cosine similarity, as outlined in the key below.
+                In the sidebar, the top slider allows you to set a threshold for the cosine similarity of displayed terms. 
+                The middle slider allows you to control the maximum number of words displayed, and the bottom slider controls the size of the plot image.</p>
               <div id="wc-color-key">
                 <p>Similarity Color Key
                   <br />Similarity — Color</p>
