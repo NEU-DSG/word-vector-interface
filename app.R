@@ -101,9 +101,15 @@ linkToWWO <- function(keyword, session) {
   paste0("<a target='_blank' href='",url,"'>",keyword,"</a>")
 }
 
-tableSimpleOpts <- list(lengthMenu = c(10, 20, 100, 150), pageLength=10, searching = TRUE)
+#tableSimpleOpts <- function(page_len = 10) {
+#  return(list(pageLength = page_len,
+#              ordering = FALSE,
+#              paging = FALSE))
+#}
 tableSidebarOpts <- function(page_len) {
-  return(list(dom = 't', pageLength = page_len, searching = FALSE))
+  return(list(dom = 't',
+              pageLength = page_len,
+              searching = FALSE))
 }
 
 # Generate a two-column table for a given set of vector data.
@@ -296,9 +302,9 @@ viz_sidebar <- conditionalPanel(condition="input.tabset1==5",
   selectInput("visualisation_selector","Select visualisation",
     choices = list(
       "Word Cloud" = "wc",
-      "Pair Plot" = "pairs",
+      "Pair Plot" = "pairs"
       # "Query Term Scatterplot" = "scatter_closest",
-      # "Cluster Scatterplot" = "scatter"),
+      # "Cluster Scatterplot" = "scatter"
     ),
     selected = 1),
   # Create sidebar content for word cloud visualization.
@@ -374,24 +380,25 @@ viz_content <- tabPanel("Visualization", value=5,
         word2 = textInput("pairs_term2", "Word 2:", width = "500px"),
         pairs_plot = plotOutput("pairs_plot", height = "600px")
       )
-    ),
-    conditionalPanel(condition="input.visualisation_selector=='scatter'",
-      class = "visualization",
-      box(
-        plotOutput("scatter_plot", height = 600),
-        width = 8
-      )
-    ),
-    conditionalPanel(condition="input.visualisation_selector=='scatter_closest'",
-      class = "visualization",
-      box( solidHeader = TRUE, 
-        textInput("scatter_plot_term", "Query term:", width = 500), 
-        width=12),
-      box(
-        plotOutput("scatter_plot_closest", height = 600),
-        width = 8
-      )
     )
+    #,
+    # conditionalPanel(condition="input.visualisation_selector=='scatter'",
+    #   class = "visualization",
+    #   box(
+    #     plotOutput("scatter_plot", height = 600),
+    #     width = 8
+    #   )
+    # ),
+    # conditionalPanel(condition="input.visualisation_selector=='scatter_closest'",
+    #   class = "visualization",
+    #   box( solidHeader = TRUE, 
+    #     textInput("scatter_plot_term", "Query term:", width = 500), 
+    #     width=12),
+    #   box(
+    #     plotOutput("scatter_plot_closest", height = 600),
+    #     width = 8
+    #   )
+    # )
   )
 )
 
@@ -544,8 +551,8 @@ app_server <- function(input, output, session) {
       use_model[[tolower(input$addition_word1)]] +
       use_model[[tolower(input$addition_word2)]]
     )
-    data <- use_model %>% closest_to(op_vector)
-    makeTableForModel(data, session, tableSimpleOpts)
+    data <- use_model %>% closest_to(op_vector, max_terms)
+    makeTableForModel(data, session, tableSidebarOpts(10))
   })
   
   # Generate table for Subtraction operation.
@@ -557,8 +564,8 @@ app_server <- function(input, output, session) {
       use_model[[tolower(input$subtraction_word1)]] -
       use_model[[tolower(input$subtraction_word2)]]
     )
-    data <- use_model %>% closest_to(op_vector)
-    makeTableForModel(data, session, tableSimpleOpts)
+    data <- use_model %>% closest_to(op_vector, max_terms)
+    makeTableForModel(data, session, tableSidebarOpts(10))
   })
   
   # Generate table for Analogies operation.
@@ -573,8 +580,8 @@ app_server <- function(input, output, session) {
         use_model[[tolower(input$analogies_word2)]] + 
         use_model[[tolower(input$analogies_word3)]]
       )
-    data <- use_model %>% closest_to(op_vector)
-    makeTableForModel(data, session, tableSimpleOpts)
+    data <- use_model %>% closest_to(op_vector, max_terms)
+    makeTableForModel(data, session, tableSidebarOpts(10))
   })
   
   # Generate table for Advanced math operation.
@@ -659,7 +666,7 @@ app_server <- function(input, output, session) {
       }
       data <- use_model %>% closest_to(op_vector, max_terms)
     }
-    makeTableForModel(data, session, tableSimpleOpts)
+    makeTableForModel(data, session, tableSidebarOpts(10))
   })
   
   
