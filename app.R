@@ -363,6 +363,7 @@ app_ui = dashboardPage(
     tags$link(rel="stylesheet", type="text/css", 
               href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"),
     tags$link(rel="stylesheet", type="text/css", href="styles/main.css"),
+    tags$link(rel="stylesheet", type="text/css", href="styles/wvi.css"),
     includeScript(path="script.js"),
     tags$style(type="text/css",
                ".shiny-output-error { visibility: hidden; }",
@@ -664,89 +665,7 @@ app_server <- function(input, output, session) {
     text(concept_pairs, labels=rownames(concept_pairs))
   })
 }
-#   
-#   # Generate query term scatterplot.
-#   dataset <- reactive({
-#     times <- input$clustering_reset_input_visualisation
-#     df2 <- sapply(sample(1:150,10), function(n) {
-#       use_model <- list_clustering[[input$modelSelect_Visualisation_tabs[[1]]]]
-#       paste0(names(use_model$cluster[use_model$cluster == n][1:150]))
-#       }) %>% 
-#       as_tibble(.name_repair = "minimal")
-#     df2
-#   })
-#   datascatter <- reactive({
-#     df2 <- dataset()
-#     # print(df2)
-#     x <- c()
-#     y <- c()
-#     names <- c()
-#     cluster <- c()
-#     vector <- vectors[[input$modelSelect_Visualisation_tabs[[1]]]]
-#     for (column in colnames(df2)) {
-#       for (word in head(df2,input$scatter_number)[column][[1]]) {
-#         x <- append(x, vector[word, 'PC1'])
-#         y <- append(y, vector[word, 'PC2'])
-#         names <- append(names,word)
-#         cluster <- append(cluster,column)
-#       }
-#     }
-#     df_new <- data.frame(x = x, y = y, names = names, 
-#                          cluster = as.factor(cluster), 
-#                          stringsAsFactors = FALSE)
-#     df_new
-#   })
-#   output$scatter_plot <- renderPlot({
-#     ggplot(datascatter(), aes(x=x, y=y, colour=cluster), 
-#       height="600px", width="100%") +
-#     geom_point() +
-#     geom_text_repel(
-#       aes(label = ifelse(cluster == input$scatter_cluster, as.character(names), '')), 
-#       hjust=0.5, vjust=-0.5, max.overlaps = 12
-#     )
-#   })
-#   outputOptions(output, "scatter_plot", suspendWhenHidden = TRUE)
-#   
-#   # Generate cluster scatterplot.
-#   dataset_closet <- reactive({
-#     use_model <- list_models[[input$modelSelect_Visualisation_tabs[[1]]]]
-#     data <- as.matrix(use_model)
-#     vectors <-stats::predict(stats::prcomp(data))[,1:2]
-#     x <- c()
-#     y <- c()
-#     names <- c()
-#     cluster <-c()
-#     closeword <- use_model %>% 
-#       closest_to(tolower(input$scatter_plot_term), max_terms)
-#     i = 0
-#     for (word in closeword[[1]]) {
-#       x <- append(x, vectors[word, 'PC1'])
-#       y <- append(y, vectors[word, 'PC2'])
-#       if (i <= 10 ) cluster <- append(cluster, "top 10")
-#       if (i > 10 & i <= 20 ) cluster <- append(cluster, "top 20")
-#       if (i > 20 & i <= 40 ) cluster <- append(cluster, "top 40")
-#       if (i > 40 & i <= 60 ) cluster <- append(cluster, "top 60")
-#       if (i > 60 & i <= 80 ) cluster <- append(cluster, "top 80")
-#       if (i > 80 & i <= 100 ) cluster <- append(cluster, "top 100")
-#       if (i > 100  ) cluster <- append(cluster, "top 150")
-#       i <- i + 1
-#       names <- append(names, word)
-#     }
-#     df_new <- data.frame(x = x, y = y, names = names, 
-#                          cluster = as.factor(cluster), 
-#                          stringsAsFactors = FALSE)
-#     return(df_new)
-#   })
-#   output$scatter_plot_closest <- renderPlot({
-#     ggplot(dataset_closet(), aes(x=x, y=y, colour=cluster)) +
-#       geom_point() +
-#       geom_text_repel(
-#         aes(label = ifelse(cluster == tolower(input$scatter_plot_closest_choice), 
-#             as.character(names), '')), 
-#         hjust=0.5, vjust=-0.5)
-#   })
-#   outputOptions(output, "scatter_plot_closest", suspendWhenHidden = TRUE)
-# }
+
 
 ##
 ##  WVI 4. GENERATE THE SHINY APP
