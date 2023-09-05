@@ -41,28 +41,28 @@ selected_compare_2 <- 1
 # can be used for various features.
 # TODO: First, narrow down to the public models, so they can be counted
 for (model in catalog_json) {
-  # A model is only acted upon if it's marked as public.
-  if (model$public == "true") {
-    print(model$shortName)
-    print(model$location)
-    name <- model$shortName
-    # The WWO full corpus and WWO body content models are set as defaults if 
-    # they appear.
-    if (name == "WWO Full Corpus") {
-      selected_default <- name
-      # TODO: consider removing selected_compare_1 in favor of selected_default
-      selected_compare_1 <- name
-    } else if (name == "WWO Body Content") {
-      selected_compare_2 <- name
-    }
-    # TODO: augment the catalog object instead of splitting everything into lists?
-    available_models <- append(available_models, name)
-    list_models[[name]] <- read.vectors(model$location)
-    list_desc[[name]] <- model$description
-    list_clustering[[name]] <- kmeans(list_models[[name]], centers=150, iter.max = 40)
-    data <- as.matrix(list_models[[name]])
-    vectors[[name]] <- stats::predict(stats::prcomp(data))[,1:2]
+  if ( model$public != "true" ) {
+    next
   }
+  print(model$shortName)
+  print(model$location)
+  name <- model$shortName
+  # The WWO full corpus and WWO body content models are set as defaults if 
+  # they appear.
+  if (name == "WWO Full Corpus") {
+    selected_default <- name
+    # TODO: consider removing selected_compare_1 in favor of selected_default
+    selected_compare_1 <- name
+  } else if (name == "WWO Body Content") {
+    selected_compare_2 <- name
+  }
+  # TODO: augment the catalog object instead of splitting everything into lists?
+  available_models <- append(available_models, name)
+  list_models[[name]] <- read.vectors(model$location)
+  list_desc[[name]] <- model$description
+  list_clustering[[name]] <- kmeans(list_models[[name]], centers=150, iter.max = 40)
+  data <- as.matrix(list_models[[name]])
+  vectors[[name]] <- stats::predict(stats::prcomp(data))[,1:2]
 }
 print("Done loading models.")
 
@@ -303,8 +303,6 @@ viz_sidebar <- conditionalPanel(condition="input.tabset1==5",
     choices = list(
       "Word Cloud" = "wc",
       "Pair Plot" = "pairs"
-      # "Query Term Scatterplot" = "scatter_closest",
-      # "Cluster Scatterplot" = "scatter"
     ),
     selected = 1),
   # Create sidebar content for word cloud visualization.
@@ -326,36 +324,6 @@ viz_sidebar <- conditionalPanel(condition="input.tabset1==5",
     sliderInput("pairs_max",
       "Maximum Number of Words:",
       min = 0,  max = 150,  value = 50)
-  ),
-  # Create sidebar content for query term scatterplot.
-  conditionalPanel(condition="input.visualisation_selector=='scatter'",
-    selectInput("scatter_cluster", "Cluster",
-      choices = list("Cluster 1" = "V1",
-        "Cluster 2" = "V2",
-        "Cluster 3" = "V3",
-        "Cluster 4" = "V4",
-        "Cluster 5" = "V5",
-        "Cluster 6" = "V6",
-        "Cluster 7" = "V7",
-        "Cluster 8" = "V8",
-        "Cluster 9" = "V9",
-        "Cluster 10" = "V10" ),
-      selected = 1),
-    sliderInput("scatter_number",
-      "Number of Words:",
-      min = 5,  max = 30,  value = 10),
-    actionButton("clustering_reset_input_visualisation", "Reset clusters")
-  ),
-  # Create sidebar content for cluster scatterplot.
-  conditionalPanel(condition="input.visualisation_selector=='scatter_closest'",
-    selectInput("scatter_plot_closest_choice", "Cluster",
-      choices = list("Top 10",
-        "Top 20",
-        "Top 40",
-        "Top 60",
-        "Top 80",
-        "Top 150"),
-      selected = 1)
   )
 )
 # Create main content for the "Visualization" tab.
@@ -381,24 +349,6 @@ viz_content <- tabPanel("Visualization", value=5,
         pairs_plot = plotOutput("pairs_plot", height = "600px")
       )
     )
-    #,
-    # conditionalPanel(condition="input.visualisation_selector=='scatter'",
-    #   class = "visualization",
-    #   box(
-    #     plotOutput("scatter_plot", height = 600),
-    #     width = 8
-    #   )
-    # ),
-    # conditionalPanel(condition="input.visualisation_selector=='scatter_closest'",
-    #   class = "visualization",
-    #   box( solidHeader = TRUE, 
-    #     textInput("scatter_plot_term", "Query term:", width = 500), 
-    #     width=12),
-    #   box(
-    #     plotOutput("scatter_plot_closest", height = 600),
-    #     width = 8
-    #   )
-    # )
   )
 )
 
