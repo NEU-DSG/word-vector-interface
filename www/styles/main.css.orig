@@ -5,14 +5,14 @@ html {
 }
 
 body {
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1rem;
   height: 100%;
   overflow: hidden;
 }
 
 h1, h2, h3 {
   font-size: 2em;
-  font-weight: normal;
-  text-align: left;
 }
 
 /* Unset a bunch of Shiny Dashboard rules in order to use CSS Grid. */
@@ -24,19 +24,17 @@ html, body, .wrapper {
   max-height: unset !important;
   min-height: unset !important;
   z-index: unset !important;
-  transform: none;
 }
 
 .wrapper {
   display: grid;
-  font-size: 1rem;
+  font-size: 0.875rem;
   grid-gap: 0;
   grid-template-areas:
     "header header"
     "sidebar content";
-  grid-template-columns: minmax(250px, 1fr) 4fr;
+  grid-template-columns: 1fr 3fr;
   grid-template-rows: auto 1fr;
-  justify-items: stretch;
 }
 
 .wrapper:before {
@@ -95,7 +93,11 @@ html, body, .wrapper {
 }
 
 .nav-item {
-  font-size: 1.125em;
+  margin: 0 2px;
+}
+
+.dropdown-menu {
+  font-size: 1em;
 }
 
 .btn-group-vertical>.btn-group:after, .btn-group-vertical>.btn-group:before, 
@@ -142,7 +144,7 @@ html, body, .wrapper {
 }
 
 .main-header .navbar {
-  /*font-size: 1.275em;*/
+  font-size: 1.275em;
   margin : 0;
   padding: 0.15rem 0.25rem;
   position: unset;
@@ -156,11 +158,11 @@ html, body, .wrapper {
 .main-sidebar {
   background-color: #222d32; /* via shinydashboard */
   grid-area: sidebar;
-  margin: 0;
+  margin: 0 5%;
   min-height: unset;
-  padding: 0 1.125rem;
+  padding-right: 1.5rem;
+  padding-top: 0;
   position: initial;
-  width: 100%;
 }
 
 #sidebarItemExpanded {
@@ -187,12 +189,28 @@ html, body, .wrapper {
   padding: 1.25rem;
 }
 
+#wwvt-home {
+  margin-left: 1rem;
+  align-self: center;
+  color: #fefefe;
+  font-size: 1.35rem;
+}
+
+#wwvt-home:hover {
+  color: #ccc;
+  text-decoration: none;
+}
+
 .welcome_desc {
   font-size: 1.2em;
 }
 
 .dataTables_filter {
   display: none !important;
+}
+
+.nav-over-flow{
+  background-color: #343a40 !important;
 }
 
 #word_cloud{
@@ -210,14 +228,14 @@ html, body, .wrapper {
     width: 100% !important;
   }
 
-  .main-header .navbar-collapse.collapse {
+  .navbar-collapse.collapse {
     height: auto !important;
     padding-bottom: 0;
     overflow: visible !important;
     display: none !important;
   }
 
-  .main-header .navbar-nav {
+  .navbar-nav {
     display: none !important;
   }
 
@@ -249,7 +267,6 @@ html, body, .wrapper {
       "sidebar";
     grid-template-columns: 1fr;
     grid-template-rows: auto;
-    overflow: visible;
   }
 
 } /* END @media only screen and (max-width: 1000px) */
