@@ -163,6 +163,23 @@ html, body, .wrapper {
   width: 100%;
 }
 
+#navbarResponsive {
+  display: none;
+}
+
+#navbarResponsive .nav-link {
+  color: #d7d9dc;
+}
+
+#navbarResponsive .nav-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+#navbarResponsive .dropdown-menu {
+  background-color: white;
+}
+
 #sidebarItemExpanded {
   color: white;
   padding-bottom: 1rem; /* mod of shinydashboard */
@@ -219,6 +236,19 @@ html, body, .wrapper {
 
   .main-header .navbar-nav {
     display: none !important;
+  }
+  
+  /* We're using Bootstrap v4 CSS (from WWVT) and v3 JS (from Shiny Dashboard). 
+    The rule below displays a collapsed element when the "in" class is attached 
+    (v4 uses "show" instead). */
+  .main-sidebar .collapse:not(.show).in,
+  .main-sidebar #navbarResponsive.in {
+    display: block;
+  }
+  
+  .main-sidebar .collapse:not(.show).in + .sidebar,
+  .main-sidebar #navbarResponsive.in + .sidebar {
+    display: none;
   }
 
   .side-open {
