@@ -275,8 +275,8 @@ html, body, .wrapper {
   .wrapper {
     grid-template-areas:
       "header"
-      "content"
-      "sidebar";
+      "sidebar"
+      "content";
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     overflow: visible;
