@@ -171,6 +171,7 @@ html, body, .wrapper {
   color: #d7d9dc;
 }
 
+#navbarResponsive .nav-link:focus,
 #navbarResponsive .nav-link:hover {
   color: #fff;
   text-decoration: underline;
