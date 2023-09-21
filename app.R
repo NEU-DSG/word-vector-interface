@@ -137,7 +137,7 @@ home_sidebar <- conditionalPanel(condition="input.tabset1==1",
   br(),
   sliderInput("max_words_home",
     "Number of Words:",
-    min = 1,  max = 150,  value = 10)
+    min = 1,  max = max_terms,  value = 10)
 )
 # Create main content for "Home" tab.
 home_content <- tabPanel("Home", value=1,
@@ -161,7 +161,7 @@ compare_sidebar <- conditionalPanel(condition="input.tabset1==2",
     selected = selected_compare_2),
   sliderInput("max_words",
     "Number of Words:",
-    min = 1,  max = 150,  value = 10)
+    min = 1,  max = max_terms,  value = 10)
 )
 # Create main content for the "Compare" tab.
 compare_content <- tabPanel("Compare", value=2,
@@ -215,7 +215,7 @@ clusters_sidebar <- conditionalPanel(condition="input.tabset1==3",
   br(),
   sliderInput("max_words_cluster",
     "Number of Words:",
-    min = 1,  max = 150,  value = 10)
+    min = 1,  max = max_terms,  value = 10)
 )
 # Create main content for the "Clusters" tab.
 clusters_content <- tabPanel("Clusters", value=3,
@@ -241,7 +241,7 @@ operations_sidebar <- conditionalPanel(condition="input.tabset1==4",
     selected = 1),
   sliderInput("max_words_operations",
     "Number of Words:",
-    min = 1,  max = 150,  value = 10)
+    min = 1,  max = max_terms,  value = 10)
 )
 # Create the contents of the "Addition" operation tab.
 controlsPlus <- conditionalPanel(condition="input.operator_selector=='Addition'",
@@ -320,7 +320,7 @@ viz_sidebar <- conditionalPanel(condition="input.tabset1==5",
       min = 0.2,  max = 1, value = 0.5),
     sliderInput("max",
       "Maximum Number of Words:",
-      min = 0,  max = 150,  value = 100),
+      min = 0,  max = max_terms,  value = 100),
     sliderInput("scale",
       "Size of plot:",
       min = 1,  max = 5,  value = 1)
@@ -329,7 +329,7 @@ viz_sidebar <- conditionalPanel(condition="input.tabset1==5",
   conditionalPanel(condition="input.visualisation_selector=='pairs'",
     sliderInput("pairs_max",
       "Maximum Number of Words:",
-      min = 0,  max = 150,  value = 50)
+      min = 0,  max = max_terms,  value = 50)
   )
 )
 # Create main content for the "Visualization" tab.
