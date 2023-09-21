@@ -75,7 +75,7 @@ html, body, .wrapper {
   width : 100%;
 }
 
-#Download_reset_button {
+#cluster-button-container {
   display: flex;
   margin: 0;
   padding: 0;

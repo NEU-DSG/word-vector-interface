@@ -20,6 +20,8 @@ library(wordVectors)
 
 # Maximum number of terms to display per model
 max_terms <- 150
+# Total number of clusters to generate per model
+num_clusters <- 150
 
 # Load JSON catalog of models and information about them.
 catalog_filename <- "data/catalog.json"
@@ -60,7 +62,8 @@ for (model in catalog_json) {
   available_models <- append(available_models, name)
   list_models[[name]] <- read.vectors(model$location)
   list_desc[[name]] <- model$description
-  list_clustering[[name]] <- kmeans(list_models[[name]], centers=150, iter.max = 40)
+  list_clustering[[name]] <- kmeans(list_models[[name]], centers = num_clusters, 
+    iter.max = 40)
   data <- as.matrix(list_models[[name]])
   vectors[[name]] <- stats::predict(stats::prcomp(data))[,1:2]
 }
@@ -68,9 +71,9 @@ print("Done loading models.")
 
 # Set up a reactive values object to persist clusters data.
 reactive_value_obj <- reactiveValues()
-generateClustersData <- function(model) {
-  data <- sapply(sample(1:150, 10), function(n) {
-    cword <- names(model$cluster[model$cluster==n][1:max_terms])
+generateClustersData <- function(model_clusters) {
+  data <- sapply( 1:num_clusters, function(n) {
+    cword <- names(model_clusters$cluster[model_clusters$cluster == n][1:max_terms])
   })
   reactive_value_obj[['clusters']] <- data %>% 
     as_tibble(.name_repair = "minimal")
@@ -202,7 +205,7 @@ clusters_sidebar <- conditionalPanel(condition="input.tabset1==3",
     selected = selected_default),
   br(),
   column(
-    id = "Download_reset_button",
+    id = "cluster-button-container",
     width = 12,
     actionButton("clustering_reset_input_fullcluster", "Reset clusters", 
       class="clustering-reset-full"),
