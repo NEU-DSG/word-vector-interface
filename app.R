@@ -188,7 +188,7 @@ renderClusterTable <- function(data, rows, session) {
           linkToWWO(keyword = word, session = session)
         })
       cluster
-    }) %>% as.data.frame(row.names = c(paste0(1:max_terms)))
+    }) %>% as.data.frame(row.names = c(paste0(1:10)))
   DT::datatable(data, escape = FALSE, 
     colnames = c(paste0("cluster_",1:10)),
     options = list(dom='ft', 
@@ -238,7 +238,10 @@ operations_sidebar <- conditionalPanel(condition="input.tabset1==4",
     selected = selected_default),
   selectInput("operator_selector", "Select operator",
     choices = c("Addition", "Subtraction", "Analogies", "Advanced"),
-    selected = 1)
+    selected = 1),
+  sliderInput("max_words_operations",
+    "Number of Words:",
+    min = 1,  max = 150,  value = 10)
 )
 # Create the contents of the "Addition" operation tab.
 controlsPlus <- conditionalPanel(condition="input.operator_selector=='Addition'",
@@ -457,6 +460,7 @@ app_server <- function(input, output, session) {
   observeEvent(input$modelSelect_clusters, {
     output$model_name_cluster <- renderText(input$modelSelect_clusters[[1]])
     output$model_desc_cluster <- renderModelDesc(input$modelSelect_clusters[[1]])
+    # TODO: update table
   })
   
   # Generate and render clusters.
@@ -506,7 +510,7 @@ app_server <- function(input, output, session) {
       use_model[[tolower(input$addition_word2)]]
     )
     data <- use_model %>% closest_to(op_vector, max_terms)
-    makeTableForModel(data, session, tableSidebarOpts(10))
+    makeTableForModel(data, session, tableSidebarOpts(input$max_words_operations))
   })
   
   # Generate table for Subtraction operation.
@@ -519,7 +523,7 @@ app_server <- function(input, output, session) {
       use_model[[tolower(input$subtraction_word2)]]
     )
     data <- use_model %>% closest_to(op_vector, max_terms)
-    makeTableForModel(data, session, tableSidebarOpts(10))
+    makeTableForModel(data, session, tableSidebarOpts(input$max_words_operations))
   })
   
   # Generate table for Analogies operation.
@@ -535,7 +539,7 @@ app_server <- function(input, output, session) {
         use_model[[tolower(input$analogies_word3)]]
       )
     data <- use_model %>% closest_to(op_vector, max_terms)
-    makeTableForModel(data, session, tableSidebarOpts(10))
+    makeTableForModel(data, session, tableSidebarOpts(input$max_words_operations))
   })
   
   # Generate table for Advanced math operation.
@@ -620,7 +624,7 @@ app_server <- function(input, output, session) {
       }
       data <- use_model %>% closest_to(op_vector, max_terms)
     }
-    makeTableForModel(data, session, tableSidebarOpts(10))
+    makeTableForModel(data, session, tableSidebarOpts(input$max_words_operations))
   })
   
   
