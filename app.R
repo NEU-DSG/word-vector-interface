@@ -27,6 +27,12 @@ num_clusters <- 150
 catalog_filename <- "data/catalog.json"
 catalog_json <- fromJSON(file = catalog_filename)
 
+# Reduce the list of models to only the ones marked as public.
+is_public_model <- function(model) {
+  model$public == "true"
+}
+catalog_json <- catalog_json[sapply(catalog_json, is_public_model) == TRUE]
+
 # Load models.
 available_models <- c()
 list_clustering <- list()
@@ -41,11 +47,12 @@ selected_compare_2 <- 1
 
 # Iterate over models in the catalog, adding them to the lists of models that 
 # can be used for various features.
-# TODO: First, narrow down to the public models, so they can be counted
-for (model in catalog_json) {
-  if ( model$public != "true" ) {
-    next
-  }
+total_models <- length(catalog_json)
+for (i in 1:total_models) {
+  model <- catalog_json[[i]]
+  # There should now only be public models, but it doesn't hurt to check.
+  if ( model$public != "true" ) { next }
+  print(paste(c("Loading model", i, "of", total_models), collapse = " "))
   print(model$shortName)
   print(model$location)
   name <- model$shortName
@@ -104,11 +111,6 @@ linkToWWO <- function(keyword, session) {
   paste0("<a target='_blank' href='",url,"'>",keyword,"</a>")
 }
 
-#tableSimpleOpts <- function(page_len = 10) {
-#  return(list(pageLength = page_len,
-#              ordering = FALSE,
-#              paging = FALSE))
-#}
 tableSidebarOpts <- function(page_len) {
   return(list(dom = 't',
               pageLength = page_len,
