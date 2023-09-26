@@ -35,7 +35,7 @@ catalog_json <- catalog_json[sapply(catalog_json, is_public_model) == TRUE]
 
 # Load models.
 available_models <- c()
-list_clustering <- list()
+list_cluster_centers <- list()
 list_models <- list()
 list_desc <- list()
 vectors <- list()
@@ -69,7 +69,7 @@ for (i in 1:total_models) {
   available_models <- append(available_models, name)
   list_models[[name]] <- read.vectors(model$location)
   list_desc[[name]] <- model$description
-  list_clustering[[name]] <- kmeans(list_models[[name]], centers = num_clusters, 
+  list_cluster_centers[[name]] <- kmeans(list_models[[name]], centers = num_clusters, 
     iter.max = 40)
   data <- as.matrix(list_models[[name]])
   vectors[[name]] <- stats::predict(stats::prcomp(data))[,1:2]
@@ -77,17 +77,16 @@ for (i in 1:total_models) {
 print("Done loading models.")
 
 # Set up a reactive values object to persist clusters data.
-reactive_value_obj <- reactiveValues()
+reactive_clusters <- reactiveValues()
 generateClustersData <- function(model_clusters) {
   data <- sapply( 1:num_clusters, function(n) {
     cword <- names(model_clusters$cluster[model_clusters$cluster == n][1:max_terms])
   })
-  reactive_value_obj[['clusters']] <- data %>% 
-    as_tibble(.name_repair = "minimal")
+  reactive_clusters[['clusters']] <- data %>% as_tibble(.name_repair = "minimal")
   #browser()
 }
 # Pre-generate clusters using the default model.
-generateClustersData(list_clustering[[selected_default]])
+generateClustersData(list_cluster_centers[[selected_default]])
 
 
 ##
@@ -467,19 +466,19 @@ app_server <- function(input, output, session) {
   
   # Generate and render clusters.
   output$clusters_full <- DT::renderDataTable({
-    renderClusterTable(reactive_value_obj[['clusters']], input$max_words_cluster,
+    renderClusterTable(reactive_clusters[['clusters']], input$max_words_cluster,
       session)
   })
   # Handle resetting clusters from tab content.
   observeEvent(input$clustering_reset_input_fullcluster, {
-    generateClustersData(list_clustering[[input$modelSelect_clusters[[1]]]])
-    renderClusterTable(reactive_value_obj[['clusters']], input$max_words_cluster,
+    generateClustersData(list_cluster_centers[[input$modelSelect_clusters[[1]]]])
+    renderClusterTable(reactive_clusters[['clusters']], input$max_words_cluster,
       session)
   })
   # Handle resetting clusters from sidebar.
   observeEvent(input$clustering_reset_input_fullcluster1, {
-    generateClustersData(list_clustering[[input$modelSelect_clusters[[1]]]])
-    renderClusterTable(reactive_value_obj[['clusters']], input$max_words_cluster,
+    generateClustersData(list_cluster_centers[[input$modelSelect_clusters[[1]]]])
+    renderClusterTable(reactive_clusters[['clusters']], input$max_words_cluster,
       session)
   })
   
@@ -489,7 +488,7 @@ app_server <- function(input, output, session) {
       paste(input$modelSelect_clusters[[1]], ".csv", sep="") 
     },
     content = function(file) {
-      write.csv(reactive_value_obj[['clusters']], file, row.names = FALSE)
+      write.csv(reactive_clusters[['clusters']], file, row.names = FALSE)
     }
   )
   
