@@ -35,7 +35,6 @@ catalog_json <- catalog_json[sapply(catalog_json, is_public_model) == TRUE]
 
 # Load models.
 available_models <- c()
-list_cluster_centers <- list()
 list_clusters <- list()
 list_models <- list()
 list_desc <- list()
@@ -83,12 +82,11 @@ for (i in 1:total_models) {
   available_models <- append(available_models, name)
   list_models[[name]] <- read.vectors(model$location)
   list_desc[[name]] <- model$description
+  # Generate this model's 150 clusters.
   my_centers <- kmeans(list_models[[name]], centers = num_clusters, iter.max = 40)
-  list_cluster_centers[[name]] <- my_centers
   list_clusters[[name]] <- list(name = name,
                                 centers = my_centers,
                                 clusters = generateClustersData(my_centers))
-  #reactive_clusters[[name]] <- getRandomClusters()
   data <- as.matrix(list_models[[name]])
   vectors[[name]] <- stats::predict(stats::prcomp(data))[,1:2]
 }
@@ -408,10 +406,14 @@ app_ui = dashboardPage(
 # Listen for user interactions and handle them. This function runs once per user
 # session.
 app_server <- function(input, output, session) {
-  # Apply settings for this app session.
+  # Set up a list of clusters for a single user's session.
   session$userData[['clusters']] <- list()
-  # Get 10 clusters at random for the default model.
+  # For the default model, choose 10 random indexes out of the 150 clusters. These 
+  # will persist until the user resets the clusters, or until the session ends.
   session$userData$clusters[[selected_default]] <- getRandomClusters()
+  # Set up a reactive object that will store ONLY the cluster indices that are 
+  # currently shown on the Clusters tab. When this object changes, the table will 
+  # change to reflect it.
   reactive_obj <- reactiveValues(clusters = session$userData$clusters[[selected_default]])
   
   # Given a model, generate its description for display.
@@ -465,7 +467,17 @@ app_server <- function(input, output, session) {
   
   ## WVI 3c."CLUSTERS" REACTIVE COMPONENTS
   
-  ## Keep the model name and description in sync with the user's choice.
+  # Use the clusters stored in the reactive object to generate a table.
+  # The table will update automatically when either `reactive_obj$clusters`
+  # or `input$max_words_cluster` changes.
+  output$clusters_full <- DT::renderDataTable({
+    use_model <- input$modelSelect_clusters[[1]]
+    renderClusterTable(reactive_obj[['clusters']], 
+      list_clusters[[use_model]]$clusters, input$max_words_cluster, session)
+  })
+  
+  # When a new model is chosen from the list, update the model name, model 
+  # description, and what clusters are shown.
   observeEvent(input$modelSelect_clusters, {
     use_model <- input$modelSelect_clusters[[1]]
     output$model_name_cluster <- renderText(use_model)
@@ -480,23 +492,21 @@ app_server <- function(input, output, session) {
     reactive_obj[['clusters']] <- session$userData$clusters[[use_model]]
   })
   
-  # Generate and render clusters.
-  output$clusters_full <- DT::renderDataTable({
-    use_model <- input$modelSelect_clusters[[1]]
-    renderClusterTable(reactive_obj[['clusters']], list_clusters[[use_model]]$clusters, 
-      input$max_words_cluster, session)
-  })
-  
   # Handle resetting clusters from tab content.
   observeEvent(input$clustering_reset_input_fullcluster, {
     use_model <- input$modelSelect_clusters[[1]]
+    # Store the model's new selection of clusters for persistence.
     session$userData$clusters[[use_model]] <- getRandomClusters()
+    # Update the reactive object to reflect the current clusters.
     reactive_obj[['clusters']] <- session$userData$clusters[[use_model]]
   })
-  # Handle resetting clusters from sidebar.
+  
+  # Handle resetting clusters from the sidebar.
   observeEvent(input$clustering_reset_input_fullcluster1, {
     use_model <- input$modelSelect_clusters[[1]]
+    # Store the model's new selection of clusters for persistence.
     session$userData$clusters[[use_model]] <- getRandomClusters()
+    # Update the reactive object to reflect the current clusters.
     reactive_obj[['clusters']] <- session$userData$clusters[[use_model]]
   })
   
