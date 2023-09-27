@@ -36,6 +36,7 @@ catalog_json <- catalog_json[sapply(catalog_json, is_public_model) == TRUE]
 # Load models.
 available_models <- c()
 list_cluster_centers <- list()
+list_clusters <- list()
 list_models <- list()
 list_desc <- list()
 vectors <- list()
@@ -44,6 +45,19 @@ vectors <- list()
 selected_default <- 1
 selected_compare_1 <- 1
 selected_compare_2 <- 1
+
+# Generate clusters for a model.
+generateClustersData <- function(model_clusters) {
+  data <- sapply( 1:num_clusters, function(n) {
+    cword <- names(model_clusters$cluster[model_clusters$cluster == n][1:max_terms])
+  }) %>% as_tibble(.name_repair = "minimal")
+  data
+  #browser()
+}
+# Choose a random selection of 10 clusters.
+getRandomClusters <- function(subset = 10) {
+  sample(1:num_clusters, subset)
+}
 
 # Iterate over models in the catalog, adding them to the lists of models that 
 # can be used for various features.
@@ -69,24 +83,16 @@ for (i in 1:total_models) {
   available_models <- append(available_models, name)
   list_models[[name]] <- read.vectors(model$location)
   list_desc[[name]] <- model$description
-  list_cluster_centers[[name]] <- kmeans(list_models[[name]], centers = num_clusters, 
-    iter.max = 40)
+  my_centers <- kmeans(list_models[[name]], centers = num_clusters, iter.max = 40)
+  list_cluster_centers[[name]] <- my_centers
+  list_clusters[[name]] <- list(name = name,
+                                centers = my_centers,
+                                clusters = generateClustersData(my_centers))
+  #reactive_clusters[[name]] <- getRandomClusters()
   data <- as.matrix(list_models[[name]])
   vectors[[name]] <- stats::predict(stats::prcomp(data))[,1:2]
 }
 print("Done loading models.")
-
-# Set up a reactive values object to persist clusters data.
-reactive_clusters <- reactiveValues()
-generateClustersData <- function(model_clusters) {
-  data <- sapply( 1:num_clusters, function(n) {
-    cword <- names(model_clusters$cluster[model_clusters$cluster == n][1:max_terms])
-  })
-  reactive_clusters[['clusters']] <- data %>% as_tibble(.name_repair = "minimal")
-  #browser()
-}
-# Pre-generate clusters using the default model.
-generateClustersData(list_cluster_centers[[selected_default]])
 
 
 ##
@@ -180,18 +186,18 @@ compare_content <- tabPanel("Compare", value=2,
 
 ##  WVI 2c.  "CLUSTERS" UI
 
-# Given some data, create a table of 10 clusters.
-renderClusterTable <- function(data, rows, session) {
+# Given some kmeans clusters, create a table of 10 clusters.
+renderClusterTable <- function(cluster_indexes, clusters, rows, session) {
+  #print(cluster_indexes)
   # Add WWO links around words in each cluster.
-  data <- sapply(1:10, function(cluster_num) {
-      cluster <- data[[cluster_num]] %>%
-        sapply(function(word) {
+  data <- sapply(cluster_indexes, function(cluster_num) {
+      clusters[[cluster_num]] %>%
+        sapply( function(word) {
           linkToWWO(keyword = word, session = session)
         })
-      cluster
     }) %>% as.data.frame(row.names = c(paste0(1:10)))
   DT::datatable(data, escape = FALSE, 
-    colnames = c(paste0("cluster_",1:10)),
+    colnames = c(paste0("cluster ",cluster_indexes)),
     options = list(dom='ft', 
       lengthMenu = c(10, 20, 100, 150), 
       ordering = FALSE,
@@ -403,8 +409,10 @@ app_ui = dashboardPage(
 # session.
 app_server <- function(input, output, session) {
   # Apply settings for this app session.
-  #set.seed(122)
-  #histdata <- rnorm(500)
+  session$userData[['clusters']] <- list()
+  # Get 10 clusters at random for the default model.
+  session$userData$clusters[[selected_default]] <- getRandomClusters()
+  reactive_obj <- reactiveValues(clusters = session$userData$clusters[[selected_default]])
   
   # Given a model, generate its description for display.
   renderModelDesc <- function(model) {
@@ -459,36 +467,49 @@ app_server <- function(input, output, session) {
   
   ## Keep the model name and description in sync with the user's choice.
   observeEvent(input$modelSelect_clusters, {
-    output$model_name_cluster <- renderText(input$modelSelect_clusters[[1]])
-    output$model_desc_cluster <- renderModelDesc(input$modelSelect_clusters[[1]])
-    # TODO: update table
+    use_model <- input$modelSelect_clusters[[1]]
+    output$model_name_cluster <- renderText(use_model)
+    output$model_desc_cluster <- renderModelDesc(use_model)
+    # If this model has not been accessed before, get the indexes for 10 clusters chosen 
+    # at random. Otherwise, the last selected clusters are re-used.
+    if ( is.null(session$userData$clusters[[use_model]]) ) {
+      session$userData$clusters[[use_model]] <- getRandomClusters()
+    }
+    # Update the reactive object to reflect the current clusters. This will trigger an 
+    # update of the table too.
+    reactive_obj[['clusters']] <- session$userData$clusters[[use_model]]
   })
   
   # Generate and render clusters.
   output$clusters_full <- DT::renderDataTable({
-    renderClusterTable(reactive_clusters[['clusters']], input$max_words_cluster,
-      session)
+    use_model <- input$modelSelect_clusters[[1]]
+    renderClusterTable(reactive_obj[['clusters']], list_clusters[[use_model]]$clusters, 
+      input$max_words_cluster, session)
   })
+  
   # Handle resetting clusters from tab content.
   observeEvent(input$clustering_reset_input_fullcluster, {
-    generateClustersData(list_cluster_centers[[input$modelSelect_clusters[[1]]]])
-    renderClusterTable(reactive_clusters[['clusters']], input$max_words_cluster,
-      session)
+    use_model <- input$modelSelect_clusters[[1]]
+    session$userData$clusters[[use_model]] <- getRandomClusters()
+    reactive_obj[['clusters']] <- session$userData$clusters[[use_model]]
   })
   # Handle resetting clusters from sidebar.
   observeEvent(input$clustering_reset_input_fullcluster1, {
-    generateClustersData(list_cluster_centers[[input$modelSelect_clusters[[1]]]])
-    renderClusterTable(reactive_clusters[['clusters']], input$max_words_cluster,
-      session)
+    use_model <- input$modelSelect_clusters[[1]]
+    session$userData$clusters[[use_model]] <- getRandomClusters()
+    reactive_obj[['clusters']] <- session$userData$clusters[[use_model]]
   })
   
-  # Create a CSV file of clusters when requested.
+  # Create a CSV file of all clusters (for this model) when requested.
   output$downloadData <- downloadHandler(
     filename = function() { 
       paste(input$modelSelect_clusters[[1]], ".csv", sep="") 
     },
     content = function(file) {
-      write.csv(reactive_clusters[['clusters']], file, row.names = FALSE)
+      use_model <- input$modelSelect_clusters[[1]]
+      write.table(list_clusters[[use_model]]$clusters, file, row.names = FALSE, 
+        col.names = c(paste0('cluster_',1:150)), sep = ","
+      )
     }
   )
   
