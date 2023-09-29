@@ -148,6 +148,10 @@ html, body, .wrapper {
   position: unset;
 }
 
+#sidebar-hider {
+  border-color: #ccc;
+}
+
 .main-header .navbar .container {
   margin: 0.25rem 1rem;
   max-width: unset;
@@ -164,11 +168,17 @@ html, body, .wrapper {
 }
 
 #navbarResponsive {
+  background-color: rgb(67, 76, 81);
   display: none;
+  padding: 0.25em 0.5em 0.5em;
+}
+
+#navbarResponsive .navbar-nav {
+  margin: 0;
 }
 
 #navbarResponsive .nav-link {
-  color: #d7d9dc;
+  color: white;
 }
 
 #navbarResponsive .nav-link:focus,
