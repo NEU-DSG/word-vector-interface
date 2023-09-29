@@ -148,10 +148,6 @@ html, body, .wrapper {
   position: unset;
 }
 
-#sidebar-hider {
-  border-color: #ccc;
-}
-
 .main-header .navbar .container {
   margin: 0.25rem 1rem;
   max-width: unset;

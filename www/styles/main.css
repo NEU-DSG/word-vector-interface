@@ -21,6 +21,21 @@ body {
 
 .navbar-toggler {
   margin-top: 0.25rem;
+  background-color: #252525;
+}
+.navbar-toggler:focus,
+.navbar-toggler:hover {
+  box-shadow: 0 0 0.5em #ccc;
+}
+.navbar-toggler[aria-expanded=true] {
+  background-color: unset;
+}
+/* Override the border color defined in Bootstrap. */
+.navbar-dark .navbar-toggler {
+  border-color: #ccc;
+}
+.navbar-dark .navbar-toggler[aria-expanded="true"] {
+  border-color: #aaa;
 }
 
 .navbar-group {
@@ -28,7 +43,7 @@ body {
   flex-direction: column;
   align-items: flex-end;
   flex: 1 1 auto;
-  align-self: flex-end;
+  align-self: center;
   text-align: right;
 }
 
