@@ -340,10 +340,9 @@ viz_sidebar <- conditionalPanel(condition="input.tabset1==5",
 # Create main content for the "Visualization" tab.
 viz_content <- tabPanel("Visualization", value=5,
   fluidRow(
-    box(
-      tags$h1(textOutput("model_name_visualisation")),
-      div(class = "model_desc", p(uiOutput("model_desc_visualisation"))),
-      width=12
+    htmlTemplate("html/viz_common_tab_content.html",
+      model_name = textOutput("model_name_visualisation"),
+      model_desc = uiOutput("model_desc_visualisation")
     ),
     conditionalPanel(condition="input.visualisation_selector=='wc'",
       class = "visualization",

@@ -20,6 +20,7 @@ html, body, .wrapper {
   height: 100% !important;
   min-height: unset !important;
 }
+
 .main-header, .main-sidebar, .content-wrapper {
   max-height: unset !important;
   min-height: unset !important;
@@ -71,6 +72,12 @@ html, body, .wrapper {
   overflow-y : auto;
 }
 
+/* Keep padding the same between <th>s and <td>s. */
+table.dataTable thead th, table.dataTable thead td,
+table.dataTable tbody th, table.dataTable tbody td {
+  padding: 0.5rem 0.625rem;
+}
+
 .visualization {
   width : 100%;
 }
@@ -114,17 +121,17 @@ html, body, .wrapper {
   content: unset;
 }
 
-#word_cloud.shiny-output-error-validation {
-  visibility: visible;
-  color: inherit;
-  font-size: 1.25em;
-  font-style: italic;
+.nav-tabs-custom > .nav-tabs {
+  border-bottom: thin solid #a1a1a1;
 }
 
-#word_cloud > img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+.nav-tabs-custom > .nav-tabs > li.active > a {
+  border-left-color: #a1a1a1;
+  border-right-color: #a1a1a1;
+}
+.nav-tabs-custom > .nav-tabs > li > a:hover {
+  background-color: rgba(220, 220, 220, 0.6);
+  color: black;
 }
 
 .btn, .form-control {
@@ -206,21 +213,39 @@ html, body, .wrapper {
 .home_desc {
   border-bottom: medium solid;
   border-radius: 0.125rem;
-  font-size: 0.875em;
-  margin-bottom: 2.25em;
-  padding: 1.25rem;
+  font-size: 0.9em;
+  margin-bottom: 2em;
+  padding: 0.5rem 1.25rem;
 }
 
 .welcome_desc {
   font-size: 1.2em;
+  padding-bottom: 1em;
 }
 
 .dataTables_filter {
   display: none !important;
 }
 
-#word_cloud{
+#word_cloud {
   height: calc(100vh - 200px);
+}
+
+#word_cloud.shiny-output-error-validation {
+  visibility: visible;
+  color: inherit;
+  font-size: 1.25em;
+  font-style: italic;
+}
+
+#word_cloud > img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#wc-color-key li {
+  padding: 0.25em 0.5em;
 }
 
 
