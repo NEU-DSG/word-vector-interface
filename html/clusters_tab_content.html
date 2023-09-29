@@ -1,0 +1,39 @@
+<div>
+  <!-- Contents of the "Clusters" tab in the Word Vector Interface -->
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="box box-solid">
+        <div class="box-body">
+          <div class="home_desc">
+            <p>Clusters are generated based on neighboring words in vector space—words that are used in similar contexts will be clustered together. Each column represents a different cluster, randomly selected from 150 total clusters; the words in the list are those closest to the center of the cluster.</p>
+            <p>Use the dropdown on the left to select which model you want to view. You can also hit the “reset clusters” button to see a new set of clusters and use the slider to see more terms from each cluster. Click the “Download” button to download the full set of 150 clusters for the current model.</p>
+            <p>If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see 
+              <a href="https://wwp.northeastern.edu/wwo/license/" target="_blank">this page</a>
+               for information on subscribing and setting up a free trial) to search for your term in the WWO collection.
+            </p>
+            <p>
+              For more information on how the clusters were derived and what they show, see our <a href="https://wwp.northeastern.edu/lab/wwvt/about/navigate/" target="_blank">guide to the Shiny app</a>.
+            </p>
+          </div>
+          <h1>
+            {{ model_name }}
+          </h1>
+          <div class="model_desc">
+            {{ model_desc }}
+          </div>
+          <br />
+          {{ controls }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="box">
+        <div class="box-body">
+          {{ results }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

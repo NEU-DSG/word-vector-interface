@@ -1,0 +1,73 @@
+<div>
+  <!-- Contents of the "Compare" tab in the Word Vector Interface -->
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="box box-solid">
+        <div class="box-body">
+          <div class="home_desc">
+            <p>
+              To get started, type a word in the “Query term” box. The results that appear are the words that are closest to the term that you queried in vector space across two models. You can select which models to query by using the sidebar on the left as well as increase the number of words in your results set for both.
+            </p>
+            <p>If you click on any individual term, a new page will take you to the Women Writers Online interface (subscription required; see 
+                <a href="https://wwp.northeastern.edu/wwo/license/" target="_blank">this page</a>
+                 for information on subscribing and setting up a free trial) to search for your term in the WWO collection.
+            </p>
+          </div>
+          {{ controls }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <div class="box">
+        <div class="box-body">
+          <div class="col-sm-12">
+            <div class="box box-solid">
+              <div class="box-body model_header">
+                <h1>
+                  {{ model_1_name }}
+                </h1>
+                <div class="model_desc">
+                  {{ model_1_desc }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="box">
+              <div class="box-body">
+                {{ model_1_results }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <div class="box">
+        <div class="box-body">
+          <div class="col-sm-12">
+            <div class="box box-solid">
+              <div class="box-body model_header">
+                <h1>
+                  {{ model_2_name }}
+                </h1>
+                <div class="model_desc">
+                  {{ model_2_desc }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="box">
+              <div class="box-body">
+                {{ model_2_results }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

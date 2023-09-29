@@ -1,0 +1,23 @@
+{
+
+  "WWO Corpus": {
+    "shortName": "WWO Full Corpus",
+    "location": "data/wwo.bin",
+  	"shortDescription" : "All texts from WWO",
+  	"public" : "true",
+  	"date":"June 2019",
+  	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo.bin",
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850. This corpus contains 10,978,553 words in 415 texts. This model was trained in June 2019."
+  },
+  
+    "WWO Regularized Corpus": {
+    "shortName": "WWO Regularized Full Corpus",
+    "location": "data/wwo-regularized.bin",
+  	"shortDescription" : "All texts from WWO, regularized",
+  	"public" : "true",
+  	"date":"February 2020",
+  	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-regularized.bin",
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, regularized with routines developed by the Visualizing English Print project. This corpus contains 11,279,989 words in 421 texts. This model was trained in February 2020."
+  }
+
+}

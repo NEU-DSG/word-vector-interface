@@ -1,0 +1,65 @@
+<div>
+  <!-- Contents of the "Home" tab in the Word Vector Interface -->
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="box box-solid">
+        <div class="box-body">
+          <p class="home_desc welcome_desc">Welcome to the Women Writers Vector 
+            Toolkit (WWVT) discovery interface! This interface will allow you to 
+            query terms in word2vec models that were trained on texts from the Women 
+            Writers Online, Victorian Women Writers Project, and Early English Books 
+            Online–Text Creation Partnership collections.</p>
+          <h1>
+            {{ model_name }}
+          </h1>
+          <div class="model_desc">
+            {{ model_desc }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-6">
+      <div class="box">
+        <div class="box-body">
+          <div class="col-sm-12">
+            <div class="box box-solid">
+              <div class="box-body">
+                {{ controls }}
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="box">
+              <div class="box-body" id="table-main-1">
+                {{ results }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-6">
+      <div class="box">
+        <div class="box-body">
+          <p>To get started, type a word in the “Query term” box. The results that 
+            appear are the words that are closest to the term that you queried in 
+            vector space—that is, words that appear in similar contexts in the 
+            corpus used to train your model.</p>
+          <p>On the left-hand sidebar, you can select different models to query; you 
+            can also increase the number of words in your results set. More ways to 
+            explore these models can be accessed under the “Compare,” “Clusters,” 
+            “Operations,” and “Visualization” tabs above.</p>
+          <p>If you click on any individual term, a new page will take you to the 
+            Women Writers Online interface (subscription required; see our
+            <a href="https://wwp.northeastern.edu/wwo/license/" target="_blank"
+            >licensing page</a> for information on subscribing and setting up a free 
+            trial) to search for your term in the WWO collection.
+          </p>
+          <p>If the query term that you select is not in the vocabulary of your chosen model, the word list generated will be a list of stop and filler words.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

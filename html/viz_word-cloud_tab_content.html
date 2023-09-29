@@ -1,0 +1,45 @@
+<div>
+  <!-- Layout for the "Word Cloud" portion of the visualization tab. -->
+  <div class="col-sm-12">
+    <div class="box box-solid">
+      <div class="box-body">
+        {{ word }}
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="box">
+      <div class="box-body">
+        <div class="col-sm-12 col-md-8">
+          <div class="box box-solid">
+            <div class="box-body">
+              {{ word_cloud }}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-4">
+          <div class="box box-solid">
+            <div class="box-body">
+              <p>The Word Cloud visualization offers a spatial view of the closest words to a query term. The query term you enter appears
+                in the center of the cloud, surrounded by terms whose proximity is based on cosine similarity to the input term. 
+                Terms with higher cosine similarities are closer to the center. The terms are also color-coded to show cosine similarity, as outlined in the key below.
+                In the sidebar, the top slider allows you to set a threshold for the cosine similarity of displayed terms. 
+                The middle slider allows you to control the maximum number of words displayed, and the bottom slider controls the size of the plot image.</p>
+              <div id="wc-color-key">
+                <p>Similarity Color Key
+                  <br />Similarity — Color</p>
+                <ul class="list-unstyled" style="color:white">
+                  <li style="background-color:#000">0.81 – 1.0 — black</li>
+                  <li style="background-color:#2C7BB6">0.61 – 0.80 — blue</li>
+                  <li style="background-color:#D7191C">0.41 – 0.60 — red</li>
+                  <li style="background-color:#313695">0.21 – 0.40 — purple</li>
+                  <li style="background-color:#FDAE61; color:black;">0 – 0.20 — orange</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
