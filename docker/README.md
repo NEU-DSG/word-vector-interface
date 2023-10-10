@@ -15,13 +15,13 @@ You will need:
 
 First, you’ll need to [build a Docker image](https://docs.docker.com/engine/reference/builder/). Using the command line, navigate to the main directory which contains the Shiny app code, for example:
 
-```
+```shell
 cd /Users/aclark/Documents/word-vector-interface
 ```
 
 Then, instruct Docker to use the `Dockerfile` in this folder to construct an image with the name "wvi":
 
-```
+```shell
 docker build --file docker/Dockerfile --tag wvi .
 ```
 
@@ -38,7 +38,7 @@ Building the image will take some time, but once you have the image, you probabl
 
 Once the build process is complete, you can start up a Docker container by running this command:
 
-```
+```shell
 docker run -p 3838:3838 --name=shiny-app wvi
 ```
 
@@ -58,7 +58,7 @@ To stop the application, hit the <kbd>Control</kbd> and <kbd>c</kbd> keys while 
 
 To restart the "shiny-app" Docker container, you can run this command:
 
-```
+```shell
 docker restart shiny-app
 ```
 
@@ -67,7 +67,7 @@ docker restart shiny-app
 
 Here's how to enter the Docker container command line interface through the Terminal:
 
-```
+```shell
 docker exec -it shiny-app /bin/sh
 ```
 
@@ -85,13 +85,13 @@ To read or edit files inside the Docker container, use the `nano` editor.
 
 Once you’ve made changes to the R Shiny code, catalog file, or models, you’ll need to rebuild the "wvi" Docker image so that your changes are reflected. As before, navigate to the `word-vector-interface` folder and run this command:
 
-```
+```shell
 docker build --file docker/Dockerfile --tag wvi .
 ```
 
 To run the Shiny app Docker container, you’ll first have to delete the old one, then tell Docker to start up a new container with the same name:
 
-```
+```shell
 docker rm shiny-app
 docker run -p 3838:3838 --name=shiny-app wvi
 ```
@@ -109,8 +109,21 @@ If you see this line soon after starting the Docker container:
 
 ...the Shiny app may have run out of memory as it tried to load all the "public" word vector models. If it's not possible to switch to a computer with more RAM available, you can find out how much memory is available by running this command:
 
-```
+```shell
 docker info
 ```
 
-You can probably still run the application, but you should [edit the catalog](../components.md#word-embedding-models) so that fewer models need to be loaded.
+You can probably still run the application by loading a smaller number word vector models. To do so, you can [edit the catalog](../components.md#word-embedding-models) so that fewer models need to be loaded.
+
+You can also edit [app.R](../app.R) to use the [“mini” catalog](../data/catalog_mini.json), which specifies only two models. Find the line that looks like this:
+
+```R
+catalog_filename <- "data/catalog.json"
+```
+
+Then change the filename so the line looks like this:
+
+```R
+catalog_filename <- "data/catalog_mini.json"
+```
+

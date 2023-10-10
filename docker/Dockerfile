@@ -1,5 +1,5 @@
 # Start from a Shiny Server container from the Rocker Project
-FROM rocker/shiny:4.2.0
+FROM --platform=linux/amd64 rocker/shiny:4.2
 
 # Install necessary Ubuntu software packages
 RUN apt-get update && apt-get install -y \
