@@ -130,27 +130,18 @@ catalog_filename <- "data/catalog_mini.json"
 
 ### File system space
 
-Docker uses up a lot of disk space in creating images, containers, and volumes. If you’re rapidly re-creating a images and/or containers, this can eat through your file system’s available space very quickly.
+If Docker images can’t be built because there isn’t enough space on the disk, you may be able to clear up some space by deleting old, out-of-date Docker images, containers, and other cache objects.
 
-If Docker images can’t be built because there isn’t enough space on the disk:
+To see all containers and images currently stored on your computer, run:
 
-- `docker ps -a` lists all containers and their current statuses
-  - `docker rm CONTAINER-ID` or `docker rm NAME` will delete the container matching that ID.
-- `docker image ls` lists all images on this computer
+- `docker ps -a` to list all containers and their current statuses
+- `docker image ls` list all images on this computer
   - Those with `<none>` in the repository column are dangling images left over from older builds.
-  - `docker rmi IMAGE-ID` will delete the image matching that ID. You can also use the repository(+ tag) to specify an image to delete, e.g. `docker rmi drupal:7.90`
-    - If an image is still referenced by a container, you'll have to force the command, or delete the container first.
 
-Docker also has commands that will specifically [prune un-used or dangling resources](https://docs.docker.com/config/pruning/):
+If you have a lot of older resources, you can use Docker’s pruning capabilities to remove them. The command below will remove all stopped containers, dangling images, and dangling build caches.
 
-- `docker container prune` will remove stopped containers
-  - Run containers with the `--rm` flag to remove them automatically when stopping the container
-- `docker volume prune` will remove volumes which are not used by 1+ container
-  - Docker does not automatically prune volumes because that could cause data loss
-- `docker image prune` will remove dangling images (not tagged and not referenced by containers)
-  - `docker image prune -a` will remove all images not referenced by existing containers
-- `docker system prune --volumes` will remove all stopped containers, unused and anonymous volumes, dangling images, and dangling build caches
+```shell
+docker system prune
+```
 
-Each of these commands can be filtered to limit which resources are deleted. For example, `docker container prune --filter "until=24h"` will remove stopped containers which are older than 24 hours.
-
-
+For more information on pruning, see the [Docker documentation "Prune unused Docker objects"](https://docs.docker.com/config/pruning/)
