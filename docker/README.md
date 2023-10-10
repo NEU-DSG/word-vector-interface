@@ -144,4 +144,4 @@ If you have a lot of older resources, you can use Docker’s pruning capabilitie
 docker system prune
 ```
 
-For more information on pruning, see the [Docker documentation "Prune unused Docker objects"](https://docs.docker.com/config/pruning/)
+For more information on pruning, see the Docker documentation ["Prune unused Docker objects"](https://docs.docker.com/config/pruning/).
