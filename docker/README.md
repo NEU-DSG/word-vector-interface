@@ -107,7 +107,7 @@ If you see this line soon after starting the Docker container:
 [INFO] shiny-server - Error getting worker: Error: The application exited during initialization.
 ```
 
-...the Shiny app may have run out of memory as it tried to load all the "public" word vector models. If it's not possible to switch to a computer with more RAM available, you can find out how much memory is available by running this command:
+...the Shiny app may have run out of memory as it tried to load all the "public" word vector models. If it’s not possible to switch to a computer with more RAM available, you can find out how much memory is available by running this command:
 
 ```shell
 docker info
@@ -115,7 +115,7 @@ docker info
 
 You can probably still run the application by loading a smaller number word vector models. To do so, you can [edit the catalog](../components.md#word-embedding-models) so that fewer models need to be loaded.
 
-You can also edit [app.R](../app.R) to use the [“mini” catalog](../data/catalog_mini.json), which specifies only two models. Find the line that looks like this:
+You can also edit [app.R](../app.R) to use the ["mini" catalog](../data/catalog_mini.json), which specifies only two models. Find the line that looks like this:
 
 ```R
 catalog_filename <- "data/catalog.json"
@@ -126,4 +126,31 @@ Then change the filename so the line looks like this:
 ```R
 catalog_filename <- "data/catalog_mini.json"
 ```
+
+
+### File system space
+
+Docker uses up a lot of disk space in creating images, containers, and volumes. If you’re rapidly re-creating a images and/or containers, this can eat through your file system’s available space very quickly.
+
+If Docker images can’t be built because there isn’t enough space on the disk:
+
+- `docker ps -a` lists all containers and their current statuses
+  - `docker rm CONTAINER-ID` or `docker rm NAME` will delete the container matching that ID.
+- `docker image ls` lists all images on this computer
+  - Those with `<none>` in the repository column are dangling images left over from older builds.
+  - `docker rmi IMAGE-ID` will delete the image matching that ID. You can also use the repository(+ tag) to specify an image to delete, e.g. `docker rmi drupal:7.90`
+    - If an image is still referenced by a container, you'll have to force the command, or delete the container first.
+
+Docker also has commands that will specifically [prune un-used or dangling resources](https://docs.docker.com/config/pruning/):
+
+- `docker container prune` will remove stopped containers
+  - Run containers with the `--rm` flag to remove them automatically when stopping the container
+- `docker volume prune` will remove volumes which are not used by 1+ container
+  - Docker does not automatically prune volumes because that could cause data loss
+- `docker image prune` will remove dangling images (not tagged and not referenced by containers)
+  - `docker image prune -a` will remove all images not referenced by existing containers
+- `docker system prune --volumes` will remove all stopped containers, unused and anonymous volumes, dangling images, and dangling build caches
+
+Each of these commands can be filtered to limit which resources are deleted. For example, `docker container prune --filter "until=24h"` will remove stopped containers which are older than 24 hours.
+
 
