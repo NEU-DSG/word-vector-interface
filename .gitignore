@@ -6,3 +6,5 @@ rsconnect
 scrap.R
 test.R
 .DS_Store
+/testing/models
+/testing/output
