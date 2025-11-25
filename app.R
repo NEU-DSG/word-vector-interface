@@ -103,7 +103,7 @@ print("Done loading models.")
 
 # Create a link to search WWO, optionally with a proxy URL.
 linkToWWO <- function(keyword, session) {
-  url <- paste0("https://wwo.wwp.northeastern.edu/WWO/search?keyword=",keyword)
+  url <- paste0("https://wwo.wwp.northeastern.edu/WWO/xq/search?text=",keyword)
   requestParams <- parseQueryString(session$clientData$url_search)
   proxy <- requestParams$proxy
   proxy <- ifelse( exists("proxy") && proxy != '', proxy, 'none' )
