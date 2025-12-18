@@ -190,7 +190,7 @@
 	"public" : "true",
 	"date": "December 2025",
 	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-vep-evans.bin&quot;",
-    "description": "Currently displayed: the Visualizing English Print project’s Evans Early American Imprints Online corpus. Texts were extracted from the Evans-TCP XML files; the spellings are original and the corpus covers the period 1639–1800. This corpus contains xxx words in 5,012 texts. This model was trained in December 2025."
+    "description": "Currently displayed: the Visualizing English Print project’s Evans Early American Imprints Online corpus. Texts were extracted from the Evans-TCP XML files; the spellings are original and the corpus covers the period 1639–1800. This corpus contains 101,766,515 words in 5,012 texts. This model was trained in December 2025."
   },
   
   
