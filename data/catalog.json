@@ -32,7 +32,7 @@
   },
   "VWWP": {
     "shortName": "VWWP Full Corpus",
-    "location": "data/vwwp_xquery_nonreg.bin",
+    "location": "data/vwwp.bin",
 	"shortDescription" : "The Victorian Women Writers Project Corpus",
 	"public" : "true",
 	"date":"December 2020",
@@ -201,7 +201,7 @@
 	"public" : "true",
 	"date": "December 2025",
 	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-vep-superscience.bin&quot;",
-    "description": "Currently displayed: the Visualizing English Print project’s Super Science corpus. The corpus includes every scientific’ text from EEBO-TCP Phases I and II, ECCO-TCP, and Evans-TCP corpora, covering the period 1482–1710. This corpus contains 72,505,243 words in 1,979 texts. This model was trained in December 2025."
+    "description": "Currently displayed: the Visualizing English Print project’s Super Science corpus. The corpus includes every scientific’ text from EEBO-TCP Phases I and II, ECCO-TCP, and Evans-TCP corpora, covering the period 1482–1710. This corpus contains 72,503,985 words in 1,977 texts. This model was trained in December 2025."
   },
 
 
