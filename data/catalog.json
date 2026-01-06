@@ -35,8 +35,8 @@
     "location": "data/vwwp.bin",
 	"shortDescription" : "The Victorian Women Writers Project Corpus",
 	"public" : "true",
-	"date":"December 2020",
-	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/vwwp_xquery_nonreg.bin",
+	"date":"December 2025",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/vwwp.bin",
     "description": "Currently displayed: the entire Victorian Women Writers Project corpus of women’s writing from 1830 to 1929. This corpus contains 7,992,386 words in 199 texts. This model was trained in December 2025."
   },
 
@@ -108,7 +108,7 @@
     "location": "data/wwo-19-vwwp.bin",
 	"shortDescription" : "The Victorian Women Writers Project and 19thC Women Writers Online Combined Corpus",
 	"public" : "true",
-	"date": "December 1015",
+	"date": "December 2025",
 	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-19-vwwp.bin",
     "description": "Currently displayed: a combined corpus that includes the full set of Victorian Women Writers Projects texts and the subset of the Women Writers Online corpus that was published in the 19th century. This corpus contains 12,712,666 words in 324 texts. This model was trained in December 2025."
   },
@@ -148,7 +148,7 @@
 	"shortDescription" : "Text content extracted from the <body> element in the WWO, excludes front and back matter",
 	"public" : "true",
 	"date":"December 2025",
-	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-wwo_entity-tokenized.bin&quot;",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/data/wwo-body.bin",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes the body of each text, without front or back matter. This corpus contains 12,603,093 words in 464 texts. This model was trained in December 2025."
   },
   
@@ -168,7 +168,7 @@
 	"shortDescription" : "Visualizing English Print project’s Early Modern 1080 corpus",
 	"public" : "true",
 	"date": "December 2025",
-	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-vep-em1080.bin&quot;",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/data/vep-em1080.bin",
     "description": "Currently displayed: the Visualizing English Print project’s Early Modern 1080 corpus. The corpus includes 40 randomly selected texts per decade from the period 1530–1799. Texts were sourced from EEBO-TCP Phase I and ECCO-TCP. This corpus contains 37,088,017 words in 1080 texts. This model was trained in December 2025."
   },
   
@@ -178,7 +178,7 @@
 	"shortDescription" : "Visualizing English Print project’s Eighteenth Century Collections Online corpus",
 	"public" : "true",
 	"date": "December 2025",
-	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-vep-ecco.bin&quot;",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/data/vep-ecco.bin",
     "description": "Currently displayed: the Visualizing English Print project’s Eighteenth Century Collections Online corpus. Texts were extracted from the ECCO-TCP XML files; the spellings are original and the corpus covers the period 1701–1800. This corpus contains 73,982,448 words in 2,473 texts. This model was trained in December 2025."
   },
 
@@ -189,7 +189,7 @@
 	"shortDescription" : "Visualizing English Print project’s Evans corpus",
 	"public" : "true",
 	"date": "December 2025",
-	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-vep-evans.bin&quot;",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/data/vep-evans.bin",
     "description": "Currently displayed: the Visualizing English Print project’s Evans Early American Imprints Online corpus. Texts were extracted from the Evans-TCP XML files; the spellings are original and the corpus covers the period 1639–1800. This corpus contains 101,766,515 words in 5,012 texts. This model was trained in December 2025."
   },
   
@@ -200,8 +200,8 @@
 	"shortDescription" : "Visualizing English Print project’s Super Science corpus",
 	"public" : "true",
 	"date": "December 2025",
-	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-vep-superscience.bin&quot;",
-    "description": "Currently displayed: the Visualizing English Print project’s Super Science corpus. The corpus includes every scientific’ text from EEBO-TCP Phases I and II, ECCO-TCP, and Evans-TCP corpora, covering the period 1482–1710. This corpus contains 72,503,985 words in 1,977 texts. This model was trained in December 2025."
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/data/vep-superscience.bin",
+    "description": "Currently displayed: the Visualizing English Print project’s Super Science corpus. The corpus includes every ‘scientific’ text from the EEBO-TCP Phases I and II, ECCO-TCP, and Evans-TCP corpora, covering the period 1482–1710. This corpus contains 72,503,985 words in 1,977 texts. This model was trained in December 2025."
   },
 
 
