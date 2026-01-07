@@ -5,9 +5,9 @@
     "location": "data/wwo.bin",
 	"shortDescription" : "All texts from WWO",
 	"public" : "true",
-	"date":"June 2019",
+	"date":"December 2025",
 	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo.bin",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850. This corpus contains 10,978,553 words in 415 texts. This model was trained in June 2019."
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850. This corpus contains 12,818,063 words in 474 texts. This model was trained in December 2025."
   },
   
     "WWO Regularized Corpus": {
@@ -32,12 +32,12 @@
   },
   "VWWP": {
     "shortName": "VWWP Full Corpus",
-    "location": "data/vwwp_xquery_nonreg.bin",
+    "location": "data/vwwp.bin",
 	"shortDescription" : "The Victorian Women Writers Project Corpus",
 	"public" : "true",
-	"date":"December 2020",
-	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/vwwp_xquery_nonreg.bin",
-    "description": "Currently displayed: the entire Victorian Women Writers Project corpus of women’s writing from 1830 to 1929. This corpus contains 8,065,805 words in 199 texts. This model was trained in December 2020."
+	"date":"December 2025",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/vwwp.bin",
+    "description": "Currently displayed: the entire Victorian Women Writers Project corpus of women’s writing from 1830 to 1929. This corpus contains 7,992,386 words in 199 texts. This model was trained in December 2025."
   },
 
     "VWWP and WWO": {
@@ -45,16 +45,16 @@
     "location": "data/wwo-vwwp.bin",
 	"shortDescription" : "The Victorian Women Writers Project and Women Writers Online Combined Corpus",
 	"public" : "true",
-	"date":"June 2019",
+	"date":"December 2025",
 	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-vwwp.bin",
-    "description": "Currently displayed: a combined corpus that includes all texts from both the Victorian Women Writers Project and Women Writers Online. This corpus contains 19,044,358 words in 614 texts. This model was trained in June 2019."
+    "description": "Currently displayed: a combined corpus that includes all texts from both the Victorian Women Writers Project and Women Writers Online. This corpus contains 20,851,532 words in 673 texts. This model was trained in December 2025."
   },
  
 
   "WWO Authorial Corpus": {
     "shortName": "WWO Authorial Corpus",
     "location": "data/wwo-authorial.bin",
-	"shortDescription" : "All texts from WWO, restricted to those by the authors",
+	"shortDescription" : "All texts from WWO, restricted to language by the authors",
 	"public" : "true",
 	"date":"February 2020",
 	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-authorial.bin",
@@ -64,24 +64,22 @@
     "WWO Regularized Authorial Corpus": {
     "shortName": "WWO Regularized Authorial Corpus",
     "location": "data/wwo-authorial-regularized.bin",
-	"shortDescription" : "All texts from WWO, restricted to those by the authors and regularized",
-	"public" : "true",
+	"shortDescription" : "All texts from WWO, restricted to language by the authors and regularized",
+	"public" : "false",
 	"date":"February 2020",
 	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-authorial-regularized.bin",
     "description": "Currently displayed: a subset of the Women Writers Online corpus of women’s writing from 1526 to 1850, restricted to those contents written by the texts’ authors and regularized with routines developed by the Visualizing English Print project. This corpus contains 10,983,868 words in 421 texts. This model was trained in February 2020."
   },
   
 
-
-
   "WWO 17th century": {
     "shortName": "WWO 16th and 17th Centuries",
     "location": "data/wwo-16-17.bin",
 	"shortDescription" : "WWO texts from the 17th century",
 	"public" : "true",
-	"date":"June 2019",
+	"date":"December 2025",
 	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-16-17.bin",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 16th and 17th centuries. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,886,257 words in 201 texts. This model was trained in June 2019."
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 16th and 17th centuries. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 4,062,458 words in 212 texts. This model was trained in December 2025."
   },
 
   "WWO 18th century": {
@@ -89,9 +87,9 @@
     "location": "data/wwo-18.bin",
 	"shortDescription" : "WWO texts from the 18th century",
 	"public" : "true",
-	"date":"June 2019",
+	"date":"December 2025",
 	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-18.bin",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 18th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,408,243 words in 119 texts. This model was trained in June 2019."
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 18th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,880,186 words in 139 texts. This model was trained in December 2025."
   },
 
   "WWO 19th Century": {
@@ -99,8 +97,9 @@
     "location": "data/wwo-19.bin",
 	"shortDescription" : "WWO texts from the 19th century",
 	"public" : "true",
+	"date":"December 2025",
 	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-19.bin",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 19th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 3,559,440 words in 96 texts. This model was trained in June 2019."
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes texts that were published in the 19th century. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 4,683,946 words in 125 texts. This model was trained in December 2025."
   },
 
   
@@ -109,16 +108,16 @@
     "location": "data/wwo-19-vwwp.bin",
 	"shortDescription" : "The Victorian Women Writers Project and 19thC Women Writers Online Combined Corpus",
 	"public" : "true",
-	"date": "June 2019",
+	"date": "December 2025",
 	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-19-vwwp.bin",
-    "description": "Currently displayed: a combined corpus that includes the full set of Victorian Women Writers Projects texts and the subset of the Women Writers Online corpus that was published in the 19th century. This corpus contains 11,625,245 words in 295 texts. This model was trained in June 2019."
+    "description": "Currently displayed: a combined corpus that includes the full set of Victorian Women Writers Projects texts and the subset of the Women Writers Online corpus that was published in the 19th century. This corpus contains 12,712,666 words in 324 texts. This model was trained in December 2025."
   },
   
   "WWO Place Names Tokenized": {
     "shortName": "WWO Place Names Tokenized",
     "location": "data/all-wwo_placeName-tokenized.bin",
 	"shortDescription" : "WWO corpus with tokenized content for <placeName> element",
-	"public" : "true",
+	"public" : "false",
 	"date":"December 2020",
 	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/all-wwo_placeName-tokenized.bin",
     "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for place names. This corpus contains 11,488,313 words in 427 texts. The text has been regularized. This model was trained in December 2020."
@@ -128,7 +127,7 @@
     "shortName": "WWO Person Names Tokenized",
     "location": "data/all-wwo_persName-tokenized.bin",
 	"shortDescription" : "WWO corpus with tokenized content for <persName> element",
-	"public" : "true",
+	"public" : "false",
 	"date":"December 2020",
     "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, with tokenized content for person names. This corpus contains 11,432,470 words in 427 texts. The text has been regularized. This model was trained in December 2020."
   },
@@ -148,16 +147,69 @@
     "location": "data/wwo-body.bin",
 	"shortDescription" : "Text content extracted from the <body> element in the WWO, excludes front and back matter",
 	"public" : "true",
-	"date":"June 2019",
-	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-wwo_entity-tokenized.bin&quot;",
-    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes the body of each text, without front or back matter. This corpus contains 10,669,922 words in 405 texts. This model was trained in June 2019."
+	"date":"December 2025",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/data/wwo-body.bin",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes the body of each text, without front or back matter. This corpus contains 12,603,093 words in 464 texts. This model was trained in December 2025."
   },
+  
+    "Cavendish": {
+    "shortName": "Works by Margaret Cavendish",
+    "location": "data/cavendish.bin",
+	"shortDescription" : "Texts by Margaret Cavendish in Women Writers Online",
+	"public" : "true",
+	"date":"December 2025",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-cavendish.bin&quot;",
+    "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all texts written by Margaret Cavendish. Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 1,377,107 words in 33 texts. This model was trained in December 2025."
+  },
+  
+    "VEP Early Modern 1080": {
+    "shortName": "VEP Early Modern 1080",
+    "location": "data/vep-em1080.bin",
+	"shortDescription" : "Visualizing English Print project’s Early Modern 1080 corpus",
+	"public" : "true",
+	"date": "December 2025",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/data/vep-em1080.bin",
+    "description": "Currently displayed: the Visualizing English Print project’s Early Modern 1080 corpus. The corpus includes 40 randomly selected texts per decade from the period 1530–1799. Texts were sourced from EEBO-TCP Phase I and ECCO-TCP. This corpus contains 37,088,017 words in 1080 texts. This model was trained in December 2025."
+  },
+  
+      "VEP ECCO": {
+    "shortName": "VEP ECCO",
+    "location": "data/vep-ecco.bin",
+	"shortDescription" : "Visualizing English Print project’s Eighteenth Century Collections Online corpus",
+	"public" : "true",
+	"date": "December 2025",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/data/vep-ecco.bin",
+    "description": "Currently displayed: the Visualizing English Print project’s Eighteenth Century Collections Online corpus. Texts were extracted from the ECCO-TCP XML files; the spellings are original and the corpus covers the period 1701–1800. This corpus contains 73,982,448 words in 2,473 texts. This model was trained in December 2025."
+  },
+
+
+      "VEP Evans": {
+    "shortName": "VEP Evans",
+    "location": "data/vep-evans.bin",
+	"shortDescription" : "Visualizing English Print project’s Evans corpus",
+	"public" : "true",
+	"date": "December 2025",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/data/vep-evans.bin",
+    "description": "Currently displayed: the Visualizing English Print project’s Evans Early American Imprints Online corpus. Texts were extracted from the Evans-TCP XML files; the spellings are original and the corpus covers the period 1639–1800. This corpus contains 101,766,515 words in 5,012 texts. This model was trained in December 2025."
+  },
+  
+  
+        "VEP Super Science": {
+    "shortName": "VEP Super Science",
+    "location": "data/vep-superscience.bin",
+	"shortDescription" : "Visualizing English Print project’s Super Science corpus",
+	"public" : "true",
+	"date": "December 2025",
+	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/data/vep-superscience.bin",
+    "description": "Currently displayed: the Visualizing English Print project’s Super Science corpus. The corpus includes every ‘scientific’ text from the EEBO-TCP Phases I and II, ECCO-TCP, and Evans-TCP corpora, covering the period 1482–1710. This corpus contains 72,503,985 words in 1,977 texts. This model was trained in December 2025."
+  },
+
 
   "WWO Verse": {
     "shortName": "WWO Verse",
     "location": "data/wwo-lg.bin",
 	"shortDescription" : "Poetry and verse subset of the WWO",
-	"public" : "true",
+	"public" : "false",
 	"date": "June 2019",
 	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-wwo_entity-tokenized.bin&quot;",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a verse line group (<lg>). Because this model is trained on a small corpus, it should be treated as experimental. This corpus contains 4,973,946 words in 290 texts. This model was trained in June 2019."
@@ -167,7 +219,7 @@
     "shortName": "WWO Prose",
     "location": "data/wwo-p.bin",
 	"shortDescription" : "Prose only subset of the WWO",
-	"public" : "true",
+	"public" : "false",
 	"date":"June 2019",
 	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/tree/main/dataall-wwo_entity-tokenized.bin&quot;",
     "description": "Currently displayed: a subset of the Women Writers Online corpus that includes all text marked as appearing in a paragraph (<p>). This corpus contains 8,433,255 words in 406 texts. This model was trained in June 2019."
@@ -177,7 +229,7 @@
 		"shortName": "Text Creation Partnership 1",
 		"location": "data/tcp1.bin",
 		"shortDescription" : "TCP Selected Corpus 1",
-		"public" : "true",
+		"public" : "false",
 		"date":"June 2019",
 		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,329,588 words in 205 texts. This model was trained in June 2019."
     },
@@ -186,7 +238,7 @@
 		"shortName": "Text Creation Partnership 2",
 		"location": "data/tcp2.bin",
 		"shortDescription" : "TCP Selected Corpus 2",
-		"public" : "true",
+		"public" : "false",
 		"date": "June 2019",
 		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,002,431 words in 1,796 texts. This model was trained in June 2019."
     },
@@ -195,7 +247,7 @@
 		"shortName": "Text Creation Partnership 3",
 		"location": "data/tcp3.bin",
 		"shortDescription" : "TCP Selected Corpus 3",
-		"public" : "true",
+		"public" : "false",
 		"date": "June 2019",
 		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 7,990,878 words in 470 texts. This model was trained in June 2019."
     },
@@ -204,7 +256,7 @@
 		"shortName": "Text Creation Partnership 4",
 		"location": "data/tcp4.bin",
 		"shortDescription" : "TCP Selected Corpus 4",
-		"public" : "true",
+		"public" : "false",
 		"date": "June 2019",
 		"description": "Currently displayed: a subset of texts from the Text Creation Partnership that contains approximately the same number of words as the full Women Writers Online corpus, to allow for experimental comparisons between the two corpora. This is one of several TCP corpora, each of which has a different selection of texts. This corpus contains 8,343,987 words in 69 texts. This model was trained in June 2019."
     },
