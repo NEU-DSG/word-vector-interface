@@ -1,0 +1,35 @@
+<project
+   default="release" 
+   name="word-vector-interface">
+  
+  <!--
+    Apache Ant buildfile for generating a ZIP release of the Word Vector Interface.
+    -->
+  
+<!-- 
+    PROPERTIES
+  -->
+  <property name="build.dir" value="releases"/>
+  
+<!-- 
+    ANT TASKS
+  -->
+  
+  <!-- Create a ZIP file of the customizable WVI app. -->
+  <target name="release"
+          description="Create a ZIP file of the customizable WVI app.">
+    <mkdir dir="${build.dir}"/>
+    <zip destfile="${build.dir}/word-vector-interface_customizable.zip">
+      <!-- Artifacts of the Ant build are excluded from packaging, as are git artifacts. The models 
+        directory (`data/`) is skipped for now. -->
+      <fileset dir="." 
+        excludes="${build.dir}/** build.xml maintenance.md .git/** .gitignore data/** .DS_Store .Rproj.user/*"/>
+      <!-- Include only the models specified in data/catalog_mini.json . -->
+      <zipfileset dir="data" includes="README.md wwo.bin vwwp.bin vep-em1080.bin vep-ecco.bin"
+        prefix="data"/>
+      <!-- Replace the regular catalog file with the mini one. -->
+      <zipfileset dir="data" includes="catalog_mini.json" fullpath="data/catalog.json"/>
+    </zip>
+  </target>
+  
+</project>

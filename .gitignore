@@ -8,3 +8,4 @@ test.R
 .DS_Store
 /testing/models
 /testing/output
+releases/**
