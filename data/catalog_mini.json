@@ -1,23 +1,41 @@
 {
-
   "WWO Corpus": {
     "shortName": "WWO Full Corpus",
     "location": "data/wwo.bin",
-  	"shortDescription" : "All texts from WWO",
-  	"public" : "true",
-  	"date":"June 2019",
-  	"modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo.bin",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850. This corpus contains 10,978,553 words in 415 texts. This model was trained in June 2019."
+    "shortDescription": "All texts from WWO",
+    "public": "true",
+    "date": "December 2025",
+    "modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo.bin",
+    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850. This corpus contains 12,818,063 words in 474 texts. This model was trained in December 2025."
   },
   
-    "WWO Regularized Corpus": {
-    "shortName": "WWO Regularized Full Corpus",
-    "location": "data/wwo-regularized.bin",
-  	"shortDescription" : "All texts from WWO, regularized",
-  	"public" : "true",
-  	"date":"February 2020",
-  	"modelUrl":"https://github.com/NEU-DSG/word-vector-interface/blob/main/data/wwo-regularized.bin",
-    "description": "Currently displayed: the entire Women Writers Online corpus of women’s writing from 1526 to 1850, regularized with routines developed by the Visualizing English Print project. This corpus contains 11,279,989 words in 421 texts. This model was trained in February 2020."
+  "VWWP": {
+    "shortName": "VWWP Full Corpus",
+    "location": "data/vwwp.bin",
+    "shortDescription": "The Victorian Women Writers Project Corpus",
+    "public": "true",
+    "date": "December 2025",
+    "modelUrl": "https://github.com/NEU-DSG/word-vector-interface/blob/main/data/vwwp.bin",
+    "description": "Currently displayed: the entire Victorian Women Writers Project corpus of women’s writing from 1830 to 1929. This corpus contains 7,992,386 words in 199 texts. This model was trained in December 2025."
+  },
+  
+  "VEP Early Modern 1080": {
+    "shortName": "VEP Early Modern 1080",
+    "location": "data/vep-em1080.bin",
+    "shortDescription": "Visualizing English Print project’s Early Modern 1080 corpus",
+    "public": "true",
+    "date": "December 2025",
+    "modelUrl": "https://github.com/NEU-DSG/word-vector-interface/tree/main/data/vep-em1080.bin",
+    "description": "Currently displayed: the Visualizing English Print project’s Early Modern 1080 corpus. The corpus includes 40 randomly selected texts per decade from the period 1530–1799. Texts were sourced from EEBO-TCP Phase I and ECCO-TCP. This corpus contains 37,088,017 words in 1080 texts. This model was trained in December 2025."
+  },
+  
+  "VEP ECCO": {
+    "shortName": "VEP ECCO",
+    "location": "data/vep-ecco.bin",
+    "shortDescription": "Visualizing English Print project’s Eighteenth Century Collections Online corpus",
+    "public": "true",
+    "date": "December 2025",
+    "modelUrl": "https://github.com/NEU-DSG/word-vector-interface/tree/main/data/vep-ecco.bin",
+    "description": "Currently displayed: the Visualizing English Print project’s Eighteenth Century Collections Online corpus. Texts were extracted from the ECCO-TCP XML files; the spellings are original and the corpus covers the period 1701–1800. This corpus contains 73,982,448 words in 2,473 texts. This model was trained in December 2025."
   }
-
 }
