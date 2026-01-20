@@ -19,7 +19,9 @@
   <target name="release"
           description="Create a ZIP file of the customizable WVI app.">
     <mkdir dir="${build.dir}"/>
-    <zip destfile="${build.dir}/word-vector-interface_customizable.zip">
+    <!-- Prompt the user to provide an versioning string for the filename. -->
+    <input message="Input a version number to use in the ZIP filename:" addproperty="version"/>
+    <zip destfile="${build.dir}/word-vector-interface-${version}_customizable.zip">
       <!-- Artifacts of the Ant build are excluded from packaging, as are git artifacts. The models 
         directory (`data/`) is skipped for now. -->
       <fileset dir="." 
